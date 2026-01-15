@@ -1,0 +1,52 @@
+# Project Configuration Files
+*.pid
+.backend.pid
+.frontend.pid
+.ollama.pid
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+.venv
+.env
+
+# ChromaDB / Embeddings
+backend/chroma_db/
+backend/code_chroma_db/
+*.db
+*.sqlite
+
+# Documents (PDFs, etc.)
+docs/*.pdf
+docs/*.PDF
+*.pdf
+*.PDF
+
+# Node
+node_modules/
+dist/
+.env.local
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+logs/
+
+# Build artifacts
+build/
+*.egg-info/
