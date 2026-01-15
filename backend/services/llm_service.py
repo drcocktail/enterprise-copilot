@@ -143,25 +143,36 @@ class LLMService:
         context: List[Dict[str, Any]],
         role: str,
         capabilities,
-        intent: QueryIntent
+        intent: QueryIntent,
+        conversation_history: List[Dict[str, Any]] = None  # NEW: Chat history
     ) -> Dict[str, Any]:
         """
         Step 2: Generate response based on classified intent
         Uses different prompt strategies for different intents
+        Now includes conversation history for context
         """
         
         # Build appropriate system prompt based on intent
         system_prompt = self._build_system_prompt(role, capabilities, intent)
         
+        # Build conversation history string
+        history_str = self._format_conversation_history(conversation_history)
+        
         # Build user prompt (context only for document/code queries)
         user_prompt = self._build_user_prompt(query, context, intent)
+        
+        # Combine all parts
+        full_prompt = system_prompt
+        if history_str:
+            full_prompt += f"\n\n{history_str}"
+        full_prompt += f"\n\n{user_prompt}"
         
         try:
             response = await self.client.post(
                 f"{self.base_url}/api/generate",
                 json={
                     "model": self.model,
-                    "prompt": f"{system_prompt}\n\n{user_prompt}",
+                    "prompt": full_prompt,
                     "stream": False,
                     "options": {
                         "temperature": 0.7 if intent.intent_type == "GENERAL" else 0.4,
@@ -299,6 +310,34 @@ Answer the user's question based on the above context. Be conversational and cit
                 parts.append(f"\n[From {doc}, Page {page}]\n{text}")
         
         return "\n".join(parts)
+    
+    def _format_conversation_history(
+        self,
+        history: List[Dict[str, Any]] = None,
+        max_messages: int = 10
+    ) -> str:
+        """Format conversation history for inclusion in prompt"""
+        if not history:
+            return ""
+        
+        # Take last N messages
+        recent = history[-max_messages:] if len(history) > max_messages else history
+        
+        if not recent:
+            return ""
+        
+        lines = ["Previous conversation:"]
+        for msg in recent:
+            role = msg.get("role", "user").capitalize()
+            content = msg.get("content", "")
+            
+            # Truncate long messages
+            if len(content) > 300:
+                content = content[:297] + "..."
+            
+            lines.append(f"{role}: {content}")
+        
+        return "\n".join(lines)
     
     async def _extract_action_parameters(
         self,

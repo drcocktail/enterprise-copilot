@@ -36,7 +36,7 @@ apiClient.interceptors.response.use(
     if (error.response) {
       // Server responded with error status
       console.error('API Error:', error.response.data);
-      
+
       if (error.response.status === 403) {
         // IAM denial - show appropriate message
         return Promise.reject({
@@ -59,13 +59,13 @@ export const chatAPI = {
    */
   sendQuery: async (query, iamRole, sessionId = null) => {
     window.currentIAMRole = iamRole; // Set for interceptor
-    
+
     const response = await apiClient.post('/api/chat', {
       query,
       session_id: sessionId,
       context: {}
     });
-    
+
     return response.data;
   }
 };
@@ -92,23 +92,23 @@ export const auditAPI = {
    */
   getLogs: async (limit = 50, iamRole) => {
     window.currentIAMRole = iamRole;
-    
+
     const response = await apiClient.get('/api/audit/logs', {
       params: { limit }
     });
-    
+
     return response.data;
   },
-  
+
   /**
    * Connect to audit log WebSocket stream
    */
   connectStream: (onMessage, onError = null) => {
     const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
     const wsUrl = `${protocol}//${window.location.host}/ws/audit`;
-    
+
     const ws = new WebSocket(wsUrl);
-    
+
     ws.onmessage = (event) => {
       try {
         const log = JSON.parse(event.data);
@@ -117,16 +117,16 @@ export const auditAPI = {
         console.error('Failed to parse audit log:', e);
       }
     };
-    
+
     ws.onerror = (error) => {
       console.error('WebSocket error:', error);
       if (onError) onError(error);
     };
-    
+
     ws.onclose = () => {
       console.log('Audit stream disconnected');
     };
-    
+
     return ws;
   }
 };
@@ -140,21 +140,21 @@ export const ingestionAPI = {
    */
   ingestDocuments: async (iamRole) => {
     window.currentIAMRole = iamRole;
-    
+
     const response = await apiClient.post('/api/ingest/documents');
     return response.data;
   },
-  
+
   /**
    * Index codebase
    */
   indexCodebase: async (path, iamRole) => {
     window.currentIAMRole = iamRole;
-    
+
     const response = await apiClient.post('/api/ingest/codebase', null, {
       params: { path }
     });
-    
+
     return response.data;
   }
 };
@@ -165,6 +165,111 @@ export const ingestionAPI = {
 export const healthAPI = {
   check: async () => {
     const response = await apiClient.get('/api/health');
+    return response.data;
+  }
+};
+
+/**
+ * Conversation API
+ */
+export const conversationAPI = {
+  /**
+   * List all conversations
+   */
+  list: async (iamRole) => {
+    window.currentIAMRole = iamRole;
+    const response = await apiClient.get('/api/conversations');
+    return response.data.conversations;
+  },
+
+  /**
+   * Create a new conversation
+   */
+  create: async (iamRole, title = null) => {
+    window.currentIAMRole = iamRole;
+    const response = await apiClient.post('/api/conversations', { title });
+    return response.data;
+  },
+
+  /**
+   * Get conversation with messages
+   */
+  get: async (conversationId, iamRole) => {
+    window.currentIAMRole = iamRole;
+    const response = await apiClient.get(`/api/conversations/${conversationId}`);
+    return response.data;
+  },
+
+  /**
+   * Get messages for a conversation
+   */
+  getMessages: async (conversationId, iamRole, limit = 100) => {
+    window.currentIAMRole = iamRole;
+    const response = await apiClient.get(`/api/conversations/${conversationId}/messages`, {
+      params: { limit }
+    });
+    return response.data.messages;
+  },
+
+  /**
+   * Add message to conversation
+   */
+  addMessage: async (conversationId, iamRole, role, content, metadata = null) => {
+    window.currentIAMRole = iamRole;
+    const response = await apiClient.post(`/api/conversations/${conversationId}/messages`, {
+      role,
+      content,
+      metadata
+    });
+    return response.data;
+  },
+
+  /**
+   * Delete a conversation
+   */
+  delete: async (conversationId, iamRole) => {
+    window.currentIAMRole = iamRole;
+    const response = await apiClient.delete(`/api/conversations/${conversationId}`);
+    return response.data;
+  }
+};
+
+/**
+ * Document API
+ */
+export const documentAPI = {
+  /**
+   * List user's documents
+   */
+  list: async (iamRole) => {
+    window.currentIAMRole = iamRole;
+    const response = await apiClient.get('/api/documents');
+    return response.data.documents;
+  },
+
+  /**
+   * Upload a document
+   */
+  upload: async (file, iamRole) => {
+    window.currentIAMRole = iamRole;
+
+    const formData = new FormData();
+    formData.append('file', file);
+
+    const response = await apiClient.post('/api/documents/upload', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    });
+    return response.data;
+  },
+
+  /**
+   * Delete a document
+   */
+  delete: async (docId, iamRole) => {
+    window.currentIAMRole = iamRole;
+    const response = await apiClient.delete(`/api/documents/${docId}`);
     return response.data;
   }
 };

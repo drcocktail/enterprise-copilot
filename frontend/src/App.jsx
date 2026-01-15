@@ -12,6 +12,7 @@ import { IAMBadge } from './components/IAMBadge';
 import { ChatMessage } from './components/ChatMessage';
 import { DashboardWidget } from './components/DashboardWidget';
 import { AuditLogPanel } from './components/AuditLogPanel';
+import { DocumentsPanel } from './components/DocumentsPanel';
 
 const DEFAULT_PERSONAS = {
   CSUITE: {
@@ -60,6 +61,7 @@ export default function App() {
   const [personas, setPersonas] = useState(DEFAULT_PERSONAS);
   const [healthStatus, setHealthStatus] = useState({ status: 'checking' });
   const [error, setError] = useState(null);
+  const [activeTab, setActiveTab] = useState('dashboard'); // 'dashboard', 'documents', 'projects', 'team'
 
   const scrollRef = useRef(null);
   const wsRef = useRef(null);
@@ -218,19 +220,35 @@ export default function App() {
         <nav className="flex-1 p-4 space-y-1">
           <p className="text-xs font-semibold text-stone-400 uppercase tracking-wider px-3 mb-3">Menu</p>
 
-          <button className="w-full flex items-center gap-3 px-4 py-3 rounded-xl bg-violet-50 text-violet-700 text-sm font-medium">
+          <button
+            onClick={() => setActiveTab('dashboard')}
+            className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-colors ${activeTab === 'dashboard' ? 'bg-violet-50 text-violet-700' : 'hover:bg-stone-50 text-stone-500'
+              }`}
+          >
             <LayoutDashboard size={18} />
             Dashboard
           </button>
-          <button className="w-full flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-stone-50 text-stone-500 text-sm font-medium transition-colors">
+          <button
+            onClick={() => setActiveTab('projects')}
+            className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-colors ${activeTab === 'projects' ? 'bg-violet-50 text-violet-700' : 'hover:bg-stone-50 text-stone-500'
+              }`}
+          >
             <Briefcase size={18} />
             Projects
           </button>
-          <button className="w-full flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-stone-50 text-stone-500 text-sm font-medium transition-colors">
+          <button
+            onClick={() => setActiveTab('team')}
+            className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-colors ${activeTab === 'team' ? 'bg-violet-50 text-violet-700' : 'hover:bg-stone-50 text-stone-500'
+              }`}
+          >
             <Users size={18} />
             Team
           </button>
-          <button className="w-full flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-stone-50 text-stone-500 text-sm font-medium transition-colors">
+          <button
+            onClick={() => setActiveTab('documents')}
+            className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-colors ${activeTab === 'documents' ? 'bg-violet-50 text-violet-700' : 'hover:bg-stone-50 text-stone-500'
+              }`}
+          >
             <FolderOpen size={18} />
             Documents
           </button>
@@ -246,8 +264,8 @@ export default function App() {
                 key={p.id}
                 onClick={() => setActivePersona(p)}
                 className={`w-full flex items-center gap-3 p-3 rounded-xl transition-all ${activePersona.id === p.id
-                    ? 'bg-stone-100 shadow-soft'
-                    : 'hover:bg-stone-50'
+                  ? 'bg-stone-100 shadow-soft'
+                  : 'hover:bg-stone-50'
                   }`}
               >
                 <div className={`w-10 h-10 rounded-xl ${p.color} flex items-center justify-center text-lg`}>
@@ -306,8 +324,8 @@ export default function App() {
               <button
                 onClick={() => setShowLogs(!showLogs)}
                 className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium transition-all ${showLogs
-                    ? 'bg-amber-100 text-amber-700'
-                    : 'bg-stone-100 text-stone-600 hover:bg-stone-200'
+                  ? 'bg-amber-100 text-amber-700'
+                  : 'bg-stone-100 text-stone-600 hover:bg-stone-200'
                   }`}
               >
                 <Eye size={16} />
@@ -324,70 +342,96 @@ export default function App() {
             </div>
           </header>
 
-          {/* Dashboard Content */}
-          <div className="flex-1 overflow-y-auto p-6 bg-stone-50">
+          {/* Main Content - Dynamic based on activeTab */}
+          {activeTab === 'dashboard' && (
+            <div className="flex-1 overflow-y-auto p-6 bg-stone-50">
 
-            {/* Stats */}
-            <div className="grid grid-cols-3 gap-5 mb-6">
-              {activePersona.id === personas.IT?.id && (
-                <>
-                  <DashboardWidget title="Active Incidents" value="12" trend="+2" icon={AlertTriangle} color="bg-red-500" />
-                  <DashboardWidget title="System Uptime" value="99.9%" trend="+0.1%" icon={Server} color="bg-emerald-500" />
-                  <DashboardWidget title="Open PRs" value="34" trend="-5" icon={Code} color="bg-blue-500" />
-                </>
-              )}
-              {activePersona.id === personas.HR?.id && (
-                <>
-                  <DashboardWidget title="Open Roles" value="8" trend="+1" icon={Users} color="bg-rose-500" />
-                  <DashboardWidget title="Onboarding" value="3" trend="0" icon={Users} color="bg-purple-500" />
-                  <DashboardWidget title="eNPS Score" value="42" trend="+4" icon={Activity} color="bg-pink-500" />
-                </>
-              )}
-              {activePersona.id === personas.CSUITE?.id && (
-                <>
-                  <DashboardWidget title="Q3 Revenue" value="$4.2M" trend="+15%" icon={PieChart} color="bg-violet-500" />
-                  <DashboardWidget title="Burn Rate" value="$180k" trend="-2%" icon={Activity} color="bg-orange-500" />
-                  <DashboardWidget title="Market Share" value="12%" trend="+1%" icon={PieChart} color="bg-cyan-500" />
-                </>
-              )}
-            </div>
-
-            {/* Cards */}
-            <div className="grid grid-cols-2 gap-5">
-              <div className="bg-white rounded-2xl p-6 shadow-soft">
-                <h3 className="text-base font-bold text-stone-700 mb-4">Recent Activity</h3>
-                <div className="space-y-4">
-                  {[
-                    { text: 'Budget report updated', time: '2h ago' },
-                    { text: 'New team member onboarded', time: '4h ago' },
-                    { text: 'Q3 projections reviewed', time: 'Yesterday' }
-                  ].map((item, i) => (
-                    <div key={i} className="flex items-center gap-4 pb-4 border-b border-stone-100 last:border-0 last:pb-0">
-                      <div className="w-10 h-10 rounded-xl bg-stone-100 flex items-center justify-center text-stone-400">
-                        <FileText size={18} />
-                      </div>
-                      <div className="flex-1">
-                        <p className="text-sm font-medium text-stone-700">{item.text}</p>
-                        <p className="text-xs text-stone-400">{item.time}</p>
-                      </div>
-                    </div>
-                  ))}
-                </div>
+              {/* Stats */}
+              <div className="grid grid-cols-3 gap-5 mb-6">
+                {activePersona.id === personas.IT?.id && (
+                  <>
+                    <DashboardWidget title="Active Incidents" value="12" trend="+2" icon={AlertTriangle} color="bg-red-500" />
+                    <DashboardWidget title="System Uptime" value="99.9%" trend="+0.1%" icon={Server} color="bg-emerald-500" />
+                    <DashboardWidget title="Open PRs" value="34" trend="-5" icon={Code} color="bg-blue-500" />
+                  </>
+                )}
+                {activePersona.id === personas.HR?.id && (
+                  <>
+                    <DashboardWidget title="Open Roles" value="8" trend="+1" icon={Users} color="bg-rose-500" />
+                    <DashboardWidget title="Onboarding" value="3" trend="0" icon={Users} color="bg-purple-500" />
+                    <DashboardWidget title="eNPS Score" value="42" trend="+4" icon={Activity} color="bg-pink-500" />
+                  </>
+                )}
+                {activePersona.id === personas.CSUITE?.id && (
+                  <>
+                    <DashboardWidget title="Q3 Revenue" value="$4.2M" trend="+15%" icon={PieChart} color="bg-violet-500" />
+                    <DashboardWidget title="Burn Rate" value="$180k" trend="-2%" icon={Activity} color="bg-orange-500" />
+                    <DashboardWidget title="Market Share" value="12%" trend="+1%" icon={PieChart} color="bg-cyan-500" />
+                  </>
+                )}
               </div>
 
-              <div className="bg-white rounded-2xl p-6 shadow-soft">
-                <h3 className="text-base font-bold text-stone-700 mb-4">Quick Actions</h3>
-                <div className="space-y-2">
-                  {['View Reports', 'Schedule Meeting', 'Submit Request'].map(label => (
-                    <button key={label} className="w-full flex items-center justify-between px-4 py-3 rounded-xl hover:bg-stone-50 transition-colors group">
-                      <span className="text-sm text-stone-600">{label}</span>
-                      <ArrowRight size={16} className="text-stone-300 group-hover:text-violet-500 transition-colors" />
-                    </button>
-                  ))}
+              {/* Cards */}
+              <div className="grid grid-cols-2 gap-5">
+                <div className="bg-white rounded-2xl p-6 shadow-soft">
+                  <h3 className="text-base font-bold text-stone-700 mb-4">Recent Activity</h3>
+                  <div className="space-y-4">
+                    {[
+                      { text: 'Budget report updated', time: '2h ago' },
+                      { text: 'New team member onboarded', time: '4h ago' },
+                      { text: 'Q3 projections reviewed', time: 'Yesterday' }
+                    ].map((item, i) => (
+                      <div key={i} className="flex items-center gap-4 pb-4 border-b border-stone-100 last:border-0 last:pb-0">
+                        <div className="w-10 h-10 rounded-xl bg-stone-100 flex items-center justify-center text-stone-400">
+                          <FileText size={18} />
+                        </div>
+                        <div className="flex-1">
+                          <p className="text-sm font-medium text-stone-700">{item.text}</p>
+                          <p className="text-xs text-stone-400">{item.time}</p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="bg-white rounded-2xl p-6 shadow-soft">
+                  <h3 className="text-base font-bold text-stone-700 mb-4">Quick Actions</h3>
+                  <div className="space-y-2">
+                    {['View Reports', 'Schedule Meeting', 'Submit Request'].map(label => (
+                      <button key={label} className="w-full flex items-center justify-between px-4 py-3 rounded-xl hover:bg-stone-50 transition-colors group">
+                        <span className="text-sm text-stone-600">{label}</span>
+                        <ArrowRight size={16} className="text-stone-300 group-hover:text-violet-500 transition-colors" />
+                      </button>
+                    ))}
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
+          )}
+
+          {activeTab === 'documents' && (
+            <DocumentsPanel activePersona={activePersona} />
+          )}
+
+          {activeTab === 'projects' && (
+            <div className="flex-1 overflow-y-auto p-6 bg-stone-50 flex items-center justify-center">
+              <div className="text-center text-stone-400">
+                <Briefcase size={48} className="mx-auto mb-3 opacity-50" />
+                <p className="font-medium">Projects</p>
+                <p className="text-sm mt-1">Coming soon</p>
+              </div>
+            </div>
+          )}
+
+          {activeTab === 'team' && (
+            <div className="flex-1 overflow-y-auto p-6 bg-stone-50 flex items-center justify-center">
+              <div className="text-center text-stone-400">
+                <Users size={48} className="mx-auto mb-3 opacity-50" />
+                <p className="font-medium">Team</p>
+                <p className="text-sm mt-1">Coming soon</p>
+              </div>
+            </div>
+          )}
 
           {showLogs && <AuditLogPanel logs={auditLogs} onClose={() => setShowLogs(false)} />}
 
@@ -478,8 +522,8 @@ export default function App() {
                     onClick={handleSend}
                     disabled={!input.trim() || isTyping}
                     className={`p-3 rounded-xl transition-all ${input.trim()
-                        ? 'bg-gradient-to-r from-violet-500 to-indigo-600 text-white shadow-lg shadow-violet-200 hover:shadow-violet-300'
-                        : 'bg-stone-200 text-stone-400'
+                      ? 'bg-gradient-to-r from-violet-500 to-indigo-600 text-white shadow-lg shadow-violet-200 hover:shadow-violet-300'
+                      : 'bg-stone-200 text-stone-400'
                       } disabled:opacity-50`}
                   >
                     {isTyping ? <Loader2 size={18} className="animate-spin" /> : <Send size={18} />}
