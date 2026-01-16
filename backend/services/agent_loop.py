@@ -109,7 +109,7 @@ When you have enough information to answer, use the 'final_answer' tool.
             
             trace.append({
                 "step": step_num,
-                "thought": thought,
+                "text": f"Step {step_num}: {thought[:100]}..." if len(thought) > 100 else f"Step {step_num}: {thought}",
                 "action": action,
                 "state": "done"
             })

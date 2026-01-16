@@ -4,6 +4,7 @@ Developer and IT-focused Agentic Assistant with Code Intelligence.
 """
 
 from fastapi import FastAPI, HTTPException, Header, UploadFile, File
+from fastapi.responses import StreamingResponse
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 from typing import Optional, List, Dict, Any, Literal
@@ -335,6 +336,72 @@ async def chat_agent(
         timestamp=datetime.now(),
         trace=result.trace,
         actions=result.actions
+    )
+
+
+@app.post("/api/chat/stream")
+async def chat_stream(
+    request: QueryRequest,
+    x_iam_role: str = Header(..., description="IAM Role of the requester")
+):
+    """Streaming chat endpoint using Server-Sent Events"""
+    
+    # Resolve capabilities
+    capabilities = resolve_capabilities(x_iam_role)
+    
+    # Get conversation history
+    conversation_history = []
+    if request.conversation_id:
+        try:
+            messages = await db_service.get_recent_messages(request.conversation_id, limit=6)
+            conversation_history = [{"role": m["role"], "content": m["content"]} for m in messages]
+        except:
+            pass
+    
+    async def generate():
+        # Send initial thinking step
+        yield f"data: {json.dumps({'type': 'step', 'text': 'Analyzing your request...', 'state': 'processing'})}\n\n"
+        
+        # Classify intent
+        intent = await llm_service.classify_intent(request.query, capabilities)
+        yield f"data: {json.dumps({'type': 'step', 'text': 'Analyzing your request...', 'state': 'done'})}\n\n"
+        
+        # Get context
+        yield f"data: {json.dumps({'type': 'step', 'text': 'Searching knowledge base...', 'state': 'processing'})}\n\n"
+        
+        context = []
+        if intent.requires_code_search and code_collection.count() > 0:
+            results = await hybrid_retriever.hybrid_search(request.query, top_k=5)
+            context = results
+        
+        yield f"data: {json.dumps({'type': 'step', 'text': 'Searching knowledge base...', 'state': 'done'})}\n\n"
+        
+        # Stream LLM response
+        yield f"data: {json.dumps({'type': 'step', 'text': 'Generating response...', 'state': 'processing'})}\n\n"
+        
+        full_response = ""
+        async for chunk in llm_service.stream_response(
+            query=request.query,
+            context=context,
+            role=x_iam_role,
+            capabilities=capabilities,
+            intent=intent,
+            conversation_history=conversation_history
+        ):
+            full_response += chunk
+            yield f"data: {json.dumps({'type': 'token', 'content': chunk})}\n\n"
+        
+        yield f"data: {json.dumps({'type': 'step', 'text': 'Generating response...', 'state': 'done'})}\n\n"
+        yield f"data: {json.dumps({'type': 'done', 'content': full_response})}\n\n"
+    
+    return StreamingResponse(
+        generate(),
+        media_type="text/event-stream",
+        headers={
+            "Cache-Control": "no-cache",
+            "Connection": "keep-alive",
+            "X-Accel-Buffering": "no"
+        }
     )
 
 

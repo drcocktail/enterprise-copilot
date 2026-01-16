@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Menu, Shield, Send, Terminal, Activity, ChevronDown, ChevronRight, Loader2, Sparkles, History, Plus } from 'lucide-react';
+import { Menu, Shield, Send, Terminal, Activity, ChevronDown, ChevronRight, Loader2, Sparkles, History, Plus, Zap } from 'lucide-react';
 import ActionCard from '../components/ActionCard';
 import ThinkingStep from '../components/ThinkingStep';
 import ConversationSidebar from '../components/ConversationSidebar';
@@ -53,6 +53,7 @@ const ThinkingPanel = ({ thoughts }) => {
 const ChatView = ({ isSidebarOpen, setSidebarOpen }) => {
     const [input, setInput] = useState('');
     const [isLoading, setIsLoading] = useState(false);
+    const [isStreaming, setIsStreaming] = useState(false);
     const [messages, setMessages] = useState([]);
     const [conversationId, setConversationId] = useState(null);
     const [showHistory, setShowHistory] = useState(false);
@@ -69,7 +70,6 @@ const ChatView = ({ isSidebarOpen, setSidebarOpen }) => {
         scrollToBottom();
     }, [messages]);
 
-    // Load messages when conversation changes
     useEffect(() => {
         if (conversationId) {
             loadConversationMessages(conversationId);
@@ -79,7 +79,6 @@ const ChatView = ({ isSidebarOpen, setSidebarOpen }) => {
     const loadConversationMessages = async (convoId) => {
         try {
             const msgs = await api.conversationAPI.getMessages(convoId, iamRole);
-            // Transform backend format to UI format
             const formattedMsgs = msgs.map((m, idx) => ({
                 id: idx,
                 role: m.role,
@@ -111,6 +110,7 @@ const ChatView = ({ isSidebarOpen, setSidebarOpen }) => {
         const userText = input;
         setInput('');
         setIsLoading(true);
+        setIsStreaming(true);
 
         const userMsg = {
             id: Date.now(),
@@ -124,55 +124,56 @@ const ChatView = ({ isSidebarOpen, setSidebarOpen }) => {
         const initialBotMsg = {
             id: botMsgId,
             role: 'assistant',
-            thoughts: [
-                { text: "Analyzing user intent...", state: "processing" }
-            ],
+            thoughts: [],
             content: "",
             timestamp: new Date().toLocaleTimeString()
         };
         setMessages(prev => [...prev, initialBotMsg]);
 
         try {
-            setTimeout(() => {
-                setMessages(prev => prev.map(m => m.id === botMsgId ? {
-                    ...m,
-                    thoughts: [
-                        { text: "Analyzing user intent...", state: "done" },
-                        { text: "Checking permissions...", state: "processing" }
-                    ]
-                } : m));
-            }, 800);
+            // Use streaming endpoint
+            for await (const event of api.chatAPI.streamQuery(userText, iamRole, conversationId)) {
+                if (event.type === 'step') {
+                    // Update thinking steps
+                    setMessages(prev => prev.map(m => {
+                        if (m.id !== botMsgId) return m;
 
-            const res = await api.chatAPI.sendAgentQuery(userText, iamRole, conversationId);
-
-            // Update conversation ID if new
-            if (res.conversation_id && !conversationId) {
-                setConversationId(res.conversation_id);
+                        const existingStepIdx = m.thoughts.findIndex(t => t.text === event.text);
+                        if (existingStepIdx >= 0) {
+                            // Update existing step
+                            const newThoughts = [...m.thoughts];
+                            newThoughts[existingStepIdx] = { ...newThoughts[existingStepIdx], state: event.state };
+                            return { ...m, thoughts: newThoughts };
+                        } else {
+                            // Add new step
+                            return { ...m, thoughts: [...m.thoughts, { text: event.text, state: event.state }] };
+                        }
+                    }));
+                } else if (event.type === 'token') {
+                    // Append token to content
+                    setMessages(prev => prev.map(m =>
+                        m.id === botMsgId
+                            ? { ...m, content: m.content + event.content }
+                            : m
+                    ));
+                    scrollToBottom();
+                } else if (event.type === 'done') {
+                    setIsStreaming(false);
+                }
             }
-
-            setMessages(prev => prev.map(m => m.id === botMsgId ? {
-                ...m,
-                thoughts: res.trace || [
-                    { text: "Analyzing user intent...", state: "done" },
-                    { text: "Checking permissions...", state: "done" },
-                    { text: "Generating response...", state: "done" }
-                ],
-                content: res.content || res.message,
-                action: res.actions?.[0] || res.attachment || null
-            } : m));
-
         } catch (e) {
             console.error(e);
             setMessages(prev => prev.map(m => m.id === botMsgId ? {
                 ...m,
                 thoughts: [
-                    ...m.thoughts.map(t => ({ ...t, state: t.state === 'processing' ? 'error' : t.state })),
+                    ...m.thoughts,
                     { text: "Connection failed", state: "error" }
                 ],
                 content: "I encountered an error connecting to the Nexus backend. Please ensure the services are running."
             } : m));
         } finally {
             setIsLoading(false);
+            setIsStreaming(false);
         }
     };
 
@@ -228,6 +229,12 @@ const ChatView = ({ isSidebarOpen, setSidebarOpen }) => {
                         </div>
                     </div>
                     <div className="flex items-center space-x-3">
+                        {isStreaming && (
+                            <div className="flex items-center px-3 py-1.5 bg-emerald-500/10 border border-emerald-500/20 rounded-full">
+                                <Zap className="w-3 h-3 text-emerald-400 mr-2 animate-pulse" />
+                                <span className="text-[10px] font-bold text-emerald-300 uppercase tracking-wide">Streaming</span>
+                            </div>
+                        )}
                         <div className="flex items-center px-3 py-1.5 bg-blue-500/10 border border-blue-500/20 rounded-full">
                             <div className="w-1.5 h-1.5 bg-blue-500 rounded-full mr-2 animate-pulse"></div>
                             <span className="text-[10px] font-bold text-blue-300 uppercase tracking-wide">Secure Environment</span>
@@ -270,6 +277,9 @@ const ChatView = ({ isSidebarOpen, setSidebarOpen }) => {
                                         {msg.content && (
                                             <div className="text-slate-300 text-sm leading-relaxed whitespace-pre-wrap">
                                                 {msg.content}
+                                                {isStreaming && msg.id === messages[messages.length - 1]?.id && (
+                                                    <span className="inline-block w-2 h-4 bg-blue-400 ml-0.5 animate-pulse" />
+                                                )}
                                             </div>
                                         )}
 
@@ -295,7 +305,7 @@ const ChatView = ({ isSidebarOpen, setSidebarOpen }) => {
                                 value={input}
                                 onChange={(e) => setInput(e.target.value)}
                                 onKeyDown={(e) => e.key === 'Enter' && handleSend()}
-                                placeholder={isLoading ? "Processing..." : "Type a command or ask a question..."}
+                                placeholder={isLoading ? "Streaming response..." : "Type a command or ask a question..."}
                                 className="w-full bg-transparent text-slate-200 text-sm py-4 px-4 focus:outline-none placeholder:text-slate-600 disabled:opacity-50"
                                 disabled={isLoading}
                             />

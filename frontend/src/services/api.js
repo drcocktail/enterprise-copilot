@@ -81,6 +81,50 @@ export const chatAPI = {
     });
 
     return response.data;
+  },
+
+  /**
+   * Stream a query response using SSE
+   * Returns an async iterator of events
+   */
+  streamQuery: async function* (query, iamRole, sessionId = null) {
+    const baseUrl = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+
+    const response = await fetch(`${baseUrl}/api/chat/stream`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-iam-role': iamRole
+      },
+      body: JSON.stringify({
+        query,
+        conversation_id: sessionId
+      })
+    });
+
+    const reader = response.body.getReader();
+    const decoder = new TextDecoder();
+    let buffer = '';
+
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+
+      buffer += decoder.decode(value, { stream: true });
+      const lines = buffer.split('\n\n');
+      buffer = lines.pop() || '';
+
+      for (const line of lines) {
+        if (line.startsWith('data: ')) {
+          try {
+            const data = JSON.parse(line.slice(6));
+            yield data;
+          } catch (e) {
+            console.warn('Failed to parse SSE data:', line);
+          }
+        }
+      }
+    }
   }
 };
 

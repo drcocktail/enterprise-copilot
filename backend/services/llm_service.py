@@ -101,6 +101,54 @@ class LLMService:
         except Exception as e:
             return f"Error calling LLM: {str(e)}"
     
+    async def stream_response(
+        self,
+        query: str,
+        context,
+        role: str,
+        capabilities,
+        intent,
+        conversation_history = None
+    ):
+        """Stream response tokens from Ollama"""
+        # Build prompt
+        system_prompt = self._build_system_prompt(role, capabilities, intent)
+        history_str = self._format_conversation_history(conversation_history)
+        context_str = self._format_code_context(context)
+        
+        full_prompt = system_prompt
+        if history_str:
+            full_prompt += f"\n\n{history_str}"
+        if context_str:
+            full_prompt += f"\n\n{context_str}"
+        full_prompt += f"\n\nUser: {query}\n\nAssistant:"
+        
+        try:
+            async with self.client.stream(
+                "POST",
+                f"{self.base_url}/api/generate",
+                json={
+                    "model": self.model,
+                    "prompt": full_prompt,
+                    "stream": True,
+                    "options": {
+                        "temperature": 0.4,
+                        "top_p": 0.9,
+                        "num_predict": 2000
+                    }
+                }
+            ) as response:
+                async for line in response.aiter_lines():
+                    if line:
+                        try:
+                            data = json.loads(line)
+                            if "response" in data:
+                                yield data["response"]
+                        except json.JSONDecodeError:
+                            continue
+        except Exception as e:
+            yield f"Error: {str(e)}"
+    
     async def classify_intent(
         self,
         query: str,
