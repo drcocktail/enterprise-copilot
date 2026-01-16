@@ -21,7 +21,7 @@ class AgenticRAG:
         self,
         rag_service,
         llm_base_url: str = "http://localhost:11434",
-        llm_model: str = "llama3.2",
+        llm_model: str = "qwen2.5-coder:7b",
         max_hops: int = 3
     ):
         self.rag_service = rag_service
@@ -99,6 +99,11 @@ class AgenticRAG:
                     break
                 
                 # Step 3: Use follow-up query for next hop
+                # Deduplication check
+                if follow_up in queries_made:
+                    print(f"Skipping duplicate query: {follow_up}")
+                    break
+                    
                 current_query = follow_up
                 queries_made.append(follow_up)
         

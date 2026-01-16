@@ -306,24 +306,72 @@ class CodeIngestionService:
 
         return chunks
 
-    def _chunk_by_lines(self, content, file_path, language, repo_name, user_id, chunk_size=50):
+    def _chunk_by_lines(self, content, file_path, language, repo_name, user_id, chunk_size=1000, overlap=100):
+        """
+        Robust chunking using recursive character splitting logic.
+        Splits by separators (class/def, newlines, spaces) to respect code structure.
+        """
+        separators = ["\nclass ", "\ndef ", "\nfunc ", "\n\n", "\n", " "]
+        
+        final_chunks = []
+        
+        # Initial split
+        if len(content) <= chunk_size:
+            final_chunks = [content]
+        else:
+            final_chunks = self._recursive_split(content, separators, chunk_size, overlap)
+            
         chunks = []
-        lines = content.split('\n')
-        for i in range(0, len(lines), chunk_size):
-            chunk_lines = lines[i:i + chunk_size]
-            chunk_text = '\n'.join(chunk_lines)
-            if len(chunk_text.strip()) > 20:
+        for i, text in enumerate(final_chunks):
+            if len(text.strip()) > 10:
                 chunks.append(self._create_chunk(
-                    text=chunk_text,
+                    text=text,
                     chunk_type="code_block",
-                    name=f"{file_path}:{i+1}",
+                    name=f"{file_path}:chunk_{i+1}",
                     file_path=file_path,
                     language=language,
                     repo_name=repo_name,
                     user_id=user_id,
-                    start_line=i + 1,
-                    end_line=i + len(chunk_lines)
+                    start_line=0, # Hard to track line numbers exactly with recursive split without robust tracking
+                    end_line=0
                 ))
+        return chunks
+
+    def _recursive_split(self, text, separators, chunk_size, overlap):
+        """Recursive splitting helper"""
+        if len(text) <= chunk_size:
+            return [text]
+            
+        # Find best separator
+        separator = separators[-1]
+        for sep in separators:
+            if sep in text:
+                separator = sep
+                break
+        
+        # Split
+        parts = text.split(separator)
+        
+        # Merge parts back into chunks
+        chunks = []
+        current_chunk = []
+        current_len = 0
+        
+        for part in parts:
+            part_len = len(part) + len(separator)
+            if current_len + part_len > chunk_size and current_chunk:
+                # Flush current chunk
+                chunks.append(separator.join(current_chunk))
+                # Handle overlap? (Simplified: no overlap for now to avoid duplications in RAG)
+                current_chunk = [part]
+                current_len = part_len
+            else:
+                current_chunk.append(part)
+                current_len += part_len
+        
+        if current_chunk:
+            chunks.append(separator.join(current_chunk))
+            
         return chunks
 
     def _create_chunk(self, text, chunk_type, name, file_path, language, repo_name, user_id, start_line, end_line):

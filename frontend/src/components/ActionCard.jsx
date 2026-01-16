@@ -1,7 +1,7 @@
 import React from 'react';
 import { Shield, Unlock, Lock } from 'lucide-react';
 
-const ActionCard = ({ system, payload, status, iamReason }) => (
+const ActionCard = ({ system, payload, status, iamReason, result }) => (
     <div className="mt-4 mb-2 bg-slate-900 border border-slate-700 rounded-lg overflow-hidden shadow-lg shadow-black/20">
         <div className="bg-slate-800/50 px-4 py-2 flex items-center justify-between border-b border-slate-700">
             <div className="flex items-center space-x-2">
@@ -11,9 +11,9 @@ const ActionCard = ({ system, payload, status, iamReason }) => (
                 {system === 'KUBERNETES' && <div className="w-2 h-2 rounded-full bg-blue-400"></div>}
                 <span className="text-xs font-bold text-slate-300 tracking-wide uppercase">{system} Integration</span>
             </div>
-            <div className={`flex items-center px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider ${status === 'AUTHORIZED' ? 'bg-green-900/30 text-green-400 border border-green-800' : 'bg-red-900/30 text-red-400 border border-red-800'
+            <div className={`flex items-center px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider ${status === 'AUTHORIZED' || status === 'EXECUTED' ? 'bg-green-900/30 text-green-400 border border-green-800' : 'bg-red-900/30 text-red-400 border border-red-800'
                 }`}>
-                {status === 'AUTHORIZED' ? <Unlock className="w-3 h-3 mr-1" /> : <Lock className="w-3 h-3 mr-1" />}
+                {(status === 'AUTHORIZED' || status === 'EXECUTED') ? <Unlock className="w-3 h-3 mr-1" /> : <Lock className="w-3 h-3 mr-1" />}
                 {status}
             </div>
         </div>
@@ -24,12 +24,23 @@ const ActionCard = ({ system, payload, status, iamReason }) => (
             <pre className="text-slate-300 overflow-x-auto p-2 rounded bg-black/20 border border-white/5">
                 {JSON.stringify(payload, null, 2)}
             </pre>
+            {/* Show Result if available */}
+            {status === 'EXECUTED' && (
+                <div className="mt-4 pt-4 border-t border-slate-800/50">
+                    <div className="flex justify-between items-start mb-2">
+                        <span className="text-slate-500">// Execution Result</span>
+                    </div>
+                    <div className="text-emerald-400 p-2 rounded bg-emerald-950/20 border border-emerald-900/30 whitespace-pre-wrap font-mono text-[10px]">
+                        {typeof result === 'string' ? result : JSON.stringify(result, null, 2)}
+                    </div>
+                </div>
+            )}
         </div>
         <div className="px-4 py-3 bg-slate-800/30 border-t border-slate-700 flex items-center justify-between">
             <div className="flex items-center space-x-2">
-                <Shield className={`w-4 h-4 ${status === 'AUTHORIZED' ? 'text-green-500' : 'text-red-500'}`} />
+                <Shield className={`w-4 h-4 ${(status === 'AUTHORIZED' || status === 'EXECUTED') ? 'text-green-500' : 'text-red-500'}`} />
                 <span className="text-xs text-slate-400">
-                    IAM Check: <span className={status === 'AUTHORIZED' ? 'text-green-400' : 'text-red-400'}>{iamReason}</span>
+                    IAM Check: <span className={(status === 'AUTHORIZED' || status === 'EXECUTED') ? 'text-green-400' : 'text-red-400'}>{iamReason || 'Authorized'}</span>
                 </span>
             </div>
             {status === 'AUTHORIZED' ? (

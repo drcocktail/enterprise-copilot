@@ -3,7 +3,7 @@ DevOps Copilot V3 - FastAPI Backend
 Developer and IT-focused Agentic Assistant with Code Intelligence.
 """
 
-from fastapi import FastAPI, HTTPException, Header, UploadFile, File
+from fastapi import FastAPI, HTTPException, Header, UploadFile, File, Request
 from fastapi.responses import StreamingResponse
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
@@ -21,6 +21,7 @@ from config.iam_config import IAMConfig, resolve_capabilities, PERSONA_DEFINITIO
 from services.llm_service import LLMService
 from services.db_service import DatabaseService
 from services.code_ingestion import CodeIngestionService
+from services.document_ingestion import DocumentIngestionService
 from services.hybrid_retriever import HybridRetriever
 from services.agent_loop import AgentLoop
 
@@ -33,6 +34,7 @@ iam_config = IAMConfig()
 llm_service: Optional[LLMService] = None
 db_service: Optional[DatabaseService] = None
 code_ingestion: Optional[CodeIngestionService] = None
+document_ingestion: Optional[DocumentIngestionService] = None
 hybrid_retriever: Optional[HybridRetriever] = None
 chroma_client = None
 code_collection = None
@@ -41,32 +43,40 @@ code_collection = None
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     """Initialize services on startup"""
-    global llm_service, db_service, code_ingestion, hybrid_retriever
-    global chroma_client, code_collection
-    
     print("🚀 Initializing DevOps Copilot V3...")
     
     # Initialize ChromaDB
     chroma_path = Path(__file__).parent / "chroma_db"
-    chroma_client = chromadb.PersistentClient(
+    app.state.chroma_client = chromadb.PersistentClient(
         path=str(chroma_path),
         settings=Settings(anonymized_telemetry=False)
     )
     
     # Get or create code collection
-    code_collection = chroma_client.get_or_create_collection(
+    app.state.code_collection = app.state.chroma_client.get_or_create_collection(
         name="code_chunks",
         metadata={"hnsw:space": "cosine"}
     )
     
     # Initialize services
-    db_service = DatabaseService()
-    llm_service = LLMService()
-    code_ingestion = CodeIngestionService()
-    hybrid_retriever = HybridRetriever(collection=code_collection)
+    app.state.db_service = DatabaseService()
+    app.state.llm_service = LLMService()
+    app.state.code_ingestion = CodeIngestionService()
+    app.state.document_ingestion = DocumentIngestionService()
+    app.state.hybrid_retriever = HybridRetriever(collection=app.state.code_collection)
+    
+    # Update globals
+    global llm_service, db_service, code_ingestion, hybrid_retriever, code_collection, document_ingestion
+    llm_service = app.state.llm_service
+    db_service = app.state.db_service
+    code_ingestion = app.state.code_ingestion
+    document_ingestion = app.state.document_ingestion
+    hybrid_retriever = app.state.hybrid_retriever
+    code_collection = app.state.code_collection
+    app.state.iam_config = IAMConfig()
     
     # Load IAM configuration
-    await iam_config.load()
+    await app.state.iam_config.load()
     
     print("✅ DevOps Copilot V3 ready!")
     print("   - LLM: qwen2.5-coder:7b")
@@ -77,6 +87,7 @@ async def lifespan(app: FastAPI):
     
     # Cleanup
     print("🛑 Shutting down...")
+
 
 
 app = FastAPI(
@@ -301,6 +312,7 @@ async def chat_agent(
         llm_service=llm_service,
         hybrid_retriever=hybrid_retriever,
         code_ingestion=code_ingestion,
+        document_ingestion=document_ingestion,
         max_steps=5
     )
     
@@ -341,7 +353,8 @@ async def chat_agent(
 
 @app.post("/api/chat/stream")
 async def chat_stream(
-    request: QueryRequest,
+    body: QueryRequest,
+    request: Request,
     x_iam_role: str = Header(..., description="IAM Role of the requester")
 ):
     """Streaming chat endpoint using Server-Sent Events"""
@@ -351,51 +364,109 @@ async def chat_stream(
     
     # Get conversation history
     conversation_history = []
-    if request.conversation_id:
+    if body.conversation_id:
         try:
-            messages = await db_service.get_recent_messages(request.conversation_id, limit=6)
+            # Use request.app.state.db_service
+            messages = await request.app.state.db_service.get_recent_messages(body.conversation_id, limit=6)
             conversation_history = [{"role": m["role"], "content": m["content"]} for m in messages]
         except:
             pass
     
-    async def generate():
-        # Send initial thinking step
-        yield f"data: {json.dumps({'type': 'step', 'text': 'Analyzing your request...', 'state': 'processing'})}\n\n"
-        
-        # Classify intent
-        intent = await llm_service.classify_intent(request.query, capabilities)
-        yield f"data: {json.dumps({'type': 'step', 'text': 'Analyzing your request...', 'state': 'done'})}\n\n"
-        
-        # Get context
-        yield f"data: {json.dumps({'type': 'step', 'text': 'Searching knowledge base...', 'state': 'processing'})}\n\n"
-        
-        context = []
-        if intent.requires_code_search and code_collection.count() > 0:
-            results = await hybrid_retriever.hybrid_search(request.query, top_k=5)
-            context = results
-        
-        yield f"data: {json.dumps({'type': 'step', 'text': 'Searching knowledge base...', 'state': 'done'})}\n\n"
-        
-        # Stream LLM response
-        yield f"data: {json.dumps({'type': 'step', 'text': 'Generating response...', 'state': 'processing'})}\n\n"
-        
-        full_response = ""
-        async for chunk in llm_service.stream_response(
-            query=request.query,
-            context=context,
-            role=x_iam_role,
-            capabilities=capabilities,
-            intent=intent,
-            conversation_history=conversation_history
-        ):
-            full_response += chunk
-            yield f"data: {json.dumps({'type': 'token', 'content': chunk})}\n\n"
-        
-        yield f"data: {json.dumps({'type': 'step', 'text': 'Generating response...', 'state': 'done'})}\n\n"
-        yield f"data: {json.dumps({'type': 'done', 'content': full_response})}\n\n"
+    # Create a Queue for the stream
+    event_queue = asyncio.Queue()
     
+    async def background_worker():
+        """Runs the agent, pushes to queue, and saves to DB."""
+        full_answer = ""
+        thoughts = []
+        actions = []
+        
+        try:
+            # Initialize agent
+            agent = AgentLoop(
+                llm_service=request.app.state.llm_service,
+                hybrid_retriever=request.app.state.hybrid_retriever,
+                code_ingestion=request.app.state.code_ingestion,
+                document_ingestion=request.app.state.document_ingestion
+            )
+            
+            async for event in agent.run_stream(
+                query=body.query,
+                role=x_iam_role,
+                capabilities=capabilities,
+                conversation_history=conversation_history
+            ):
+                # 1. Push to queue for the live client
+                await event_queue.put(event)
+                
+                # 2. Accumulate state for persistence
+                if event["type"] == "step":
+                    thoughts.append(event) # {"type": "step", "text": "...", "state": "done"}
+                elif event["type"] == "answer":
+                    full_answer = event["content"]
+                elif event["type"] == "action_result":
+                    actions.append(event["data"])
+            
+            # 3. Persistence: Save the assistant's response to DB
+            if body.conversation_id:
+                try:
+                    # Construct the complex message content if needed, but DB currently takes 'content'.
+                    # We might want to save the trace in a separate field if DB supports it.
+                    # As a fallback, we append the trace to the content or just save the answer.
+                    # Ideally, db_service.add_message supports `metadata` or `trace`.
+                    # Let's stick to simple content for now to ensure compatibility.
+                    
+                    # For a "true agent", the answer is the answer. The trace is metadata.
+                    # We assume db_service.add_message(conversation_id, role, content)
+                    await request.app.state.db_service.add_message(
+                        body.conversation_id,
+                        "assistant",
+                        full_answer
+                    )
+                    # TODO: If DB has a `trace` column, save `thoughts` and `actions` there.
+                except Exception as db_e:
+                    print(f"Failed to save message to DB: {db_e}")
+                    
+        except Exception as e:
+            print(f"Background worker error: {e}")
+            await event_queue.put({"type": "error", "error": str(e)})
+        finally:
+            await event_queue.put(None) # Sentinel
+
+    # Start background task
+    asyncio.create_task(background_worker())
+
+    async def stream_generator():
+        while True:
+            try:
+                # Wait for next event
+                event = await event_queue.get()
+                
+                if event is None: # Done
+                    break
+                
+                if event.get("type") == "error":
+                    # Optionally verify if we should signal error to stream
+                    break
+                    
+                # Yield SSE format
+                if event["type"] == "step":
+                    yield f"data: {json.dumps({'type': 'step', 'text': event['text'], 'state': event['state']})}\n\n"
+                elif event["type"] == "action_result":
+                    yield f"data: {json.dumps({'type': 'action', 'data': event['data']})}\n\n"
+                elif event["type"] == "answer":
+                    yield f"data: {json.dumps({'type': 'done', 'content': event['content']})}\n\n"
+                elif event["type"] == "step_start":
+                    pass
+
+            except asyncio.CancelledError:
+                # Client disconnected.
+                # We stop yielding, but the background_worker continues running!
+                print(f"Stream cancelled by client for conversation {body.conversation_id}")
+                raise
+
     return StreamingResponse(
-        generate(),
+        stream_generator(),
         media_type="text/event-stream",
         headers={
             "Cache-Control": "no-cache",
@@ -600,18 +671,39 @@ async def upload_document(
     
     file_size = os.path.getsize(file_path)
     
+    # Trigger background ingestion
+    # In a real app, this should be a background task, but we'll await it for now to return stats
+    # or use asyncio.create_task if we want fire-and-forget
+    
+    ingest_stats = {}
+    if document_ingestion:
+        try:
+            # We treat this as fire-and-forget for speed, or await for immediate feedback?
+            # User wants "Ingesting..." progress. 
+            # Let's await it so we can return the node count immediately for the UI to show.
+            ingest_stats = await document_ingestion.ingest_document(
+                file_path=str(file_path),
+                user_id=x_iam_role,
+                original_filename=file.filename
+            )
+        except Exception as e:
+            print(f"Ingestion failed: {e}")
+            ingest_stats = {"error": str(e)}
+
     doc_record = await db_service.add_user_document(
         user_id=x_iam_role,
         filename=safe_filename,
         original_filename=file.filename,
         file_path=str(file_path),
-        file_size=file_size
+        file_size=file_size,
+        chunk_count=ingest_stats.get("chunk_count", 0)
     )
     
     return {
         "id": doc_record["id"],
         "filename": file.filename,
-        "status": "uploaded"
+        "status": "uploaded",
+        "ingestion": ingest_stats
     }
 
 

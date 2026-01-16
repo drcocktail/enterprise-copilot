@@ -42,11 +42,13 @@ class AgentLoop:
         llm_service,
         hybrid_retriever,
         code_ingestion=None,
+        document_ingestion=None,
         max_steps: int = 5
     ):
         self.llm = llm_service
         self.retriever = hybrid_retriever
         self.code_ingestion = code_ingestion
+        self.document_ingestion = document_ingestion
         self.max_steps = max_steps
         
         # Tool registry
@@ -78,12 +80,43 @@ Available Tools:
         capabilities,
         conversation_history: List[Dict[str, Any]] = None
     ) -> AgentResult:
-        """Execute the agent loop"""
+        """Execute the agent loop (non-streaming wrapper)"""
         trace = []
         actions = []
-        step_num = 0
+        answer = ""
         
-        # Initial context
+        async for event in self.run_stream(query, role, capabilities, conversation_history):
+            if event["type"] == "step":
+                trace.append({
+                    "step": len(trace) + 1,
+                    "text": event["text"],
+                    "state": event["state"]
+                })
+            elif event["type"] == "action":
+                # Actions are collected in run_stream's internal logic, 
+                # but we need them in the result. 
+                # Simpler: extraction from the stream events if needed
+                pass 
+            elif event["type"] == "answer":
+                answer += event.get("content", "")
+            elif event["type"] == "action_result":
+                actions.append(event["data"])
+                
+        return AgentResult(
+            answer=answer,
+            trace=trace,
+            actions=actions
+        )
+
+    async def run_stream(
+        self,
+        query: str,
+        role: str,
+        capabilities,
+        conversation_history: List[Dict[str, Any]] = None
+    ):
+        """Execute the agent loop yielding events"""
+        step_num = 0
         context = f"""User Query: {query}
 Role: {role}
 Permissions: {', '.join(capabilities.permissions)}
@@ -101,51 +134,59 @@ When you have enough information to answer, use the 'final_answer' tool.
         while step_num < self.max_steps:
             step_num += 1
             
+            # Yield thinking start
+            yield {"type": "step", "text": f"Step {step_num}: Analyzing...", "state": "processing"}
+            
             # Think: Ask LLM what to do
             think_response = await self._think(context, conversation_history)
             
             # Parse response
             thought, action, action_input = self._parse_response(think_response)
             
-            trace.append({
-                "step": step_num,
-                "text": f"Step {step_num}: {thought[:100]}..." if len(thought) > 100 else f"Step {step_num}: {thought}",
-                "action": action,
-                "state": "done"
-            })
+            # Yield step update
+            yield {"type": "step", "text": f"Step {step_num}: {thought[:80]}...", "state": "done"}
             
             # Check if done
             if action == "final_answer":
-                return AgentResult(
-                    answer=action_input.get("answer", think_response),
-                    trace=trace,
-                    actions=actions
-                )
+                answer = action_input.get("answer", think_response)
+                yield {"type": "answer", "content": answer}
+                return
             
             # Act: Execute tool
             if action in self.tools:
-                observation = await self.tools[action](action_input, role)
+                yield {"type": "step", "text": f"Executing {action}...", "state": "processing"}
                 
-                # Record action if it's an external tool
+                try:
+                    observation = await self.tools[action](action_input, role)
+                except Exception as e:
+                    observation = f"Error executing tool {action}: {str(e)}"
+                
+                # Truncate observation
+                max_obs_len = 1000
+                if len(str(observation)) > max_obs_len:
+                    observation_truncated = str(observation)[:max_obs_len] + f"... (truncated)"
+                else:
+                    observation_truncated = str(observation)
+                
+                # Yield action result
                 if action in ["jira_create", "slack_post", "k8s_exec", "calendar_event"]:
-                    actions.append({
-                        "system": action.upper().replace("_", " "),
+                    action_data = {
+                        "system": action.split("_")[0].upper() if "_" in action else action.upper(),
                         "status": "EXECUTED",
                         "payload": action_input,
-                        "result": observation
-                    })
+                        "result": observation_truncated
+                    }
+                    yield {"type": "action_result", "data": action_data}
                 
-                # Update context with observation
-                context += f"\n\nStep {step_num}:\nThought: {thought}\nAction: {action}\nAction Input: {json.dumps(action_input)}\nObservation: {observation}\n"
+                yield {"type": "step", "text": f"Executing {action}...", "state": "done"}
+                
+                # Update context
+                context += f"\n\nStep {step_num}:\nThought: {thought}\nAction: {action}\nAction Input: {json.dumps(action_input)}\nObservation: {observation_truncated}\n"
             else:
                 context += f"\n\nStep {step_num}:\nThought: {thought}\nAction: {action}\nObservation: Unknown tool '{action}'. Available tools: {list(self.tools.keys())}\n"
         
-        # Max steps reached, force answer
-        return AgentResult(
-            answer="I've gathered the information but reached my reasoning limit. Based on what I found, here's my response: " + trace[-1].get("thought", ""),
-            trace=trace,
-            actions=actions
-        )
+        # Max steps reached
+        yield {"type": "answer", "content": "I've reached my reasoning limit. " + trace[-1].get("thought", "") if trace else ""}
     
     async def _think(self, context: str, history: List[Dict[str, Any]] = None) -> str:
         """Get LLM to think about next step"""
@@ -203,10 +244,11 @@ Now, think step by step about what to do next."""
         return "No code results found."
     
     async def _search_docs(self, input: Dict, role: str) -> str:
-        """Search documents"""
+        """Search documents using Knowledge Graph"""
         query = input.get("query", "")
-        # TODO: Implement document search
-        return f"Document search for '{query}' - No results (document search not yet implemented)."
+        if self.document_ingestion:
+            return await self.document_ingestion.get_context_for_query(query)
+        return "Document ingestion service not available."
     
     async def _jira_create(self, input: Dict, role: str) -> str:
         """Create JIRA ticket (mock)"""
