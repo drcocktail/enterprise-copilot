@@ -70,7 +70,36 @@ class LLMService:
     ):
         self.base_url = base_url
         self.model = model
-        self.client = httpx.AsyncClient(timeout=180.0)
+        self.client = httpx.AsyncClient(timeout=120.0)
+    
+    async def _call_ollama(self, prompt: str, system: str = None) -> str:
+        """Direct call to Ollama API for agent loop compatibility"""
+        try:
+            full_prompt = prompt
+            if system:
+                full_prompt = f"System: {system}\n\n{prompt}"
+            
+            response = await self.client.post(
+                f"{self.base_url}/api/generate",
+                json={
+                    "model": self.model,
+                    "prompt": full_prompt,
+                    "stream": False,
+                    "options": {
+                        "temperature": 0.3,
+                        "top_p": 0.9,
+                        "num_predict": 1000
+                    }
+                }
+            )
+            
+            if response.status_code == 200:
+                result = response.json()
+                return result.get("response", "")
+            else:
+                return f"Error: {response.status_code}"
+        except Exception as e:
+            return f"Error calling LLM: {str(e)}"
     
     async def classify_intent(
         self,

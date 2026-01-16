@@ -55,15 +55,29 @@ apiClient.interceptors.response.use(
  */
 export const chatAPI = {
   /**
-   * Send a query to the copilot
+   * Send a query to the copilot (legacy linear pipeline)
    */
   sendQuery: async (query, iamRole, sessionId = null) => {
     window.currentIAMRole = iamRole; // Set for interceptor
 
     const response = await apiClient.post('/api/chat', {
       query,
-      session_id: sessionId,
+      conversation_id: sessionId,
       context: {}
+    });
+
+    return response.data;
+  },
+
+  /**
+   * Send a query using the agentic ReAct loop
+   */
+  sendAgentQuery: async (query, iamRole, sessionId = null) => {
+    window.currentIAMRole = iamRole;
+
+    const response = await apiClient.post('/api/chat/agent', {
+      query,
+      conversation_id: sessionId
     });
 
     return response.data;

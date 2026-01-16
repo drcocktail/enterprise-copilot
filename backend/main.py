@@ -21,6 +21,7 @@ from services.llm_service import LLMService
 from services.db_service import DatabaseService
 from services.code_ingestion import CodeIngestionService
 from services.hybrid_retriever import HybridRetriever
+from services.agent_loop import AgentLoop
 
 import chromadb
 from chromadb.config import Settings
@@ -112,6 +113,8 @@ class AgentResponse(BaseModel):
     trace_id: str
     timestamp: datetime
     sources: Optional[List[Dict[str, Any]]] = None
+    trace: Optional[List[Dict[str, Any]]] = None  # Reasoning steps
+    actions: Optional[List[Dict[str, Any]]] = None  # Tool outputs
 
 
 class PersonaInfo(BaseModel):
@@ -266,6 +269,75 @@ async def chat(
     )
 
 
+@app.post("/api/chat/agent", response_model=AgentResponse)
+async def chat_agent(
+    request: QueryRequest,
+    x_iam_role: str = Header(..., description="IAM Role of the requester")
+):
+    """Main chat endpoint with agentic reasoning loop"""
+    trace_id = str(uuid.uuid4())[:8]
+    
+    # Resolve capabilities
+    capabilities = resolve_capabilities(x_iam_role)
+    
+    # Get conversation history if provided
+    conversation_history = []
+    if request.conversation_id:
+        try:
+            messages = await db_service.get_recent_messages(
+                request.conversation_id,
+                limit=6
+            )
+            conversation_history = [
+                {"role": m["role"], "content": m["content"]}
+                for m in messages
+            ]
+        except:
+            pass
+    
+    # Create agent and run
+    agent = AgentLoop(
+        llm_service=llm_service,
+        hybrid_retriever=hybrid_retriever,
+        code_ingestion=code_ingestion,
+        max_steps=5
+    )
+    
+    result = await agent.run(
+        query=request.query,
+        role=x_iam_role,
+        capabilities=capabilities,
+        conversation_history=conversation_history
+    )
+    
+    # Save messages if conversation exists
+    if request.conversation_id:
+        try:
+            await db_service.add_message(
+                request.conversation_id,
+                role="user",
+                content=request.query
+            )
+            await db_service.add_message(
+                request.conversation_id,
+                role="assistant",
+                content=result.answer,
+                metadata={"trace": result.trace, "actions": result.actions}
+            )
+        except:
+            pass
+    
+    return AgentResponse(
+        content=result.answer,
+        attachment=result.actions[0] if result.actions else None,
+        iam_role=x_iam_role,
+        trace_id=trace_id,
+        timestamp=datetime.now(),
+        trace=result.trace,
+        actions=result.actions
+    )
+
+
 # ==================== GITHUB INGESTION ====================
 
 @app.post("/api/github/ingest")
@@ -329,6 +401,68 @@ async def list_repos(
                 })
     
     return {"repos": repos}
+
+
+@app.get("/api/repos/{repo_id}/graph")
+async def get_repo_graph(
+    repo_id: str,
+    x_iam_role: str = Header(..., description="IAM Role of the requester")
+):
+    """Get AST graph for a repository"""
+    nodes = []
+    edges = []
+    
+    if code_ingestion and code_ingestion.graph:
+        # Get nodes and edges from NetworkX graph
+        for node_id, data in code_ingestion.graph.nodes(data=True):
+            # Filter by repo if needed
+            nodes.append({
+                "id": node_id,
+                "type": data.get("type", "unknown"),
+                "label": data.get("name", node_id),
+                "file": data.get("file", ""),
+                "line": data.get("line", 0)
+            })
+        
+        for source, target, data in code_ingestion.graph.edges(data=True):
+            edges.append({
+                "source": source,
+                "target": target,
+                "type": data.get("type", "RELATED")
+            })
+    
+    return {"nodes": nodes, "edges": edges}
+
+
+@app.get("/api/repos/{repo_id}/chunks")
+async def get_repo_chunks(
+    repo_id: str,
+    x_iam_role: str = Header(..., description="IAM Role of the requester")
+):
+    """Get vector chunks for a repository"""
+    chunks = []
+    
+    if code_collection:
+        try:
+            # Query all chunks (limit for performance)
+            result = code_collection.get(
+                limit=50,
+                include=["documents", "metadatas"]
+            )
+            
+            if result and result.get("documents"):
+                for i, doc in enumerate(result["documents"]):
+                    meta = result["metadatas"][i] if result.get("metadatas") else {}
+                    chunks.append({
+                        "id": result["ids"][i] if result.get("ids") else i,
+                        "content": doc[:500] + "..." if len(doc) > 500 else doc,
+                        "file": meta.get("file_path", "unknown"),
+                        "lines": f"{meta.get('start_line', 0)}-{meta.get('end_line', 0)}"
+                    })
+        except Exception as e:
+            print(f"Error fetching chunks: {e}")
+    
+    return {"chunks": chunks}
 
 
 # ==================== CONVERSATIONS ====================
