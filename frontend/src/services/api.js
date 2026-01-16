@@ -274,4 +274,22 @@ export const documentAPI = {
   }
 };
 
-export default apiClient;
+// Unified API Export
+const api = {
+  // Direct Axios Methods
+  get: (url, config) => apiClient.get(url, config),
+  post: (url, data, config) => apiClient.post(url, data, config),
+  put: (url, data, config) => apiClient.put(url, data, config),
+  delete: (url, config) => apiClient.delete(url, config),
+
+  // Modules
+  chatAPI,
+  personasAPI,
+  auditAPI,
+  ingestionAPI,
+  healthAPI,
+  conversationAPI,
+  documentAPI
+};
+
+export default api;

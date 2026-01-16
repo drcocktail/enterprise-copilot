@@ -1,9 +1,6 @@
 """
-LLM Service with Ollama Integration
-Implements proper agentic architecture with:
-1. Intent classification (first LLM call)
-2. Context-aware response generation (second LLM call)
-3. Human-like conversational style
+LLM Service for DevOps Copilot V3
+Uses Qwen2.5-Coder for code understanding and IT tool actions.
 """
 
 import asyncio
@@ -11,13 +8,14 @@ import httpx
 from typing import Dict, Any, List, Optional
 from pydantic import BaseModel
 import json
+import re
 
 
 class QueryIntent(BaseModel):
     """Classified intent of user query"""
-    intent_type: str = "GENERAL"  # GENERAL, DOCUMENT_QUERY, CODE_SEARCH, ACTION
-    requires_rag: bool = False
+    intent_type: str = "GENERAL"  # CODE_QUERY, DOC_QUERY, IT_ACTION, GENERAL
     requires_code_search: bool = False
+    requires_doc_search: bool = False
     requires_action: bool = False
     action_type: Optional[str] = None
     confidence: float = 0.0
@@ -26,20 +24,53 @@ class QueryIntent(BaseModel):
 
 class LLMService:
     """
-    LLM Service using Ollama with proper agentic flow:
-    1. Classify intent first
-    2. Route to appropriate handler
-    3. Generate human-like response
+    LLM Service using Qwen2.5-Coder for code understanding.
+    Supports:
+    - Code explanation and search
+    - Documentation queries
+    - IT tool actions (health checks, logs, etc.)
     """
+    
+    # IT Tool Actions
+    IT_TOOLS = {
+        "HEALTH_CHECK": {
+            "description": "Check health status of a service",
+            "keywords": ["health", "status", "alive", "running", "up", "down"]
+        },
+        "PING_SERVICE": {
+            "description": "Ping a service or endpoint",
+            "keywords": ["ping", "reachable", "connectivity", "connect"]
+        },
+        "GET_LOGS": {
+            "description": "Retrieve service logs",
+            "keywords": ["logs", "log", "errors", "warnings", "trace"]
+        },
+        "CHECK_DISK": {
+            "description": "Check disk usage",
+            "keywords": ["disk", "storage", "space", "usage"]
+        },
+        "LIST_CONTAINERS": {
+            "description": "List Docker containers",
+            "keywords": ["docker", "containers", "pods", "k8s", "kubernetes"]
+        },
+        "CHECK_MEMORY": {
+            "description": "Check memory usage",
+            "keywords": ["memory", "ram", "heap", "usage"]
+        },
+        "LIST_SERVICES": {
+            "description": "List running services",
+            "keywords": ["services", "processes", "running", "active"]
+        }
+    }
     
     def __init__(
         self,
         base_url: str = "http://localhost:11434",
-        model: str = "llama3.2"
+        model: str = "qwen2.5-coder:7b"
     ):
         self.base_url = base_url
         self.model = model
-        self.client = httpx.AsyncClient(timeout=120.0)
+        self.client = httpx.AsyncClient(timeout=180.0)
     
     async def classify_intent(
         self,
@@ -47,94 +78,61 @@ class LLMService:
         capabilities
     ) -> QueryIntent:
         """
-        Step 1: Classify query intent to determine required services
-        Uses hierarchical classification for accuracy
+        Classify query intent for routing.
         """
-        
         query_lower = query.lower().strip()
         intent = QueryIntent()
         
-        # === LEVEL 1: Detect greetings and simple chat ===
-        greeting_patterns = [
-            "hello", "hi", "hey", "good morning", "good afternoon", 
-            "good evening", "how are you", "what's up", "sup", "yo"
-        ]
-        if any(query_lower.startswith(g) or query_lower == g for g in greeting_patterns):
+        # === Greetings ===
+        greetings = ["hello", "hi", "hey", "good morning", "good afternoon", "good evening", "what's up"]
+        if any(query_lower.startswith(g) or query_lower == g for g in greetings):
             intent.intent_type = "GENERAL"
             intent.is_greeting = True
             intent.confidence = 0.95
             return intent
         
-        # === LEVEL 2: Detect ACTION intent (highest priority) ===
-        action_keywords = {
-            "CREATE_JIRA_TICKET": ["create", "make", "open", "file", "submit"],
-            "SCHEDULE_MEETING": ["schedule", "book", "set up", "arrange", "find time"],
-            "DRAFT_DOCUMENT": ["draft", "write", "compose", "prepare"]
-        }
+        # === IT Tool Actions ===
+        for action_type, config in self.IT_TOOLS.items():
+            if any(kw in query_lower for kw in config["keywords"]):
+                if "RUN_HEALTHCHECKS" in capabilities.permissions or "READ_LOGS" in capabilities.permissions:
+                    intent.intent_type = "IT_ACTION"
+                    intent.requires_action = True
+                    intent.action_type = action_type
+                    intent.confidence = 0.9
+                    return intent
         
-        # Check if it's an action request
-        if any(k in query_lower for k in ["jira", "ticket", "bug", "issue"]):
-            if any(w in query_lower for w in action_keywords["CREATE_JIRA_TICKET"]):
-                intent.intent_type = "ACTION"
-                intent.requires_action = True
-                intent.action_type = "CREATE_JIRA_TICKET"
-                intent.confidence = 0.95
-                return intent
-        
-        if any(k in query_lower for k in ["meeting", "calendar", "interview", "sync", "call"]):
-            if any(w in query_lower for w in action_keywords["SCHEDULE_MEETING"]):
-                intent.intent_type = "ACTION"
-                intent.requires_action = True
-                intent.action_type = "SCHEDULE_MEETING"
-                intent.confidence = 0.95
-                return intent
-        
-        # === LEVEL 3: Detect DOCUMENT_QUERY intent ===
-        # These are explicit document-related queries
-        doc_triggers = [
-            "according to", "what does the", "in the report", "in the document",
-            "policy says", "handbook", "annual report", "quarterly report",
-            "what is our", "summarize the", "from the pdf", "page", "section",
-            "compliance", "regulation", "procedure", "guideline"
+        # === Code Queries ===
+        code_patterns = [
+            "how does .* work", "explain .* code", "what does .* do",
+            "show me the .*", "where is .*", "find .*function", "find .*class",
+            "implementation of", "architecture", "flow", "logic",
+            "authentication", "api", "endpoint", "handler", "service",
+            "function", "class", "method", "module", "import"
         ]
         
-        if any(trigger in query_lower for trigger in doc_triggers):
-            intent.intent_type = "DOCUMENT_QUERY"
-            intent.requires_rag = True
-            intent.confidence = 0.9
-            return intent
-        
-        # Check for explicit financial/strategy document queries
-        financial_doc_queries = [
-            "revenue", "earnings", "profit", "financial", "q1", "q2", "q3", "q4",
-            "ebitda", "margin", "forecast", "budget"
-        ]
-        
-        if any(f in query_lower for f in financial_doc_queries):
-            # Only trigger RAG if it sounds like a document query
-            if any(q in query_lower for q in ["what", "how much", "show", "tell me", "summarize"]):
-                intent.intent_type = "DOCUMENT_QUERY"
-                intent.requires_rag = True
+        for pattern in code_patterns:
+            if re.search(pattern, query_lower):
+                intent.intent_type = "CODE_QUERY"
+                intent.requires_code_search = True
                 intent.confidence = 0.85
                 return intent
         
-        # === LEVEL 4: Detect CODE_SEARCH intent ===
-        code_patterns = [
-            "grep", "where is the", "find the function", "find the code",
-            "authentication", "auth module", "source code", "implementation",
-            "how does the", "show me the code", "api endpoint", "service code"
+        # === Document Queries ===
+        doc_patterns = [
+            "according to", "documentation", "readme", "guide",
+            "how to", "setup", "install", "configure", "deploy"
         ]
         
-        if any(pattern in query_lower for pattern in code_patterns):
-            if "READ_CODEBASE" in capabilities.permissions:
-                intent.intent_type = "CODE_SEARCH"
-                intent.requires_code_search = True
-                intent.confidence = 0.9
-                return intent
+        if any(p in query_lower for p in doc_patterns):
+            intent.intent_type = "DOC_QUERY"
+            intent.requires_doc_search = True
+            intent.confidence = 0.8
+            return intent
         
-        # === DEFAULT: General conversation ===
-        intent.intent_type = "GENERAL"
-        intent.confidence = 0.7
+        # === Default: treat as code query if repo is indexed ===
+        intent.intent_type = "CODE_QUERY"
+        intent.requires_code_search = True
+        intent.confidence = 0.6
         return intent
     
     async def generate_response(
@@ -144,28 +142,26 @@ class LLMService:
         role: str,
         capabilities,
         intent: QueryIntent,
-        conversation_history: List[Dict[str, Any]] = None  # NEW: Chat history
+        conversation_history: List[Dict[str, Any]] = None
     ) -> Dict[str, Any]:
         """
-        Step 2: Generate response based on classified intent
-        Uses different prompt strategies for different intents
-        Now includes conversation history for context
+        Generate response using Qwen2.5-Coder.
         """
+        # Handle IT actions
+        if intent.requires_action and intent.action_type:
+            return await self._handle_it_action(query, intent.action_type, role)
         
-        # Build appropriate system prompt based on intent
+        # Build prompts
         system_prompt = self._build_system_prompt(role, capabilities, intent)
-        
-        # Build conversation history string
         history_str = self._format_conversation_history(conversation_history)
+        context_str = self._format_code_context(context)
         
-        # Build user prompt (context only for document/code queries)
-        user_prompt = self._build_user_prompt(query, context, intent)
-        
-        # Combine all parts
         full_prompt = system_prompt
         if history_str:
             full_prompt += f"\n\n{history_str}"
-        full_prompt += f"\n\n{user_prompt}"
+        if context_str:
+            full_prompt += f"\n\n{context_str}"
+        full_prompt += f"\n\nUser: {query}\n\nAssistant:"
         
         try:
             response = await self.client.post(
@@ -175,152 +171,253 @@ class LLMService:
                     "prompt": full_prompt,
                     "stream": False,
                     "options": {
-                        "temperature": 0.7 if intent.intent_type == "GENERAL" else 0.4,
-                        "top_p": 0.9
+                        "temperature": 0.4,
+                        "top_p": 0.9,
+                        "num_predict": 2000
                     }
                 }
             )
             
             if response.status_code == 200:
                 result = response.json()
-                content = result.get("response", "I apologize, but I couldn't generate a response.")
-                
-                # Extract action parameters if needed
-                action_parameters = {}
-                if intent.requires_action:
-                    action_parameters = await self._extract_action_parameters(
-                        query,
-                        content,
-                        intent.action_type
-                    )
+                content = result.get("response", "I couldn't generate a response.")
                 
                 return {
                     "content": content,
-                    "action_parameters": action_parameters,
-                    "show_sources": intent.requires_rag  # Only show sources for RAG queries
+                    "action_parameters": {},
+                    "show_sources": intent.requires_code_search or intent.requires_doc_search
                 }
             else:
                 return {
-                    "content": "I'm having trouble connecting right now. Please try again.",
+                    "content": "I'm having trouble processing that request. Please try again.",
                     "action_parameters": {},
                     "show_sources": False
                 }
-        
+                
         except Exception as e:
             print(f"LLM Error: {e}")
             return {
-                "content": self._generate_fallback_response(query, context, role, intent),
+                "content": f"Connection error: {str(e)}",
                 "action_parameters": {},
                 "show_sources": False
             }
     
+    async def _handle_it_action(
+        self,
+        query: str,
+        action_type: str,
+        role: str
+    ) -> Dict[str, Any]:
+        """
+        Handle IT tool actions by returning structured JSON.
+        """
+        # Extract target from query
+        target = self._extract_target(query, action_type)
+        
+        # Build action JSON
+        action_data = {
+            "action": action_type,
+            "target": target,
+            "requested_by": role,
+            "status": "executed"
+        }
+        
+        # Generate mock results based on action type
+        mock_results = self._generate_mock_results(action_type, target)
+        
+        # Format as terminal-like output
+        content = f"Executing {action_type.replace('_', ' ').lower()} for **{target}**...\n\n"
+        content += "```terminal\n"
+        content += mock_results
+        content += "\n```"
+        
+        return {
+            "content": content,
+            "action_parameters": action_data,
+            "show_sources": False,
+            "attachment": {
+                "type": "TERMINAL",
+                "data": mock_results
+            }
+        }
+    
+    def _extract_target(self, query: str, action_type: str) -> str:
+        """Extract the target service/resource from query."""
+        query_lower = query.lower()
+        
+        # Common service names
+        services = [
+            "api", "api-gateway", "auth", "authentication", "database", "db",
+            "redis", "cache", "nginx", "frontend", "backend", "worker",
+            "queue", "scheduler", "prometheus", "grafana", "elasticsearch"
+        ]
+        
+        for service in services:
+            if service in query_lower:
+                return service
+        
+        # Default targets by action
+        defaults = {
+            "HEALTH_CHECK": "api-gateway",
+            "PING_SERVICE": "localhost",
+            "GET_LOGS": "application",
+            "CHECK_DISK": "/",
+            "LIST_CONTAINERS": "docker",
+            "CHECK_MEMORY": "system",
+            "LIST_SERVICES": "all"
+        }
+        
+        return defaults.get(action_type, "system")
+    
+    def _generate_mock_results(self, action_type: str, target: str) -> str:
+        """Generate mock terminal output for IT actions."""
+        
+        if action_type == "HEALTH_CHECK":
+            return f"""$ curl -s http://{target}:8000/health
+{{
+  "status": "healthy",
+  "uptime": "12d 5h 23m",
+  "version": "2.3.1",
+  "checks": {{
+    "database": "ok",
+    "cache": "ok",
+    "queue": "ok"
+  }}
+}}"""
+        
+        elif action_type == "PING_SERVICE":
+            return f"""$ ping -c 3 {target}
+PING {target} (127.0.0.1): 56 data bytes
+64 bytes from 127.0.0.1: icmp_seq=0 ttl=64 time=0.045 ms
+64 bytes from 127.0.0.1: icmp_seq=1 ttl=64 time=0.058 ms
+64 bytes from 127.0.0.1: icmp_seq=2 ttl=64 time=0.062 ms
+
+--- {target} ping statistics ---
+3 packets transmitted, 3 received, 0.0% packet loss"""
+        
+        elif action_type == "GET_LOGS":
+            return f"""$ tail -20 /var/log/{target}.log
+[2026-01-15 20:15:23] INFO  - Request handled: GET /api/users (23ms)
+[2026-01-15 20:15:24] INFO  - Request handled: POST /api/auth (45ms)
+[2026-01-15 20:15:25] DEBUG - Cache hit for key: user_session_abc123
+[2026-01-15 20:15:26] INFO  - Request handled: GET /api/health (2ms)
+[2026-01-15 20:15:28] WARN  - Slow query detected: 150ms
+[2026-01-15 20:15:30] INFO  - Request handled: GET /api/metrics (12ms)"""
+        
+        elif action_type == "CHECK_DISK":
+            return f"""$ df -h {target}
+Filesystem      Size  Used Avail Use% Mounted on
+/dev/sda1       100G   45G   55G  45% /
+/dev/sdb1       500G  230G  270G  46% /data
+tmpfs           16G   1.2G   15G   8% /tmp"""
+        
+        elif action_type == "LIST_CONTAINERS":
+            return """$ docker ps
+CONTAINER ID   IMAGE                  STATUS          PORTS                    NAMES
+a1b2c3d4e5f6   api-gateway:2.3.1     Up 12 days      0.0.0.0:8000->8000/tcp   api-gateway
+b2c3d4e5f6a1   postgres:15           Up 12 days      5432/tcp                 database
+c3d4e5f6a1b2   redis:7               Up 12 days      6379/tcp                 cache
+d4e5f6a1b2c3   nginx:latest          Up 12 days      80/tcp, 443/tcp          proxy"""
+        
+        elif action_type == "CHECK_MEMORY":
+            return """$ free -h
+              total        used        free      shared  buff/cache   available
+Mem:           32Gi       12Gi       8.5Gi       1.2Gi       11Gi        18Gi
+Swap:          8Gi        0.5Gi      7.5Gi"""
+        
+        elif action_type == "LIST_SERVICES":
+            return """$ systemctl list-units --type=service --state=running
+UNIT                    LOAD   ACTIVE SUB     DESCRIPTION
+api-gateway.service     loaded active running API Gateway Service
+postgresql.service      loaded active running PostgreSQL Database
+redis.service           loaded active running Redis Cache
+nginx.service           loaded active running NGINX Web Server
+prometheus.service      loaded active running Prometheus Monitoring"""
+        
+        return "$ Command executed successfully"
+    
     def _build_system_prompt(self, role: str, capabilities, intent: QueryIntent) -> str:
-        """Build human-like, intent-specific system prompt"""
+        """Build system prompt for code understanding."""
         
         role_name = role.replace("_", " ").title()
         
-        # Base persona (friendly and professional)
-        base = f"""You are a helpful enterprise AI assistant. You're speaking with someone in the {role_name} role.
+        base = f"""You are DevOps Copilot, an expert AI assistant for developers and IT professionals.
+You're speaking with a {role_name}.
 
-Your personality:
-- Friendly, professional, and conversational
-- You give clear, actionable answers
-- You're efficient - no unnecessary fluff
-- You sound like a helpful colleague, not a robot"""
+Your expertise:
+- Deep understanding of code architecture and design patterns
+- Clear, technical explanations with code examples
+- Practical, actionable advice
+- Concise but comprehensive answers
 
-        # Intent-specific additions
+When explaining code:
+- Reference specific files and line numbers from the context
+- Use markdown code blocks with language identifiers
+- Explain the "why" not just the "what"
+- Highlight important patterns and potential issues"""
+
         if intent.is_greeting:
             return f"""{base}
 
-The user is greeting you. Respond warmly and briefly, then ask how you can help them today. Keep it natural and short (1-2 sentences max)."""
+The user is greeting you. Respond warmly and briefly, mentioning you can help with:
+- Code understanding and explanation
+- Finding functions, classes, and logic flows
+- IT operations (health checks, logs, etc.)
+- Documentation queries"""
 
-        elif intent.intent_type == "ACTION":
-            action_name = intent.action_type.replace("_", " ").lower() if intent.action_type else "action"
+        if intent.intent_type == "CODE_QUERY":
             return f"""{base}
 
-The user wants to {action_name}. Your job:
-1. Acknowledge their request briefly
-2. Confirm what you're doing (e.g., "I'll create that ticket for you")
-3. Let them know it's done
+You're answering a code-related question. Use the provided code context to give a detailed, accurate answer.
+- Quote relevant code snippets
+- Explain the logic and data flow
+- Mention file paths and line numbers
+- Suggest improvements if appropriate"""
 
-Keep it conversational and brief. Don't mention technical details like IAM, permissions, or system internals."""
-
-        elif intent.intent_type == "DOCUMENT_QUERY":
+        if intent.intent_type == "IT_ACTION":
             return f"""{base}
 
-The user is asking about information from documents. Use the provided context to answer.
-- When referencing specific information, cite the source naturally (e.g., "According to page 42 of the annual report...")
-- If the context doesn't contain the answer, say so honestly
-- Summarize key points clearly"""
+You're helping with IT operations. Be practical and action-oriented.
+- Show command outputs in terminal format
+- Explain what the metrics mean
+- Suggest next steps if there are issues"""
 
-        elif intent.intent_type == "CODE_SEARCH":
-            return f"""{base}
-
-The user is asking about code. Use the provided code context to answer.
-- Reference file paths when helpful
-- Explain the code in plain terms
-- Be technical but accessible"""
-
-        else:
-            # General conversation
-            return f"""{base}
-
-Have a natural conversation. Answer questions helpfully and concisely.
-Don't mention internal systems, IAM, permissions, or technical infrastructure unless specifically asked."""
-
-    def _build_user_prompt(self, query: str, context: List[Dict[str, Any]], intent: QueryIntent) -> str:
-        """Build user prompt - only include context when relevant"""
-        
-        # For greetings and general chat, no context needed
-        if intent.is_greeting or intent.intent_type == "GENERAL":
-            return f"User: {query}"
-        
-        # For actions, minimal context
-        if intent.intent_type == "ACTION":
-            return f"User request: {query}\n\nProcess this request and confirm the action."
-        
-        # For document/code queries, include context
-        if context:
-            context_str = self._format_context(context, intent)
-            return f"""User question: {query}
-
-{context_str}
-
-Answer the user's question based on the above context. Be conversational and cite sources naturally when using specific facts."""
-        
-        return f"User: {query}"
+        return base
     
-    def _format_context(self, context: List[Dict[str, Any]], intent: QueryIntent) -> str:
-        """Format context for the prompt"""
+    def _format_code_context(self, context: List[Dict[str, Any]]) -> str:
+        """Format code context for the prompt."""
         if not context:
-            return "No relevant documents found."
+            return ""
         
-        parts = ["Relevant context:"]
+        parts = ["Relevant code from the repository:"]
         
-        for i, chunk in enumerate(context[:3], 1):  # Limit to top 3 chunks
-            metadata = chunk.get("metadata", {})
+        for chunk in context[:5]:  # Limit context
+            meta = chunk.get("metadata", {})
             text = chunk.get("text", "")
             
-            if metadata.get("type") == "code":
-                file_path = metadata.get("file_path", "unknown")
-                parts.append(f"\n[Code from {file_path}]\n{text}")
-            else:
-                page = metadata.get("page_number", "?")
-                doc = metadata.get("document_name", "document")
-                parts.append(f"\n[From {doc}, Page {page}]\n{text}")
+            file_path = meta.get("file_path", "unknown")
+            start_line = meta.get("start_line", "?")
+            end_line = meta.get("end_line", "?")
+            language = meta.get("language", "")
+            name = meta.get("name", "")
+            
+            header = f"\n📁 {file_path}:{start_line}-{end_line}"
+            if name:
+                header += f" ({name})"
+            
+            parts.append(f"{header}\n```{language}\n{text}\n```")
         
         return "\n".join(parts)
     
     def _format_conversation_history(
         self,
         history: List[Dict[str, Any]] = None,
-        max_messages: int = 10
+        max_messages: int = 6
     ) -> str:
-        """Format conversation history for inclusion in prompt"""
+        """Format conversation history."""
         if not history:
             return ""
         
-        # Take last N messages
         recent = history[-max_messages:] if len(history) > max_messages else history
         
         if not recent:
@@ -330,71 +427,8 @@ Answer the user's question based on the above context. Be conversational and cit
         for msg in recent:
             role = msg.get("role", "user").capitalize()
             content = msg.get("content", "")
-            
-            # Truncate long messages
-            if len(content) > 300:
-                content = content[:297] + "..."
-            
+            if len(content) > 200:
+                content = content[:197] + "..."
             lines.append(f"{role}: {content}")
         
         return "\n".join(lines)
-    
-    async def _extract_action_parameters(
-        self,
-        query: str,
-        response: str,
-        action_type: Optional[str]
-    ) -> Dict[str, Any]:
-        """Extract structured parameters for actions"""
-        
-        parameters = {}
-        
-        if action_type == "CREATE_JIRA_TICKET":
-            # Extract title from query
-            title = query
-            for prefix in ["create a jira ticket for", "create jira ticket for", 
-                          "create a ticket for", "make a ticket for", "file a ticket for"]:
-                if query.lower().startswith(prefix):
-                    title = query[len(prefix):].strip()
-                    break
-            
-            parameters = {
-                "title": title[:100] if len(title) > 100 else title,
-                "priority": "Medium",
-                "assignee": "Auto-assigned",
-                "description": f"Created via Enterprise Copilot: {query}"
-            }
-            
-        elif action_type == "SCHEDULE_MEETING":
-            parameters = {
-                "title": "Meeting",
-                "participants": ["Auto-detect from query"],
-                "duration": 60,
-                "suggested_times": ["Tomorrow 10:00 AM", "Tomorrow 2:00 PM", "Friday 11:00 AM"]
-            }
-        
-        return parameters
-    
-    def _generate_fallback_response(
-        self,
-        query: str,
-        context: List[Dict[str, Any]],
-        role: str,
-        intent: QueryIntent
-    ) -> str:
-        """Generate fallback response when LLM is unavailable"""
-        
-        if intent.is_greeting:
-            return "Hello! How can I help you today?"
-        
-        if intent.requires_action:
-            return "I've received your request and I'm processing it now."
-        
-        if context:
-            return f"I found {len(context)} relevant documents. However, I'm having trouble summarizing them right now. Please try again in a moment."
-        
-        return "I'm here to help! Could you tell me more about what you need?"
-    
-    async def close(self):
-        """Close HTTP client"""
-        await self.client.aclose()

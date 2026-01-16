@@ -8,6 +8,9 @@ numpy<2.0.0
 chromadb==0.4.22
 sentence-transformers==2.3.1
 
+# Code Embeddings & Reranking (BAAI bge-code)
+FlagEmbedding==1.2.10
+
 # PDF Processing
 PyPDF2==3.0.1
 
@@ -16,3 +19,20 @@ httpx==0.26.0
 
 # Python Environment
 python-dotenv==1.0.0
+
+# ========== NEW V3 DEPENDENCIES ==========
+
+# Code Parsing (tree-sitter for AST)
+tree-sitter==0.20.4
+
+# BM25 for hybrid retrieval
+rank-bm25==0.2.2
+
+# Graph for Code Property Graph
+networkx==3.2.1
+
+# Git operations
+gitpython==3.1.40
+
+# Syntax highlighting
+pygments==2.17.2

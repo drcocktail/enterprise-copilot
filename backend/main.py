@@ -1,11 +1,10 @@
 """
-Agentic Enterprise Copilot - FastAPI Backend
-IAM-First Architecture with RAG, Code Intelligence, and Action Execution
+DevOps Copilot V3 - FastAPI Backend
+Developer and IT-focused Agentic Assistant with Code Intelligence.
 """
 
-from fastapi import FastAPI, HTTPException, Header, WebSocket, WebSocketDisconnect, UploadFile, File
+from fastapi import FastAPI, HTTPException, Header, UploadFile, File
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import StreamingResponse
 from pydantic import BaseModel, Field
 from typing import Optional, List, Dict, Any, Literal
 from datetime import datetime
@@ -17,76 +16,78 @@ import shutil
 from pathlib import Path
 from contextlib import asynccontextmanager
 
-from config.iam_config import IAMConfig, resolve_capabilities
-from services.audit_logger import AuditLogger
-from services.rag_service import RAGService
-from services.code_intelligence import CodeIntelligence
-from services.action_executor import ActionExecutor
+from config.iam_config import IAMConfig, resolve_capabilities, PERSONA_DEFINITIONS
 from services.llm_service import LLMService
 from services.db_service import DatabaseService
-from services.agentic_rag import AgenticRAG
+from services.code_ingestion import CodeIngestionService
+from services.hybrid_retriever import HybridRetriever
+
+import chromadb
+from chromadb.config import Settings
+
 
 # Global state
-audit_logger = AuditLogger()
 iam_config = IAMConfig()
-rag_service: Optional[RAGService] = None
-code_intelligence: Optional[CodeIntelligence] = None
-action_executor: Optional[ActionExecutor] = None
 llm_service: Optional[LLMService] = None
 db_service: Optional[DatabaseService] = None
-agentic_rag: Optional[AgenticRAG] = None
-
-# Upload directory
-UPLOAD_DIR = Path(__file__).parent / "uploads"
+code_ingestion: Optional[CodeIngestionService] = None
+hybrid_retriever: Optional[HybridRetriever] = None
+chroma_client = None
+code_collection = None
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     """Initialize services on startup"""
-    global rag_service, code_intelligence, action_executor, llm_service, db_service, agentic_rag
+    global llm_service, db_service, code_ingestion, hybrid_retriever
+    global chroma_client, code_collection
     
-    print("🚀 Initializing Agentic Enterprise Copilot V2...")
+    print("🚀 Initializing DevOps Copilot V3...")
     
-    # Create upload directory
-    UPLOAD_DIR.mkdir(exist_ok=True)
+    # Initialize ChromaDB
+    chroma_path = Path(__file__).parent / "chroma_db"
+    chroma_client = chromadb.PersistentClient(
+        path=str(chroma_path),
+        settings=Settings(anonymized_telemetry=False)
+    )
+    
+    # Get or create code collection
+    code_collection = chroma_client.get_or_create_collection(
+        name="code_chunks",
+        metadata={"hnsw:space": "cosine"}
+    )
     
     # Initialize services
     db_service = DatabaseService()
     llm_service = LLMService()
-    rag_service = RAGService()
-    code_intelligence = CodeIntelligence()
-    action_executor = ActionExecutor()
-    agentic_rag = AgenticRAG(rag_service=rag_service)
+    code_ingestion = CodeIngestionService()
+    hybrid_retriever = HybridRetriever(collection=code_collection)
     
     # Load IAM configuration
     await iam_config.load()
     
-    print("✅ All services initialized successfully")
+    print("✅ DevOps Copilot V3 ready!")
+    print("   - LLM: qwen2.5-coder:7b")
+    print("   - Hybrid retrieval: Semantic + BM25 + RRF")
+    print("   - Personas: SDE-II, Principal Architect, IT Analyst")
+    
     yield
     
     # Cleanup
-    print("🛑 Shutting down services...")
+    print("🛑 Shutting down...")
 
 
 app = FastAPI(
-    title="Enterprise Copilot API",
-    description="IAM-First Agentic Assistant with RAG & Code Intelligence",
-    version="1.0.0",
+    title="DevOps Copilot API",
+    description="Developer and IT-focused Agentic Assistant with Code Intelligence",
+    version="3.0.0",
     lifespan=lifespan
 )
 
 # CORS Configuration
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[
-        "http://localhost:3000",
-        "http://localhost:3001",
-        "http://localhost:3002",
-        "http://localhost:3003",
-        "http://localhost:3004",
-        "http://localhost:3005",
-        "http://localhost:5173"
-    ],
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -96,35 +97,21 @@ app.add_middleware(
 # ==================== MODELS ====================
 
 class QueryRequest(BaseModel):
-    query: str = Field(..., min_length=1, max_length=2000)
-    context: Optional[Dict[str, Any]] = None
-    session_id: Optional[str] = None
+    query: str = Field(..., min_length=1, max_length=5000)
+    conversation_id: Optional[str] = None
 
 
-class ActionData(BaseModel):
-    type: str
-    data: Dict[str, Any]
+class GitHubIngestRequest(BaseModel):
+    github_url: str = Field(..., min_length=10)
 
 
 class AgentResponse(BaseModel):
     content: str
-    attachment: Optional[ActionData] = None
+    attachment: Optional[Dict[str, Any]] = None
     iam_role: str
     trace_id: str
     timestamp: datetime
     sources: Optional[List[Dict[str, Any]]] = None
-
-
-class AuditLog(BaseModel):
-    id: str
-    timestamp: datetime
-    actor: str
-    iam_role: str
-    action: str
-    status: Literal["ALLOWED", "DENIED", "ERROR"]
-    details: str
-    trace_id: str
-    metadata: Optional[Dict[str, Any]] = None
 
 
 class PersonaInfo(BaseModel):
@@ -133,6 +120,9 @@ class PersonaInfo(BaseModel):
     name: str
     permissions: List[str]
     description: str
+    context: str
+    emoji: str
+    suggested: List[str]
 
 
 # ==================== ENDPOINTS ====================
@@ -142,16 +132,44 @@ async def root():
     """Health check"""
     return {
         "status": "online",
-        "service": "Enterprise Copilot API",
-        "version": "1.0.0",
+        "service": "DevOps Copilot V3",
+        "version": "3.0.0"
+    }
+
+
+@app.get("/api/health")
+async def health_check():
+    """Detailed health check"""
+    return {
+        "status": "healthy",
+        "services": {
+            "llm": "online" if llm_service else "offline",
+            "database": "online" if db_service else "offline",
+            "code_ingestion": "online" if code_ingestion else "offline",
+            "hybrid_retriever": "online" if hybrid_retriever else "offline",
+            "chromadb": "online" if code_collection else "offline"
+        },
+        "llm_model": "qwen2.5-coder:7b",
         "timestamp": datetime.now().isoformat()
     }
 
 
 @app.get("/api/personas", response_model=List[PersonaInfo])
 async def get_personas():
-    """Get available personas and their permissions"""
-    return iam_config.get_all_personas()
+    """Get available personas"""
+    personas = []
+    for persona in PERSONA_DEFINITIONS.values():
+        personas.append(PersonaInfo(
+            id=persona["id"],
+            role=persona["role"],
+            name=persona["name"],
+            permissions=persona["permissions"],
+            description=persona["description"],
+            context=persona["context"],
+            emoji=persona["emoji"],
+            suggested=persona["suggested"]
+        ))
+    return personas
 
 
 @app.post("/api/chat", response_model=AgentResponse)
@@ -159,296 +177,192 @@ async def chat(
     request: QueryRequest,
     x_iam_role: str = Header(..., description="IAM Role of the requester")
 ):
-    """
-    Main chat endpoint with IAM enforcement
-    """
-    trace_id = str(uuid.uuid4())
+    """Main chat endpoint"""
+    trace_id = str(uuid.uuid4())[:8]
     
-    try:
-        # Step 1: Resolve capabilities based on IAM role
-        capabilities = await resolve_capabilities(
-            iam_config,
-            x_iam_role,
-            request.query
-        )
-        
-        if not capabilities.allowed:
-            # Log denied access
-            await audit_logger.log(
-                actor=capabilities.actor_name,
-                iam_role=x_iam_role,
-                action="QUERY_DENIED",
-                status="DENIED",
-                details=f"Access denied for query: {request.query[:50]}...",
-                trace_id=trace_id,
-                metadata={"reason": capabilities.denial_reason}
+    # Resolve capabilities
+    capabilities = resolve_capabilities(x_iam_role)
+    
+    # Get conversation history if provided
+    conversation_history = []
+    if request.conversation_id:
+        try:
+            messages = await db_service.get_recent_messages(
+                request.conversation_id,
+                limit=6
             )
-            
-            raise HTTPException(
-                status_code=403,
-                detail=f"Access Denied: {capabilities.denial_reason}"
-            )
-        
-        # Log allowed action
-        await audit_logger.log(
-            actor=capabilities.actor_name,
-            iam_role=x_iam_role,
-            action="QUERY_PROCESSING",
-            status="ALLOWED",
-            details=f"Processing query: {request.query[:50]}...",
-            trace_id=trace_id
-        )
-        
-        # Step 2: Determine query intent and route accordingly
-        intent = await llm_service.classify_intent(request.query, capabilities)
-        
-        # Step 3: Retrieve context based on intent
-        context_chunks = []
-        sources = []
-        
-        if intent.requires_rag:
-            # RAG retrieval with IAM filtering
-            rag_results = await rag_service.retrieve(
-                query=request.query,
-                role=x_iam_role,
-                top_k=5,
-                filters=capabilities.metadata_filters
-            )
-            context_chunks.extend(rag_results["chunks"])
-            sources.extend(rag_results["sources"])
-        
-        if intent.requires_code_search:
-            # Code intelligence search
-            code_results = await code_intelligence.search(
-                query=request.query,
-                role=x_iam_role,
-                filters=capabilities.code_filters
-            )
-            context_chunks.extend(code_results["chunks"])
-            sources.extend(code_results["sources"])
-        
-        # Step 4: Generate response with LLM
-        llm_response = await llm_service.generate_response(
+            conversation_history = [
+                {"role": m["role"], "content": m["content"]}
+                for m in messages
+            ]
+        except:
+            pass
+    
+    # Classify intent
+    intent = await llm_service.classify_intent(request.query, capabilities)
+    
+    # Get context based on intent
+    context = []
+    sources = []
+    
+    if intent.requires_code_search and code_collection.count() > 0:
+        # Use hybrid retrieval for code
+        filters = None  # Could filter by user's repos
+        results = await hybrid_retriever.hybrid_search(
             query=request.query,
-            context=context_chunks,
-            role=x_iam_role,
-            capabilities=capabilities,
-            intent=intent
+            top_k=5,
+            filters=filters
         )
-        
-        # Step 5: Execute actions if needed
-        attachment = None
-        if intent.requires_action:
-            action_result = await action_executor.execute(
-                action_type=intent.action_type,
-                parameters=llm_response.get("action_parameters", {}),
-                role=x_iam_role
+        context = results
+        sources = [
+            {
+                "file": r.get("metadata", {}).get("file_path", "unknown"),
+                "name": r.get("metadata", {}).get("name", ""),
+                "lines": f"{r.get('metadata', {}).get('start_line', '?')}-{r.get('metadata', {}).get('end_line', '?')}",
+                "language": r.get("metadata", {}).get("language", "")
+            }
+            for r in results
+        ]
+    
+    # Generate response
+    llm_response = await llm_service.generate_response(
+        query=request.query,
+        context=context,
+        role=x_iam_role,
+        capabilities=capabilities,
+        intent=intent,
+        conversation_history=conversation_history
+    )
+    
+    # Build attachment if IT action
+    attachment = None
+    if llm_response.get("attachment"):
+        attachment = llm_response["attachment"]
+    
+    # Save messages if conversation exists
+    if request.conversation_id:
+        try:
+            await db_service.add_message(
+                request.conversation_id,
+                role="user",
+                content=request.query
             )
-            attachment = ActionData(
-                type=action_result["type"],
-                data=action_result["data"]
+            await db_service.add_message(
+                request.conversation_id,
+                role="assistant",
+                content=llm_response["content"],
+                metadata={"sources": sources} if sources else None
             )
-            
-            # Log action execution
-            await audit_logger.log(
-                actor=capabilities.actor_name,
-                iam_role=x_iam_role,
-                action=f"ACTION_EXECUTED_{intent.action_type}",
-                status="ALLOWED",
-                details=f"Executed {intent.action_type}",
-                trace_id=trace_id,
-                metadata=action_result
-            )
-        
-        return AgentResponse(
-            content=llm_response["content"],
-            attachment=attachment,
-            iam_role=x_iam_role,
-            trace_id=trace_id,
-            timestamp=datetime.now(),
-            sources=sources if llm_response.get("show_sources", False) and sources else None
-        )
-        
-    except HTTPException:
-        raise
-    except Exception as e:
-        await audit_logger.log(
-            actor="SYSTEM",
-            iam_role=x_iam_role,
-            action="ERROR",
-            status="ERROR",
-            details=f"Error processing query: {str(e)}",
-            trace_id=trace_id
-        )
-        raise HTTPException(status_code=500, detail=str(e))
+        except:
+            pass
+    
+    return AgentResponse(
+        content=llm_response["content"],
+        attachment=attachment,
+        iam_role=x_iam_role,
+        trace_id=trace_id,
+        timestamp=datetime.now(),
+        sources=sources if llm_response.get("show_sources") else None
+    )
 
 
-@app.get("/api/audit/logs", response_model=List[AuditLog])
-async def get_audit_logs(
-    limit: int = 50,
+# ==================== GITHUB INGESTION ====================
+
+@app.post("/api/github/ingest")
+async def ingest_github_repo(
+    request: GitHubIngestRequest,
     x_iam_role: str = Header(..., description="IAM Role of the requester")
 ):
-    """Get recent audit logs (admin only)"""
-    # Check if role has audit access
-    if not iam_config.has_permission(x_iam_role, "READ_AUDIT_LOGS"):
-        raise HTTPException(status_code=403, detail="Insufficient permissions")
+    """Ingest a GitHub repository"""
+    capabilities = resolve_capabilities(x_iam_role)
     
-    return await audit_logger.get_recent_logs(limit=limit)
-
-
-@app.websocket("/ws/audit")
-async def websocket_audit_stream(websocket: WebSocket):
-    """WebSocket endpoint for real-time audit log streaming"""
-    await websocket.accept()
+    if "READ_CODEBASE" not in capabilities.permissions:
+        raise HTTPException(status_code=403, detail="Code access not permitted")
     
-    try:
-        # Subscribe to audit log updates
-        async for log in audit_logger.stream():
-            await websocket.send_json(log.dict())
-    except WebSocketDisconnect:
-        print("Client disconnected from audit stream")
-
-
-@app.post("/api/ingest/documents")
-async def ingest_documents(
-    x_iam_role: str = Header(..., description="IAM Role of the requester")
-):
-    """Trigger document ingestion (admin only)"""
-    if not iam_config.has_permission(x_iam_role, "ADMIN"):
-        raise HTTPException(status_code=403, detail="Admin access required")
+    # Ingest repository
+    result = await code_ingestion.ingest_github_repo(
+        github_url=request.github_url,
+        user_id=x_iam_role
+    )
     
-    result = await rag_service.ingest_documents()
-    return {"status": "success", "result": result}
-
-
-@app.post("/api/ingest/codebase")
-async def ingest_codebase(
-    path: str,
-    x_iam_role: str = Header(..., description="IAM Role of the requester")
-):
-    """Index a codebase for code intelligence (admin only)"""
-    if not iam_config.has_permission(x_iam_role, "ADMIN"):
-        raise HTTPException(status_code=403, detail="Admin access required")
+    if result.get("status") == "error":
+        raise HTTPException(status_code=400, detail=result.get("error"))
     
-    result = await code_intelligence.index_codebase(path)
-    return {"status": "success", "result": result}
-
-
-@app.get("/api/health")
-async def health_check():
-    """Detailed health check for all services"""
+    # Add chunks to ChromaDB
+    chunks = result.get("chunks", [])
+    if chunks:
+        code_collection.add(
+            documents=[c["text"] for c in chunks],
+            metadatas=[c["metadata"] for c in chunks],
+            ids=[c["id"] for c in chunks]
+        )
+        
+        # Build BM25 index
+        hybrid_retriever.build_bm25_index(chunks)
+        
+        # Update graph reference
+        hybrid_retriever.graph = code_ingestion.graph
+    
     return {
-        "status": "healthy",
-        "services": {
-            "iam": "online",
-            "rag": "online" if rag_service else "offline",
-            "code_intelligence": "online" if code_intelligence else "offline",
-            "llm": "online" if llm_service else "offline",
-            "database": "online" if db_service else "offline",
-            "agentic_rag": "online" if agentic_rag else "offline",
-            "audit": "online"
-        },
-        "timestamp": datetime.now().isoformat()
+        "status": "success",
+        "repo_name": result.get("repo_name"),
+        "file_count": result.get("file_count"),
+        "chunk_count": result.get("chunk_count"),
+        "graph_nodes": result.get("graph_nodes"),
+        "graph_edges": result.get("graph_edges")
     }
 
 
-# ==================== CONVERSATION MANAGEMENT ====================
+@app.get("/api/github/repos")
+async def list_repos(
+    x_iam_role: str = Header(..., description="IAM Role of the requester")
+):
+    """List ingested repositories"""
+    repos = []
+    
+    if code_ingestion and code_ingestion.repos_dir.exists():
+        for repo_dir in code_ingestion.repos_dir.iterdir():
+            if repo_dir.is_dir():
+                repos.append({
+                    "name": repo_dir.name,
+                    "path": str(repo_dir)
+                })
+    
+    return {"repos": repos}
 
-class CreateConversationRequest(BaseModel):
-    title: Optional[str] = None
 
-
-class AddMessageRequest(BaseModel):
-    role: str = "user"
-    content: str
-    metadata: Optional[Dict[str, Any]] = None
-
+# ==================== CONVERSATIONS ====================
 
 @app.get("/api/conversations")
 async def list_conversations(
     x_iam_role: str = Header(..., description="IAM Role of the requester")
 ):
     """List user's conversations"""
-    # Use role as user_id for now (in production, would use actual user ID)
     conversations = await db_service.get_conversations(user_id=x_iam_role)
     return {"conversations": conversations}
 
 
 @app.post("/api/conversations")
 async def create_conversation(
-    request: CreateConversationRequest,
     x_iam_role: str = Header(..., description="IAM Role of the requester")
 ):
     """Create a new conversation"""
     conversation = await db_service.create_conversation(
         user_id=x_iam_role,
         role=x_iam_role,
-        title=request.title
+        title="New Chat"
     )
     return conversation
-
-
-@app.get("/api/conversations/{conversation_id}")
-async def get_conversation(
-    conversation_id: str,
-    x_iam_role: str = Header(..., description="IAM Role of the requester")
-):
-    """Get a conversation with its messages"""
-    conversation = await db_service.get_conversation(conversation_id)
-    if not conversation:
-        raise HTTPException(status_code=404, detail="Conversation not found")
-    
-    # Check access
-    if conversation["user_id"] != x_iam_role:
-        raise HTTPException(status_code=403, detail="Access denied")
-    
-    messages = await db_service.get_messages(conversation_id)
-    
-    return {
-        "conversation": conversation,
-        "messages": messages
-    }
 
 
 @app.get("/api/conversations/{conversation_id}/messages")
 async def get_messages(
     conversation_id: str,
-    limit: int = 100,
     x_iam_role: str = Header(..., description="IAM Role of the requester")
 ):
     """Get messages for a conversation"""
-    conversation = await db_service.get_conversation(conversation_id)
-    if not conversation:
-        raise HTTPException(status_code=404, detail="Conversation not found")
-    
-    if conversation["user_id"] != x_iam_role:
-        raise HTTPException(status_code=403, detail="Access denied")
-    
-    messages = await db_service.get_messages(conversation_id, limit=limit)
+    messages = await db_service.get_messages(conversation_id)
     return {"messages": messages}
-
-
-@app.post("/api/conversations/{conversation_id}/messages")
-async def add_message(
-    conversation_id: str,
-    request: AddMessageRequest,
-    x_iam_role: str = Header(..., description="IAM Role of the requester")
-):
-    """Add a message to a conversation"""
-    conversation = await db_service.get_conversation(conversation_id)
-    if not conversation:
-        raise HTTPException(status_code=404, detail="Conversation not found")
-    
-    if conversation["user_id"] != x_iam_role:
-        raise HTTPException(status_code=403, detail="Access denied")
-    
-    message = await db_service.add_message(
-        conversation_id=conversation_id,
-        role=request.role,
-        content=request.content,
-        metadata=request.metadata
-    )
-    return message
 
 
 @app.delete("/api/conversations/{conversation_id}")
@@ -457,18 +371,48 @@ async def delete_conversation(
     x_iam_role: str = Header(..., description="IAM Role of the requester")
 ):
     """Delete a conversation"""
-    conversation = await db_service.get_conversation(conversation_id)
-    if not conversation:
-        raise HTTPException(status_code=404, detail="Conversation not found")
-    
-    if conversation["user_id"] != x_iam_role:
-        raise HTTPException(status_code=403, detail="Access denied")
-    
     success = await db_service.delete_conversation(conversation_id)
     return {"success": success}
 
 
-# ==================== DOCUMENT MANAGEMENT ====================
+# ==================== DOCUMENT UPLOAD ====================
+
+UPLOAD_DIR = Path(__file__).parent / "uploads"
+UPLOAD_DIR.mkdir(exist_ok=True)
+
+
+@app.post("/api/documents/upload")
+async def upload_document(
+    file: UploadFile = File(...),
+    x_iam_role: str = Header(..., description="IAM Role of the requester")
+):
+    """Upload a document (PDF)"""
+    if not file.filename.lower().endswith('.pdf'):
+        raise HTTPException(status_code=400, detail="Only PDF files are supported")
+    
+    file_id = str(uuid.uuid4())
+    safe_filename = f"{file_id}_{file.filename}"
+    file_path = UPLOAD_DIR / safe_filename
+    
+    with open(file_path, "wb") as buffer:
+        shutil.copyfileobj(file.file, buffer)
+    
+    file_size = os.path.getsize(file_path)
+    
+    doc_record = await db_service.add_user_document(
+        user_id=x_iam_role,
+        filename=safe_filename,
+        original_filename=file.filename,
+        file_path=str(file_path),
+        file_size=file_size
+    )
+    
+    return {
+        "id": doc_record["id"],
+        "filename": file.filename,
+        "status": "uploaded"
+    }
+
 
 @app.get("/api/documents")
 async def list_documents(
@@ -477,118 +421,6 @@ async def list_documents(
     """List user's documents"""
     documents = await db_service.get_user_documents(user_id=x_iam_role)
     return {"documents": documents}
-
-
-@app.post("/api/documents/upload")
-async def upload_document(
-    file: UploadFile = File(...),
-    x_iam_role: str = Header(..., description="IAM Role of the requester")
-):
-    """Upload and ingest a document"""
-    # Validate file type
-    if not file.filename.lower().endswith('.pdf'):
-        raise HTTPException(status_code=400, detail="Only PDF files are supported")
-    
-    # Generate unique filename
-    file_id = str(uuid.uuid4())
-    safe_filename = f"{file_id}_{file.filename}"
-    file_path = UPLOAD_DIR / safe_filename
-    
-    try:
-        # Save file
-        with open(file_path, "wb") as buffer:
-            shutil.copyfileobj(file.file, buffer)
-        
-        # Get file size
-        file_size = os.path.getsize(file_path)
-        
-        # Add to database
-        doc_record = await db_service.add_user_document(
-            user_id=x_iam_role,
-            filename=safe_filename,
-            original_filename=file.filename,
-            file_path=str(file_path),
-            file_size=file_size
-        )
-        
-        # Ingest into RAG (async task in real production)
-        try:
-            chunks = await rag_service._extract_pdf_chunks(file_path)
-            if chunks:
-                # Add user_id to metadata for filtering
-                for chunk in chunks:
-                    chunk["metadata"]["user_id"] = x_iam_role
-                    chunk["metadata"]["doc_id"] = doc_record["id"]
-                
-                rag_service.collection.add(
-                    documents=[chunk["text"] for chunk in chunks],
-                    metadatas=[chunk["metadata"] for chunk in chunks],
-                    ids=[chunk["id"] for chunk in chunks]
-                )
-                
-                # Update status
-                await db_service.update_document_status(
-                    doc_id=doc_record["id"],
-                    status="ready",
-                    chunk_count=len(chunks)
-                )
-            else:
-                await db_service.update_document_status(
-                    doc_id=doc_record["id"],
-                    status="error",
-                    error_message="No text content found in PDF"
-                )
-        except Exception as e:
-            await db_service.update_document_status(
-                doc_id=doc_record["id"],
-                status="error",
-                error_message=str(e)
-            )
-        
-        return {
-            "id": doc_record["id"],
-            "filename": file.filename,
-            "status": "processing",
-            "message": "Document uploaded and being processed"
-        }
-        
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Upload failed: {str(e)}")
-
-
-@app.delete("/api/documents/{doc_id}")
-async def delete_document(
-    doc_id: str,
-    x_iam_role: str = Header(..., description="IAM Role of the requester")
-):
-    """Delete a document"""
-    doc = await db_service.get_document(doc_id)
-    if not doc:
-        raise HTTPException(status_code=404, detail="Document not found")
-    
-    if doc["user_id"] != x_iam_role:
-        raise HTTPException(status_code=403, detail="Access denied")
-    
-    # Delete from ChromaDB
-    try:
-        # Find and delete chunks by doc_id metadata
-        rag_service.collection.delete(
-            where={"doc_id": doc_id}
-        )
-    except Exception as e:
-        print(f"Warning: Could not delete chunks from ChromaDB: {e}")
-    
-    # Delete file
-    try:
-        if doc["file_path"]:
-            os.remove(doc["file_path"])
-    except:
-        pass
-    
-    # Delete from database
-    success = await db_service.delete_user_document(doc_id)
-    
-    return {"success": success}
 
 
 if __name__ == "__main__":
