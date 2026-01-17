@@ -16,7 +16,7 @@ const AddRepoModal = ({ isOpen, onClose, onAdded }) => {
         setError(null);
 
         try {
-            await api.post('/api/github/ingest', { github_url: url });
+            await api.post('/api/github/ingest', { url: url });
             onAdded();
             onClose();
             setUrl('');

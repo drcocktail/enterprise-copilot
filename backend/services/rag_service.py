@@ -74,27 +74,33 @@ class RagService:
             print(f"💾 Persisted {len(texts)} chunks to ChromaDB (documents)")
 
     async def add_code_chunks(self, chunks: List[Dict[str, Any]]):
-        """Add code chunks to ChromaDB (code_chunks collection)"""
+        """Add code chunks to ChromaDB (code_chunks collection) with batching"""
         if not chunks or not self.model:
             return
             
-        texts = [c["text"] for c in chunks]
-        metadatas = [c["metadata"] for c in chunks]
-        ids = [c["id"] for c in chunks]
+        BATCH_SIZE = 2000
+        total_chunks = len(chunks)
         
-        # Generate embeddings
-        print(f"🧮 Generating embeddings for {len(texts)} code chunks...")
-        # Since this is async/blocking, we might want to run in executor but for now direct is fine
-        embeddings = self.embed_text(texts)
+        print(f"🧮 Processing {total_chunks} chunks in batches of {BATCH_SIZE}...")
         
-        if embeddings:
-            self.code_collection.add(
-                documents=texts,
-                embeddings=embeddings,
-                metadatas=metadatas,
-                ids=ids
-            )
-            print(f"💾 Persisted {len(texts)} chunks to ChromaDB (code_chunks)")
+        for i in range(0, total_chunks, BATCH_SIZE):
+            batch = chunks[i : i + BATCH_SIZE]
+            
+            texts = [c["text"] for c in batch]
+            metadatas = [c["metadata"] for c in batch]
+            ids = [c["id"] for c in batch]
+            
+            # Generate embeddings
+            embeddings = self.embed_text(texts)
+            
+            if embeddings:
+                self.code_collection.add(
+                    documents=texts,
+                    embeddings=embeddings,
+                    metadatas=metadatas,
+                    ids=ids
+                )
+                print(f"💾 Persisted batch {i // BATCH_SIZE + 1}/{(total_chunks + BATCH_SIZE - 1) // BATCH_SIZE} ({len(texts)} chunks)")
 
     def search(self, query: str, limit: int = 5) -> List[Dict[str, Any]]:
         """Semantic search for documents"""
@@ -118,3 +124,25 @@ class RagService:
                 })
                 
         return formatted_results
+
+    def get_chunks_by_metadata(self, key: str, value: str, limit: int = 100) -> List[Dict[str, Any]]:
+        """Get chunks filtered by metadata key-value pair"""
+        try:
+            results = self.collection.get(
+                where={key: value},
+                limit=limit,
+                include=["metadatas", "documents"]
+            )
+            
+            formatted_results = []
+            if results["ids"]:
+                for i in range(len(results["ids"])):
+                    formatted_results.append({
+                        "id": results["ids"][i],
+                        "text": results["documents"][i],
+                        "metadata": results["metadatas"][i]
+                    })
+            return formatted_results
+        except Exception as e:
+            print(f"Error fetching chunks for {key}={value}: {e}")
+            return []

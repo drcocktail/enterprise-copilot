@@ -89,6 +89,10 @@ async def ingestion_docs(request: Request, path: str):
 async def ingestion_repos(request: Request, path: str):
     return await forward_request(SERVICES["ingestion"], request, f"/api/repos/{path}")
 
+@app.api_route("/api/github/{path:path}", methods=["GET", "POST", "PUT", "DELETE"])
+async def ingestion_github(request: Request, path: str):
+    return await forward_request(SERVICES["ingestion"], request, f"/api/github/{path}")
+
 # 2. Chat Service
 @app.api_route("/api/chat/{path:path}", methods=["GET", "POST", "PUT", "DELETE"])
 async def chat_proxy(request: Request, path: str):

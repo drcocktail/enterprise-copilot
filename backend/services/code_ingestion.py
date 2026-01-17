@@ -21,7 +21,7 @@ import networkx as nx
 
 # Tree-sitter
 try:
-    from tree_sitter import Language, Parser
+    from tree_sitter import Language, Parser, QueryCursor
     TREE_SITTER_AVAILABLE = True
 except ImportError:
     TREE_SITTER_AVAILABLE = False
@@ -62,7 +62,7 @@ class CodeIngestionService:
             self.repos_dir = Path(repos_dir)
         
         self.repos_dir.mkdir(exist_ok=True)
-        self.graph = nx.DiGraph()
+        # self.graph = nx.DiGraph()  <-- REMOVED: Caused race condition
         
         self.parsers = {}
         if TREE_SITTER_AVAILABLE:
@@ -169,12 +169,14 @@ class CodeIngestionService:
             code_chunks = await self._parse_repository(repo_path, repo_name, user_id)
             
             print(f"🔗 Building code graph...")
-            await self._build_code_graph(code_chunks)
+            # Create a local graph for this ingestion process
+            repo_graph = nx.DiGraph()
+            await self._build_code_graph(code_chunks, repo_graph)
             
             stats = {
                 "file_count": len(set(c["metadata"]["file_path"] for c in code_chunks)),
                 "chunk_count": len(code_chunks),
-                "graph_nodes": self.graph.number_of_nodes(),
+                "graph_nodes": repo_graph.number_of_nodes(),
             }
             
             # Update DB: Ready
@@ -182,7 +184,7 @@ class CodeIngestionService:
                 await db_service.update_repository_status(repo_id, "ready", stats=stats)
             
             # Save Graph and Chunks to Disk (for persistence)
-            await self._save_repo_data(repo_id, code_chunks, self.graph)
+            await self._save_repo_data(repo_id, code_chunks, repo_graph)
 
             # 4. EMBED CHUNKS to Vector DB (CRITICAL FIX)
             if rag_service:
@@ -294,86 +296,64 @@ class CodeIngestionService:
         if not query_str:
              return self._chunk_by_lines(content, file_path, lang, repo_name, user_id)
             
-        language_obj = self.LANGUAGES[lang]
-        query = language_obj.query(query_str)
-        captures = query.captures(root_node)
-        
-        chunks = []
-        seen_ranges = set()
-        
-        for node, capture_name in captures:
-            if capture_name in ['function', 'class', 'method']:
-                start_byte = node.start_byte
-                end_byte = node.end_byte
-                
-                if start_byte in seen_ranges:
-                    continue
-                seen_ranges.add(start_byte)
-                
-                text_bytes = content.encode('utf8')[start_byte:end_byte]
-                text = text_bytes.decode('utf8', errors='replace')
-                
-                # Extract name roughly
-                name = "anonymous"
-                # For simplified logic, we just grab the first identifier child if possible
-                # Or rely on the capture group @name if we processed it differently, 
-                # but 'captures' flattens. 
-                # Better approach: query.captures returns (node, name), so we can look for @name nodes
-                pass
+        try:
+            language_obj = self.LANGUAGES[lang]
+            query = language_obj.query(query_str)
+            
+            # Correct API for tree-sitter 0.22+
+            cursor = QueryCursor()
+            captures = cursor.captures(query, root_node)
+            
+            chunks = []
+            seen_ranges = set()
+            
+            for node, capture_name in captures:
+                if capture_name in ['function', 'class', 'method']:
+                    start_byte = node.start_byte
+                    end_byte = node.end_byte
+                    
+                    if start_byte in seen_ranges:
+                        continue
+                    seen_ranges.add(start_byte)
+                    
+                    text_bytes = content.encode('utf8')[start_byte:end_byte]
+                    text = text_bytes.decode('utf8', errors='replace')
+                    
+                    # Try to find name in text
+                    name = "block"
+                    lines = text.split('\n')
+                    first_line = lines[0].strip()
+                    
+                    # Generic robust matcher for definition lines
+                    name_match = re.search(r'(?:class|def|func|function|type|var|const|let)\s+([a-zA-Z0-9_]+)', first_line)
+                    if name_match:
+                        name = name_match.group(1)
+                    else:
+                        # Check for method receivers in Go: func (r *Receiver) MethodName
+                        go_method = re.search(r'func\s+\(.*\)\s+([a-zA-Z0-9_]+)', first_line)
+                        if go_method:
+                            name = go_method.group(1)
+                            
+                    chunks.append(self._create_chunk(
+                        text=text,
+                        chunk_type=capture_name,
+                        name=name,
+                        file_path=file_path,
+                        language=lang,
+                        repo_name=repo_name,
+                        user_id=user_id,
+                        start_line=node.start_point[0] + 1,
+                        end_line=node.end_point[0] + 1
+                    ))
+            
+            if not chunks:
+                 return self._chunk_by_lines(content, file_path, lang, repo_name, user_id)
 
-        # Re-run query to get names specifically? 
-        # Actually captures returns a list of (Node, capture_index) in older bindings 
-        # or (Node, capture_name) in newer.
-        # Let's simplify: iterate captures, if name is @function/class, create chunk.
-        # Name extraction is hard without grouping. 
-        # Fallback to regex for name extraction on the chunk text? Or just use "code_block"
-        
-        # Correct approach for flat captures:
-        # We need to map @name nodes to their parent @function nodes can be tricky.
-        # Alternative: Just dump the whole function as a chunk.
-        
-        for node, capture_name in captures:
-             if capture_name in ['function', 'class', 'method']:
-                  start_byte = node.start_byte
-                  end_byte = node.end_byte
-                  text_bytes = content.encode('utf8')[start_byte:end_byte]
-                  text = text_bytes.decode('utf8', errors='replace')
-                  
-                   # Try to find name in text
-                  name = "block"
-                  # Improved Regex for name extraction
-                  # Python: def foo / class Foo
-                  # JS/TS: function foo / class Foo / const foo = () =>
-                  # Go: func foo / type Foo
-                  lines = text.split('\n')
-                  first_line = lines[0].strip()
-                  
-                  # Generic robust matcher for definition lines
-                  name_match = re.search(r'(?:class|def|func|function|type|var|const|let)\s+([a-zA-Z0-9_]+)', first_line)
-                  if name_match:
-                      name = name_match.group(1)
-                  else:
-                      # Check for method receivers in Go: func (r *Receiver) MethodName
-                      go_method = re.search(r'func\s+\(.*\)\s+([a-zA-Z0-9_]+)', first_line)
-                      if go_method:
-                          name = go_method.group(1)
-                  
-                  chunks.append(self._create_chunk(
-                    text=text,
-                    chunk_type=capture_name,
-                    name=name,
-                    file_path=file_path,
-                    language=lang,
-                    repo_name=repo_name,
-                    user_id=user_id,
-                    start_line=node.start_point[0] + 1,
-                    end_line=node.end_point[0] + 1
-                ))
-        
-        if not chunks:
+            return chunks
+
+        except Exception as e:
+             print(f"⚠️ Tree-sitter error for {lang}: {e}. Falling back.")
              return self._chunk_by_lines(content, file_path, lang, repo_name, user_id)
-
-        return chunks
 
     def _chunk_by_lines(self, content, file_path, language, repo_name, user_id, chunk_size=1000, overlap=100):
         """
@@ -462,14 +442,14 @@ class CodeIngestionService:
             }
         }
 
-    async def _build_code_graph(self, chunks):
-        self.graph.clear()
+    async def _build_code_graph(self, chunks, graph: nx.DiGraph):
+        graph.clear()
         
         # Add file nodes first
         files = set(c["metadata"]["file_path"] for c in chunks)
         for file_path in files:
             file_node_id = f"FILE::{file_path}"
-            self.graph.add_node(
+            graph.add_node(
                 file_node_id, 
                 type="file", 
                 label=Path(file_path).name,
@@ -479,27 +459,45 @@ class CodeIngestionService:
         # Add code entity nodes
         for chunk in chunks:
              meta = chunk["metadata"]
+             
+             # 1. Standard Tree-sitter Entities
              if meta.get("chunk_type") in ["function", "class", "method"]:
-                 # Create a unique ID for the node in the graph
-                 # Format: TYPE::FILE::NAME
                  node_id = f"{meta['chunk_type']}::{meta['file_path']}::{meta['name']}"
-                 
-                 self.graph.add_node(
+                 graph.add_node(
                      node_id, 
                      type=meta['chunk_type'],
                      label=meta['name'],
                      file=meta['file_path'],
                      lines=f"{meta['start_line']}-{meta['end_line']}"
                  )
-                 
                  # Edge: File -> Entity
                  file_node_id = f"FILE::{meta['file_path']}"
-                 if self.graph.has_node(file_node_id):
-                     self.graph.add_edge(file_node_id, node_id, type="CONTAINS")
+                 if graph.has_node(file_node_id):
+                     graph.add_edge(file_node_id, node_id, type="CONTAINS")
+                     
+             # 2. Fallback Code Blocks (FIX: Include these too!)
+             elif meta.get("chunk_type") == "code_block":
+                 # Use a unique ID for code blocks
+                 # Format: CODE::FILE::ID
+                 chunk_id = chunk["id"] # It has ID from _create_chunk
+                 node_id = f"CODE_BLOCK::{chunk_id}"
+                 
+                 graph.add_node(
+                     node_id,
+                     type="code_block",
+                     label=meta['name'], # usually "file:chunk_N"
+                     file=meta['file_path'],
+                     lines=f"{meta['start_line']}-{meta['end_line']}" # might be 0-0 but better than nothing
+                 )
+                 
+                 file_node_id = f"FILE::{meta['file_path']}"
+                 if graph.has_node(file_node_id):
+                     graph.add_edge(file_node_id, node_id, type="CONTAINS")
     
-    def load_all_graphs(self):
+    def load_all_graphs(self) -> nx.DiGraph:
         """Load all persisted graphs from disk into memory"""
         print("🔄 Loading persisted code graphs...")
+        combined_graph = nx.DiGraph()
         count = 0
         try:
             # Iterate through all data_* directories
@@ -519,14 +517,16 @@ class CodeIngestionService:
                             # But beware of collisions.
                             
                             subgraph = nx.node_link_graph(data)
-                            self.graph.update(subgraph)
+                            combined_graph.update(subgraph)
                             count += 1
                     except Exception as e:
                         print(f"Failed to load graph from {data_dir}: {e}")
             
-            print(f"✅ Loaded {count} repository graphs. Total nodes: {self.graph.number_of_nodes()}")
+            print(f"✅ Loaded {count} repository graphs. Total nodes: {combined_graph.number_of_nodes()}")
+            return combined_graph
         except Exception as e:
             print(f"Error loading graphs: {e}")
+            return combined_graph
 
     async def _save_repo_data(self, repo_id: str, chunks: List[Dict], graph: nx.DiGraph):
         """Persist graph and chunks to disk"""

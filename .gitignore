@@ -50,3 +50,7 @@ logs/
 # Build artifacts
 build/
 *.egg-info/
+
+# Generated Data
+backend/repos/
+backend/uploads/

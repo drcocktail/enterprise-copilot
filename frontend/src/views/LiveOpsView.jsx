@@ -28,7 +28,7 @@ const LiveOpsView = () => {
             ];
             const randomLog = newLogs[Math.floor(Math.random() * newLogs.length)];
             setLogs(prev => [...prev.slice(-20), randomLog]);
-        }, 1500);
+        }, 5000);
         return () => clearInterval(interval);
     }, []);
 
@@ -133,8 +133,8 @@ const LiveOpsView = () => {
                             >
                                 <div className="flex items-center justify-between mb-1">
                                     <div className={`text-[10px] font-bold uppercase px-1.5 py-0.5 rounded border ${alert.sev === 'critical' ? 'bg-red-900/20 text-red-500 border-red-900/50' :
-                                            alert.sev === 'warning' ? 'bg-yellow-900/20 text-yellow-500 border-yellow-900/50' :
-                                                'bg-blue-900/20 text-blue-500 border-blue-900/50'
+                                        alert.sev === 'warning' ? 'bg-yellow-900/20 text-yellow-500 border-yellow-900/50' :
+                                            'bg-blue-900/20 text-blue-500 border-blue-900/50'
                                         }`}>
                                         {alert.sev}
                                     </div>
@@ -155,9 +155,9 @@ const LiveOpsView = () => {
                             <div key={i} className="flex space-x-3 hover:bg-white/5 p-0.5 rounded group">
                                 <span className="text-slate-600 shrink-0">[{log.ts}]</span>
                                 <span className={`shrink-0 w-12 font-bold ${log.level === 'INFO' ? 'text-blue-500' :
-                                        log.level === 'DEBUG' ? 'text-slate-600' :
-                                            log.level === 'WARN' ? 'text-yellow-500' :
-                                                log.level === 'POST' ? 'text-purple-500' : 'text-green-500'
+                                    log.level === 'DEBUG' ? 'text-slate-600' :
+                                        log.level === 'WARN' ? 'text-yellow-500' :
+                                            log.level === 'POST' ? 'text-purple-500' : 'text-green-500'
                                     }`}>{log.level}</span>
                                 <span className="text-orange-500 shrink-0 w-24">[{log.sys}]</span>
                                 <span className="text-slate-400 group-hover:text-slate-200">{log.msg}</span>

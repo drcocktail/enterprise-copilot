@@ -88,7 +88,7 @@ class LLMService:
                     "options": {
                         "temperature": 0.3,
                         "top_p": 0.9,
-                        "num_predict": 1000
+                        "num_predict": 2500
                     }
                 }
             )
@@ -134,7 +134,7 @@ class LLMService:
                     "options": {
                         "temperature": 0.4,
                         "top_p": 0.9,
-                        "num_predict": 2000
+                        "num_predict": 2500
                     }
                 }
             ) as response:
@@ -250,7 +250,7 @@ class LLMService:
                     "options": {
                         "temperature": 0.4,
                         "top_p": 0.9,
-                        "num_predict": 2000
+                        "num_predict": 2500
                     }
                 }
             )

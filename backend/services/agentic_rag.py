@@ -262,6 +262,14 @@ Be concise. Only say NEED_MORE if critical information is truly missing."""
         
         return unique
     
+    async def add_code_chunks(self, chunks: List[Dict[str, Any]]):
+        """Delegate code chunk addition to underlying RAG service"""
+        if hasattr(self.rag_service, "add_code_chunks"):
+            await self.rag_service.add_code_chunks(chunks)
+        else:
+            # Fallback for now if not implemented in base RAG
+            print("⚠️ underlying RAG service missing add_code_chunks")
+
     async def close(self):
         """Close HTTP client"""
         await self.client.aclose()

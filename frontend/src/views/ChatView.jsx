@@ -162,11 +162,24 @@ const ChatView = ({ isSidebarOpen, setSidebarOpen }) => {
                     setMessages(prev => prev.map(m => {
                         if (m.id !== botMsgId) return m;
 
-                        const existingStepIdx = m.thoughts.findIndex(t => t.text === event.text);
+                        // Improved matching: Match by "Step X" prefix to handle text updates
+                        // e.g. "Step 1: Analyzing..." -> "Step 1: Thinking about..."
+                        const getStepPrefix = (txt) => {
+                            const match = txt.match(/^(Step \d+):/);
+                            return match ? match[1] : txt;
+                        };
+
+                        const eventPrefix = getStepPrefix(event.text);
+                        const existingStepIdx = m.thoughts.findIndex(t => getStepPrefix(t.text) === eventPrefix);
+
                         if (existingStepIdx >= 0) {
-                            // Update existing step
+                            // Update existing step (replace text and state)
                             const newThoughts = [...m.thoughts];
-                            newThoughts[existingStepIdx] = { ...newThoughts[existingStepIdx], state: event.state };
+                            newThoughts[existingStepIdx] = {
+                                ...newThoughts[existingStepIdx],
+                                text: event.text,
+                                state: event.state
+                            };
                             return { ...m, thoughts: newThoughts };
                         } else {
                             // Add new step
@@ -229,6 +242,21 @@ const ChatView = ({ isSidebarOpen, setSidebarOpen }) => {
                 content: "I encountered an error connecting to the Nexus backend. Please ensure the services are running."
             } : m));
         } finally {
+            // Ensure all thoughts are marked done when streaming ends
+            setMessages(prev => prev.map(m => {
+                if (m.id !== botMsgId) return m;
+                const hasProcessing = m.thoughts.some(t => t.state === 'processing');
+                if (hasProcessing) {
+                    return {
+                        ...m,
+                        thoughts: m.thoughts.map(t =>
+                            t.state === 'processing' ? { ...t, state: 'done' } : t
+                        )
+                    };
+                }
+                return m;
+            }));
+
             setIsLoading(false);
             setIsStreaming(false);
         }
@@ -239,7 +267,7 @@ const ChatView = ({ isSidebarOpen, setSidebarOpen }) => {
         : 'new-session';
 
     return (
-        <div className="flex h-full">
+        <div className="flex h-full overflow-hidden">
             {/* Conversation History Sidebar */}
             <AnimatePresence>
                 {showHistory && (
@@ -260,8 +288,8 @@ const ChatView = ({ isSidebarOpen, setSidebarOpen }) => {
             </AnimatePresence>
 
             {/* Main Chat Area */}
-            <div className="flex-1 flex flex-col min-w-0">
-                <header className="h-16 border-b border-white/5 bg-[#0f172a]/80 backdrop-blur-md flex items-center justify-between px-6 sticky top-0 z-10">
+            <div className="flex-1 flex flex-col min-w-0 h-full">
+                <header className="h-16 flex-shrink-0 border-b border-white/5 bg-[#0f172a]/80 backdrop-blur-md flex items-center justify-between px-6 sticky top-0 z-10">
                     <div className="flex items-center space-x-4">
                         <button
                             onClick={() => setShowHistory(!showHistory)}
@@ -358,7 +386,7 @@ const ChatView = ({ isSidebarOpen, setSidebarOpen }) => {
                     ))}
                 </div>
 
-                <div className="p-6 bg-[#0f172a] relative border-t border-slate-800/50">
+                <div className="p-6 bg-[#0f172a] relative border-t border-slate-800/50 flex-shrink-0">
                     <div className="max-w-4xl mx-auto">
                         <div className={`relative flex items-center bg-[#1e293b] rounded-xl border transition-all ${isLoading ? 'border-blue-500/30' : 'border-white/10 shadow-xl focus-within:ring-1 focus-within:ring-blue-500/50'}`}>
                             <div className="pl-4 text-slate-500">

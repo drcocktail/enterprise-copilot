@@ -20,7 +20,7 @@ const apiClient = axios.create({
 apiClient.interceptors.request.use(
   (config) => {
     // Get current role from somewhere (could be context, local storage, etc.)
-    const currentRole = window.currentIAMRole || 'CHIEF_STRATEGY_OFFICER';
+    const currentRole = window.currentIAMRole || 'PRINCIPAL_ARCHITECT';
     config.headers['x-iam-role'] = currentRole;
     return config;
   },

@@ -20,7 +20,7 @@ const RepositoriesView = () => {
     useEffect(() => {
         loadRepos();
         // Poll for updates every 3 seconds
-        const interval = setInterval(loadRepos, 3000);
+        const interval = setInterval(loadRepos, 10000);
         return () => clearInterval(interval);
     }, []);
 

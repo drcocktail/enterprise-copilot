@@ -327,8 +327,8 @@ class DatabaseService:
         cursor = conn.cursor()
         
         cursor.execute(
-            "SELECT * FROM conversations WHERE user_id = ? ORDER BY updated_at DESC LIMIT ?",
-            (user_id, limit)
+            "SELECT * FROM conversations ORDER BY updated_at DESC LIMIT ?",
+            (limit,)
         )
         rows = cursor.fetchall()
         conn.close()
@@ -576,8 +576,7 @@ class DatabaseService:
             )
         else:
             cursor.execute(
-                "SELECT * FROM user_documents WHERE user_id = ? ORDER BY uploaded_at DESC",
-                (user_id,)
+                "SELECT * FROM user_documents ORDER BY uploaded_at DESC"
             )
         
         rows = cursor.fetchall()
@@ -687,7 +686,7 @@ class DatabaseService:
         conn = self._get_connection()
         cursor = conn.cursor()
         
-        cursor.execute("SELECT * FROM repositories WHERE user_id = ? ORDER BY last_indexed_at DESC", (user_id,))
+        cursor.execute("SELECT * FROM repositories ORDER BY last_indexed_at DESC")
         rows = cursor.fetchall()
         conn.close()
         

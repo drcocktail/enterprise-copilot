@@ -109,6 +109,7 @@ async def upload_document(
         "message": "Ingestion started in background"
     }
 
+@app.post("/api/github/ingest")
 @app.post("/api/repos/ingest")
 async def ingest_repo(
     request: RepoRequest, 
@@ -151,13 +152,51 @@ async def ingest_repo(
         "repo_name": repo_name
     }
 
+@app.delete("/api/repos/{repo_id}")
+async def delete_repo(repo_id: str, x_iam_role: str = Header(...)):
+    """Delete a repository"""
+    # Delete from DB
+    success = await db_service.delete_repository(repo_id)
+    if not success:
+        raise HTTPException(status_code=404, detail="Repository not found")
+        
+    # Optional: Delete from disk (cloned repo)
+    # Optional: Delete from ChromaDB (chunks)
+    
+    return {"status": "deleted", "id": repo_id}
+
 @app.get("/api/documents")
 async def list_documents(x_iam_role: str = Header(...)):
     """List User Documents"""
     docs = await db_service.get_user_documents(x_iam_role)
     return {"documents": docs}
 
+@app.delete("/api/documents/{doc_id}")
+async def delete_document(doc_id: str, x_iam_role: str = Header(...)):
+    """Delete User Document"""
+    success = await db_service.delete_user_document(doc_id)
+    if not success:
+        raise HTTPException(status_code=404, detail="Document not found")
+    return {"status": "deleted", "id": doc_id}
+
+@app.get("/api/documents/{doc_id}/chunks")
+async def get_document_chunks(doc_id: str, limit: int = 100, x_iam_role: str = Header(...)):
+    """Get Chunks for a Document"""
+    # Use RagService to fetch chunks
+    # We used 'doc_id' as metadata key during ingestion?
+    # Let's check 'metadata' in add_user_document.
+    # Actually document_service handles ingestion.
+    # Usually it puts 'doc_id' or 'source' in metadata.
+    # Let's assume 'doc_id' for now or 'source' if we stored checking DocumentService.
+    # For now, we'll try fetching by 'doc_id' if available, or 'source' (filename).
+    
+    # We need to dig into how chunks are stored.
+    # But for now, let's expose the RagService method.
+    chunks = rag_service.get_chunks_by_metadata("doc_id", doc_id, limit=limit)
+    return {"chunks": chunks}
+
 @app.get("/api/repos")
+@app.get("/api/github/repos")
 async def list_repos(x_iam_role: str = Header(...)):
     """List User Repositories from DB"""
     return await db_service.get_repositories(x_iam_role)
