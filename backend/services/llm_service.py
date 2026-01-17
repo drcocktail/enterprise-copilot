@@ -66,7 +66,7 @@ class LLMService:
     def __init__(
         self,
         base_url: str = "http://localhost:11434",
-        model: str = "qwen2.5-coder:7b"
+        model: str = "llama3.2:latest"
     ):
         self.base_url = base_url
         self.model = model
@@ -486,6 +486,29 @@ You're helping with IT operations. Be practical and action-oriented.
         
         return "\n".join(parts)
     
+    async def summarize_conversation(self, history: List[Dict[str, Any]]) -> str:
+        """Generate a short 3-5 word title for the conversation"""
+        if not history:
+            return "New Chat"
+
+        # Format history for summarization
+        context = "\n".join([f"{msg['role']}: {msg['content'][:100]}" for msg in history[:5]])
+        
+        prompt = f"""Summarize the following conversation snippet into a short, concise title (3-5 words). 
+        Do not use quotes. Just the title.
+        
+        {context}
+        
+        Title:"""
+        
+        try:
+            response = await self._call_ollama(prompt, system="You are a helpful assistant that summarizes conversations.")
+            title = response.strip().strip('"').strip("'")
+            return title
+        except Exception as e:
+            print(f"Summarization failed: {e}")
+            return "New Chat"
+
     def _format_conversation_history(
         self,
         history: List[Dict[str, Any]] = None,

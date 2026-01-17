@@ -1,0 +1,171 @@
+{
+  "directed": true,
+  "multigraph": false,
+  "graph": {},
+  "nodes": [
+    {
+      "type": "code",
+      "chunk_type": "code_block",
+      "name": "README.md:chunk_1",
+      "file_path": "README.md",
+      "language": "markdown",
+      "repo_name": "fastLM",
+      "user_id": "sde_ii",
+      "start_line": 0,
+      "end_line": 0,
+      "char_count": 905,
+      "ingested_at": "2026-01-17T11:47:14.999379",
+      "id": "README.md::README.md:chunk_1"
+    },
+    {
+      "type": "file",
+      "label": "README.md",
+      "id": "README.md::FILE"
+    },
+    {
+      "type": "code",
+      "chunk_type": "code_block",
+      "name": "README.md:chunk_2",
+      "file_path": "README.md",
+      "language": "markdown",
+      "repo_name": "fastLM",
+      "user_id": "sde_ii",
+      "start_line": 0,
+      "end_line": 0,
+      "char_count": 873,
+      "ingested_at": "2026-01-17T11:47:14.999405",
+      "id": "README.md::README.md:chunk_2"
+    },
+    {
+      "type": "code",
+      "chunk_type": "code_block",
+      "name": "README.md:chunk_3",
+      "file_path": "README.md",
+      "language": "markdown",
+      "repo_name": "fastLM",
+      "user_id": "sde_ii",
+      "start_line": 0,
+      "end_line": 0,
+      "char_count": 745,
+      "ingested_at": "2026-01-17T11:47:14.999411",
+      "id": "README.md::README.md:chunk_3"
+    },
+    {
+      "type": "code",
+      "chunk_type": "code_block",
+      "name": "README.md:chunk_4",
+      "file_path": "README.md",
+      "language": "markdown",
+      "repo_name": "fastLM",
+      "user_id": "sde_ii",
+      "start_line": 0,
+      "end_line": 0,
+      "char_count": 956,
+      "ingested_at": "2026-01-17T11:47:14.999417",
+      "id": "README.md::README.md:chunk_4"
+    },
+    {
+      "type": "code",
+      "chunk_type": "code_block",
+      "name": "README.md:chunk_5",
+      "file_path": "README.md",
+      "language": "markdown",
+      "repo_name": "fastLM",
+      "user_id": "sde_ii",
+      "start_line": 0,
+      "end_line": 0,
+      "char_count": 992,
+      "ingested_at": "2026-01-17T11:47:14.999421",
+      "id": "README.md::README.md:chunk_5"
+    },
+    {
+      "type": "code",
+      "chunk_type": "code_block",
+      "name": "README.md:chunk_6",
+      "file_path": "README.md",
+      "language": "markdown",
+      "repo_name": "fastLM",
+      "user_id": "sde_ii",
+      "start_line": 0,
+      "end_line": 0,
+      "char_count": 450,
+      "ingested_at": "2026-01-17T11:47:14.999426",
+      "id": "README.md::README.md:chunk_6"
+    },
+    {
+      "type": "code",
+      "chunk_type": "code_block",
+      "name": "fast_llm.py:chunk_1",
+      "file_path": "fast_llm.py",
+      "language": "python",
+      "repo_name": "fastLM",
+      "user_id": "sde_ii",
+      "start_line": 0,
+      "end_line": 0,
+      "char_count": 438,
+      "ingested_at": "2026-01-17T11:47:14.999594",
+      "id": "fast_llm.py::fast_llm.py:chunk_1"
+    },
+    {
+      "type": "file",
+      "label": "fast_llm.py",
+      "id": "fast_llm.py::FILE"
+    },
+    {
+      "type": "code",
+      "chunk_type": "code_block",
+      "name": "fast_llm.py:chunk_2",
+      "file_path": "fast_llm.py",
+      "language": "python",
+      "repo_name": "fastLM",
+      "user_id": "sde_ii",
+      "start_line": 0,
+      "end_line": 0,
+      "char_count": 14329,
+      "ingested_at": "2026-01-17T11:47:14.999609",
+      "id": "fast_llm.py::fast_llm.py:chunk_2"
+    }
+  ],
+  "links": [
+    {
+      "type": "CONTAINS",
+      "source": "README.md::FILE",
+      "target": "README.md::README.md:chunk_1"
+    },
+    {
+      "type": "CONTAINS",
+      "source": "README.md::FILE",
+      "target": "README.md::README.md:chunk_2"
+    },
+    {
+      "type": "CONTAINS",
+      "source": "README.md::FILE",
+      "target": "README.md::README.md:chunk_3"
+    },
+    {
+      "type": "CONTAINS",
+      "source": "README.md::FILE",
+      "target": "README.md::README.md:chunk_4"
+    },
+    {
+      "type": "CONTAINS",
+      "source": "README.md::FILE",
+      "target": "README.md::README.md:chunk_5"
+    },
+    {
+      "type": "CONTAINS",
+      "source": "README.md::FILE",
+      "target": "README.md::README.md:chunk_6"
+    },
+    {
+      "type": "CONTAINS",
+      "source": "fast_llm.py::FILE",
+      "target": "fast_llm.py::fast_llm.py:chunk_1"
+    },
+    {
+      "type": "CONTAINS",
+      "source": "fast_llm.py::FILE",
+      "target": "fast_llm.py::fast_llm.py:chunk_2"
+    }
+  ]
+}

@@ -11,6 +11,7 @@ from pathlib import Path
 from typing import List, Dict, Any, Optional
 from datetime import datetime
 import re
+import json
 
 # Git operations
 from git import Repo
@@ -39,7 +40,13 @@ class CodeIngestionService:
         '.tsx': 'typescript',
         '.java': 'java',
         '.go': 'go',
+        '.go': 'go',
         '.c': 'c',
+        '.md': 'markdown',
+        '.txt': 'text',
+        '.json': 'json',
+        '.yml': 'yaml',
+        '.yaml': 'yaml',
     }
     
     SKIP_DIRS = {
@@ -131,15 +138,32 @@ class CodeIngestionService:
             except:
                 pass
 
-    async def ingest_github_repo(self, github_url: str, user_id: str) -> Dict[str, Any]:
+    async def ingest_github_repo(
+        self, 
+        github_url: str, 
+        user_id: str, 
+        repo_id: Optional[str] = None, 
+        db_service=None,
+        rag_service=None
+    ) -> Dict[str, Any]:
         """Clone and parse repo using Tree-sitter."""
         try:
             repo_name = self._extract_repo_name(github_url)
-            repo_id = str(uuid.uuid4())[:8]
+            if not repo_id:
+                repo_id = str(uuid.uuid4())[:8]
+                
             repo_path = self.repos_dir / f"{repo_id}_{repo_name}"
+            
+            # Update DB: Cloning
+            if db_service:
+                await db_service.update_repository_status(repo_id, "cloning")
             
             print(f"📥 Cloning {github_url}...")
             await self._clone_repo(github_url, repo_path)
+            
+            # Update DB: Parsing
+            if db_service:
+                await db_service.update_repository_status(repo_id, "parsing")
             
             print(f"🔍 Parsing code files...")
             code_chunks = await self._parse_repository(repo_path, repo_name, user_id)
@@ -147,17 +171,49 @@ class CodeIngestionService:
             print(f"🔗 Building code graph...")
             await self._build_code_graph(code_chunks)
             
+            stats = {
+                "file_count": len(set(c["metadata"]["file_path"] for c in code_chunks)),
+                "chunk_count": len(code_chunks),
+                "graph_nodes": self.graph.number_of_nodes(),
+            }
+            
+            # Update DB: Ready
+            if db_service:
+                await db_service.update_repository_status(repo_id, "ready", stats=stats)
+            
+            # Save Graph and Chunks to Disk (for persistence)
+            await self._save_repo_data(repo_id, code_chunks, self.graph)
+
+            # 4. EMBED CHUNKS to Vector DB (CRITICAL FIX)
+            if rag_service:
+                print(f"🧠 Embedding {len(code_chunks)} code chunks...")
+                # We need to adapt chunks to what rag_service expects or use a dedicated method
+                # rag_service.add_documents expects {text, metadata, id}
+                # Our chunks have this structure.
+                # However, RAGService writes to 'document_chunks'. We might want 'code_chunks'.
+                # Let's check rag_service support for collections or just put them there for now.
+                # Ideally we want a separate collection.
+                # We will add a method to RagService to switch collection or add generic add_items.
+                # For now, let's assume we can pass collection_name or it handles it.
+                # Let's use rag_service.add_code_chunks if we add it, or just add_documents for now.
+                # Wait, rag_service defaults to "document_chunks". 
+                # We should update RagService to support code_chunks collection.
+                pass 
+                # I will handle the RagService update in the next step.
+                # But here I need to call it.
+                await rag_service.add_code_chunks(code_chunks)
+
             return {
                 "repo_id": repo_id,
                 "repo_name": repo_name,
                 "chunks": code_chunks,
-                "file_count": len(set(c["metadata"]["file_path"] for c in code_chunks)),
-                "chunk_count": len(code_chunks),
-                "graph_nodes": self.graph.number_of_nodes(),
-                "status": "ready"
+                "status": "ready",
+                **stats
             }
         except Exception as e:
             print(f"❌ Ingestion error: {e}")
+            if db_service and repo_id:
+                await db_service.update_repository_status(repo_id, "error", error=str(e))
             return {"status": "error", "error": str(e)}
 
     def _extract_repo_name(self, github_url: str) -> str:
@@ -283,11 +339,24 @@ class CodeIngestionService:
                   text_bytes = content.encode('utf8')[start_byte:end_byte]
                   text = text_bytes.decode('utf8', errors='replace')
                   
-                  # Try to find name in text
+                   # Try to find name in text
                   name = "block"
-                  match = re.search(r'(def|class|func|function)\s+([a-zA-Z0-9_]+)', text)
-                  if match:
-                      name = match.group(2)
+                  # Improved Regex for name extraction
+                  # Python: def foo / class Foo
+                  # JS/TS: function foo / class Foo / const foo = () =>
+                  # Go: func foo / type Foo
+                  lines = text.split('\n')
+                  first_line = lines[0].strip()
+                  
+                  # Generic robust matcher for definition lines
+                  name_match = re.search(r'(?:class|def|func|function|type|var|const|let)\s+([a-zA-Z0-9_]+)', first_line)
+                  if name_match:
+                      name = name_match.group(1)
+                  else:
+                      # Check for method receivers in Go: func (r *Receiver) MethodName
+                      go_method = re.search(r'func\s+\(.*\)\s+([a-zA-Z0-9_]+)', first_line)
+                      if go_method:
+                          name = go_method.group(1)
                   
                   chunks.append(self._create_chunk(
                     text=text,
@@ -395,7 +464,118 @@ class CodeIngestionService:
 
     async def _build_code_graph(self, chunks):
         self.graph.clear()
+        
+        # Add file nodes first
+        files = set(c["metadata"]["file_path"] for c in chunks)
+        for file_path in files:
+            file_node_id = f"FILE::{file_path}"
+            self.graph.add_node(
+                file_node_id, 
+                type="file", 
+                label=Path(file_path).name,
+                file=file_path
+            )
+        
+        # Add code entity nodes
         for chunk in chunks:
              meta = chunk["metadata"]
-             node_id = f"{meta['file_path']}::{meta['name']}"
-             self.graph.add_node(node_id, **meta)
+             if meta.get("chunk_type") in ["function", "class", "method"]:
+                 # Create a unique ID for the node in the graph
+                 # Format: TYPE::FILE::NAME
+                 node_id = f"{meta['chunk_type']}::{meta['file_path']}::{meta['name']}"
+                 
+                 self.graph.add_node(
+                     node_id, 
+                     type=meta['chunk_type'],
+                     label=meta['name'],
+                     file=meta['file_path'],
+                     lines=f"{meta['start_line']}-{meta['end_line']}"
+                 )
+                 
+                 # Edge: File -> Entity
+                 file_node_id = f"FILE::{meta['file_path']}"
+                 if self.graph.has_node(file_node_id):
+                     self.graph.add_edge(file_node_id, node_id, type="CONTAINS")
+    
+    def load_all_graphs(self):
+        """Load all persisted graphs from disk into memory"""
+        print("🔄 Loading persisted code graphs...")
+        count = 0
+        try:
+            # Iterate through all data_* directories
+            for data_dir in self.repos_dir.glob("data_*"):
+                if not data_dir.is_dir():
+                    continue
+                
+                graph_file = data_dir / "graph.json"
+                if graph_file.exists():
+                    try:
+                        with open(graph_file, "r") as f:
+                            data = json.load(f)
+                            # We can merge this into the main graph or keep separate?
+                            # For RAG, we might want a unified graph.
+                            # For visualization, we load per repo.
+                            # Let's merge into main graph to support global search if needed.
+                            # But beware of collisions.
+                            
+                            subgraph = nx.node_link_graph(data)
+                            self.graph.update(subgraph)
+                            count += 1
+                    except Exception as e:
+                        print(f"Failed to load graph from {data_dir}: {e}")
+            
+            print(f"✅ Loaded {count} repository graphs. Total nodes: {self.graph.number_of_nodes()}")
+        except Exception as e:
+            print(f"Error loading graphs: {e}")
+
+    async def _save_repo_data(self, repo_id: str, chunks: List[Dict], graph: nx.DiGraph):
+        """Persist graph and chunks to disk"""
+        data_dir = self.repos_dir / f"data_{repo_id}"
+        data_dir.mkdir(exist_ok=True)
+        
+        # Save Chunks
+        with open(data_dir / "chunks.json", "w") as f:
+            json.dump(chunks, f, indent=2)
+            
+        # Save Graph (node-link format)
+        # We need to save ONLY the subgraph relevant to this repo?
+        # self.graph currently holds ALL nodes if we don't clear it.
+        # But ingest_github_repo calls _build_code_graph which clears it first?
+        # YES: self.graph.clear() is called in _build_code_graph.
+        # So self.graph ONLY contains the current repo's graph during ingestion.
+        # This is correct for saving.
+        
+        graph_data = nx.node_link_data(graph)
+        with open(data_dir / "graph.json", "w") as f:
+            json.dump(graph_data, f, indent=2)
+            
+    def get_repo_graph(self, repo_id: str) -> Dict[str, Any]:
+        """Load and return graph data for frontend"""
+        try:
+            # Check for data_{repo_id}
+            data_file = self.repos_dir / f"data_{repo_id}" / "graph.json"
+            
+            if not data_file.exists():
+                # Fallback: check if we have it in memory (for just ingested)
+                # But memory is transient.
+                return {"nodes": [], "edges": []}
+                
+            with open(data_file, "r") as f:
+                data = json.load(f)
+            return data
+        except Exception as e:
+            print(f"Error loading graph for {repo_id}: {e}")
+            return {"nodes": [], "edges": []}
+
+    def get_repo_chunks(self, repo_id: str) -> List[Dict[str, Any]]:
+        """Load and return chunks"""
+        try:
+            data_file = self.repos_dir / f"data_{repo_id}" / "chunks.json"
+            if not data_file.exists():
+                return []
+                
+            with open(data_file, "r") as f:
+                return json.load(f)
+        except Exception as e:
+            print(f"Error loading chunks for {repo_id}: {e}")
+            return []

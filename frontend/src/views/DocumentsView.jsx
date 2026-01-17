@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Upload, FileText, RefreshCw, CheckCircle, Trash2, Loader2 } from 'lucide-react';
 import api from '../services/api';
+import DocumentChunksModal from '../components/DocumentChunksModal';
 
 const DocumentsView = () => {
     const [documents, setDocuments] = useState([]);
@@ -38,6 +39,8 @@ const DocumentsView = () => {
         if (files.length > 0) handleUpload(files[0]);
     };
 
+    const [selectedDoc, setSelectedDoc] = useState(null);
+    const [chunksModalOpen, setChunksModalOpen] = useState(false);
     const [ingestionResult, setIngestionResult] = useState(null);
 
     const handleUpload = async (file) => {
@@ -55,6 +58,22 @@ const DocumentsView = () => {
         } finally {
             setUploading(false);
         }
+    };
+
+    const handleDelete = async (docId) => {
+        if (!window.confirm("Are you sure you want to delete this document?")) return;
+        try {
+            await api.documentAPI.delete(docId, 'sde_ii');
+            await loadDocuments();
+        } catch (e) {
+            console.error("Delete failed", e);
+            alert("Failed to delete document: " + (e.response?.data?.detail || e.message));
+        }
+    };
+
+    const handleViewChunks = (doc) => {
+        setSelectedDoc(doc);
+        setChunksModalOpen(true);
     };
 
     return (
@@ -96,18 +115,27 @@ const DocumentsView = () => {
                         <h2 className="text-2xl font-bold text-white mb-1">Knowledge Base</h2>
                         <p className="text-slate-400 text-sm">Upload and manage vectorized documents for RAG context.</p>
                     </div>
-                    <input
-                        type="file"
-                        ref={fileInputRef}
-                        className="hidden"
-                        onChange={(e) => e.target.files.length > 0 && handleUpload(e.target.files[0])}
-                    />
-                    <button
-                        onClick={() => fileInputRef.current?.click()}
-                        className="px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white rounded-lg flex items-center text-sm font-medium shadow-lg shadow-blue-900/20 transition-all hover:translate-y-px"
-                    >
-                        <Upload className="w-4 h-4 mr-2" /> Upload Files
-                    </button>
+                    <div className="flex items-center gap-3">
+                        <button
+                            onClick={loadDocuments}
+                            className="p-2 text-slate-400 hover:text-white hover:bg-slate-800 rounded-lg transition-colors"
+                            title="Refresh List"
+                        >
+                            <RefreshCw className={`w-5 h-5 ${loading ? 'animate-spin' : ''}`} />
+                        </button>
+                        <input
+                            type="file"
+                            ref={fileInputRef}
+                            className="hidden"
+                            onChange={(e) => e.target.files.length > 0 && handleUpload(e.target.files[0])}
+                        />
+                        <button
+                            onClick={() => fileInputRef.current?.click()}
+                            className="px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white rounded-lg flex items-center text-sm font-medium shadow-lg shadow-blue-900/20 transition-all hover:translate-y-px"
+                        >
+                            <Upload className="w-4 h-4 mr-2" /> Upload Files
+                        </button>
+                    </div>
                 </div>
 
                 {/* Drag Drop Zone */}
@@ -153,7 +181,7 @@ const DocumentsView = () => {
                                         <FileText className="w-5 h-5" />
                                     </div>
                                     <div>
-                                        <p className="text-sm font-semibold text-slate-200 group-hover:text-blue-400 transition-colors">{doc.key || doc.original_filename || doc.name}</p>
+                                        <p className="text-sm font-semibold text-slate-200 group-hover:text-blue-400 transition-colors cursor-pointer" onClick={() => handleViewChunks(doc)}>{doc.key || doc.original_filename || doc.name}</p>
                                         <p className="text-xs text-slate-500 mt-0.5">{doc.size || 'N/A'} • Uploaded {doc.date || 'Unknown'}</p>
                                     </div>
                                 </div>
@@ -164,21 +192,46 @@ const DocumentsView = () => {
                                                 <RefreshCw className="w-3 h-3 mr-2 animate-spin" /> {doc.status}
                                             </div>
                                         ) : (
-                                            <div className="flex items-center text-emerald-500 text-xs bg-emerald-900/20 px-2.5 py-1 rounded-full border border-emerald-900/30 font-medium">
+                                            <div
+                                                className="flex items-center text-emerald-500 text-xs bg-emerald-900/20 px-2.5 py-1 rounded-full border border-emerald-900/30 font-medium cursor-pointer hover:bg-emerald-900/40 transition-colors"
+                                                onClick={() => handleViewChunks(doc)}
+                                                title="View Chunks"
+                                            >
                                                 <CheckCircle className="w-3 h-3 mr-2" /> {doc.status || 'Indexed'}
                                                 {doc.chunk_count > 0 && <span className="ml-2 text-slate-500">({doc.chunk_count} chunks)</span>}
                                             </div>
                                         )}
                                     </div>
-                                    <button className="p-2 text-slate-600 hover:text-red-400 hover:bg-red-900/20 rounded transition-colors opacity-0 group-hover:opacity-100">
-                                        <Trash2 className="w-4 h-4" />
-                                    </button>
+                                    <div className="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                                        <button
+                                            onClick={() => handleViewChunks(doc)}
+                                            className="p-2 text-slate-500 hover:text-blue-400 hover:bg-blue-900/20 rounded transition-colors"
+                                            title="View Chunks"
+                                        >
+                                            <FileText className="w-4 h-4" />
+                                        </button>
+                                        <button
+                                            onClick={() => handleDelete(doc.id)}
+                                            className="p-2 text-slate-500 hover:text-red-400 hover:bg-red-900/20 rounded transition-colors"
+                                            title="Delete Document"
+                                        >
+                                            <Trash2 className="w-4 h-4" />
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                         ))}
                     </div>
                 </div>
             </div>
+
+            {/* Chunks Modal */}
+            <DocumentChunksModal
+                isOpen={chunksModalOpen}
+                onClose={() => setChunksModalOpen(false)}
+                docId={selectedDoc?.id}
+                docName={selectedDoc?.original_filename || selectedDoc?.name}
+            />
         </div>
     );
 };

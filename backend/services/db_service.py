@@ -31,6 +31,7 @@ class DatabaseService:
     def _init_db(self):
         """Initialize all database tables"""
         conn = self._get_connection()
+        conn.execute("PRAGMA journal_mode=WAL;")  # Enable Write-Ahead Logging for concurrency
         cursor = conn.cursor()
         
         # ==================== EXISTING TABLES ====================
@@ -132,6 +133,28 @@ class DatabaseService:
         cursor.execute("""
             CREATE INDEX IF NOT EXISTS idx_user_documents_user 
             ON user_documents(user_id, uploaded_at DESC)
+        """)
+        
+        # Repositories Table (codebases)
+        cursor.execute("""
+            CREATE TABLE IF NOT EXISTS repositories (
+                id TEXT PRIMARY KEY,
+                name TEXT NOT NULL,
+                url TEXT NOT NULL,
+                language TEXT,
+                branch TEXT DEFAULT 'main',
+                status TEXT DEFAULT 'pending', -- pending, cloning, parsing, ready, error
+                nodes_count INTEGER DEFAULT 0,
+                file_count INTEGER DEFAULT 0,
+                last_indexed_at TEXT,
+                error_message TEXT,
+                user_id TEXT
+            )
+        """)
+        
+        cursor.execute("""
+            CREATE INDEX IF NOT EXISTS idx_repos_user 
+            ON repositories(user_id, last_indexed_at DESC)
         """)
         
         conn.commit()
@@ -245,6 +268,26 @@ class DatabaseService:
 
     # ==================== CONVERSATIONS (NEW) ====================
     
+    async def ensure_conversation(self, conversation_id: str, user_id: str, role: str) -> bool:
+        """Ensure a conversation exists, create if not"""
+        conn = self._get_connection()
+        cursor = conn.cursor()
+        
+        cursor.execute("SELECT 1 FROM conversations WHERE id = ?", (conversation_id,))
+        exists = cursor.fetchone()
+        
+        if not exists:
+            now = datetime.now().isoformat()
+            cursor.execute(
+                "INSERT INTO conversations (id, user_id, role, title, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?)",
+                (conversation_id, user_id, role, "New Chat", now, now)
+            )
+            conn.commit()
+            print(f"Created missing conversation {conversation_id}")
+            return True
+            
+        return False
+
     async def create_conversation(
         self,
         user_id: str,
@@ -564,3 +607,88 @@ class DatabaseService:
         conn.close()
         
         return success
+
+    # ==================== REPOSITORIES (NEW) ====================
+    
+    async def add_repository(
+        self,
+        repo_data: Dict[str, Any]
+    ) -> Dict[str, Any]:
+        """Add a repository to tracking"""
+        conn = self._get_connection()
+        cursor = conn.cursor()
+        
+        repo_id = repo_data.get("id", str(uuid.uuid4())[:8])
+        now = datetime.now().isoformat()
+        
+        cursor.execute(
+            """
+            INSERT INTO repositories 
+            (id, name, url, language, status, last_indexed_at, user_id) 
+            VALUES (?, ?, ?, ?, ?, ?, ?)
+            """,
+            (
+                repo_id,
+                repo_data["name"],
+                repo_data["url"],
+                repo_data.get("language", "UNKNOWN"),
+                repo_data.get("status", "pending"),
+                now,
+                repo_data.get("user_id")
+            )
+        )
+        conn.commit()
+        conn.close()
+        
+        repo_data["id"] = repo_id
+        repo_data["last_indexed_at"] = now
+        return repo_data
+        
+    async def update_repository_status(
+        self,
+        repo_id: str,
+        status: str,
+        stats: Optional[Dict[str, Any]] = None,
+        error: Optional[str] = None
+    ):
+        """Update repository status and stats"""
+        conn = self._get_connection()
+        cursor = conn.cursor()
+        
+        now = datetime.now().isoformat()
+        
+        if stats:
+            cursor.execute(
+                """
+                UPDATE repositories 
+                SET status = ?, nodes_count = ?, file_count = ?, last_indexed_at = ?, error_message = ? 
+                WHERE id = ?
+                """,
+                (
+                    status, 
+                    stats.get("graph_nodes", 0), 
+                    stats.get("file_count", 0), 
+                    now, 
+                    error, 
+                    repo_id
+                )
+            )
+        else:
+            cursor.execute(
+                "UPDATE repositories SET status = ?, error_message = ? WHERE id = ?",
+                (status, error, repo_id)
+            )
+            
+        conn.commit()
+        conn.close()
+        
+    async def get_repositories(self, user_id: str) -> List[Dict[str, Any]]:
+        """Get all repositories for user"""
+        conn = self._get_connection()
+        cursor = conn.cursor()
+        
+        cursor.execute("SELECT * FROM repositories WHERE user_id = ? ORDER BY last_indexed_at DESC", (user_id,))
+        rows = cursor.fetchall()
+        conn.close()
+        
+        return [dict(row) for row in rows]

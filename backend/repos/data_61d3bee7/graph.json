@@ -1,0 +1,3995 @@
+{
+  "directed": true,
+  "multigraph": false,
+  "graph": {},
+  "nodes": [
+    {
+      "type": "code",
+      "chunk_type": "code_block",
+      "name": "check_db.py:chunk_1",
+      "file_path": "check_db.py",
+      "language": "python",
+      "repo_name": "enterprise-copilot",
+      "user_id": "CHIEF_STRATEGY_OFFICER",
+      "start_line": 0,
+      "end_line": 0,
+      "char_count": 646,
+      "ingested_at": "2026-01-16T23:06:12.282564",
+      "id": "check_db.py::check_db.py:chunk_1"
+    },
+    {
+      "type": "file",
+      "label": "check_db.py",
+      "id": "check_db.py::FILE"
+    },
+    {
+      "type": "code",
+      "chunk_type": "code_block",
+      "name": "main.jsx:chunk_1",
+      "file_path": "main.jsx",
+      "language": "javascript",
+      "repo_name": "enterprise-copilot",
+      "user_id": "CHIEF_STRATEGY_OFFICER",
+      "start_line": 0,
+      "end_line": 0,
+      "char_count": 414,
+      "ingested_at": "2026-01-16T23:06:12.287744",
+      "id": "main.jsx::main.jsx:chunk_1"
+    },
+    {
+      "type": "file",
+      "label": "main.jsx",
+      "id": "main.jsx::FILE"
+    },
+    {
+      "type": "code",
+      "chunk_type": "code_block",
+      "name": "main.jsx:chunk_2",
+      "file_path": "main.jsx",
+      "language": "javascript",
+      "repo_name": "enterprise-copilot",
+      "user_id": "CHIEF_STRATEGY_OFFICER",
+      "start_line": 0,
+      "end_line": 0,
+      "char_count": 1032,
+      "ingested_at": "2026-01-16T23:06:12.287759",
+      "id": "main.jsx::main.jsx:chunk_2"
+    },
+    {
+      "type": "code",
+      "chunk_type": "code_block",
+      "name": "main.jsx:chunk_3",
+      "file_path": "main.jsx",
+      "language": "javascript",
+      "repo_name": "enterprise-copilot",
+      "user_id": "CHIEF_STRATEGY_OFFICER",
+      "start_line": 0,
+      "end_line": 0,
+      "char_count": 967,
+      "ingested_at": "2026-01-16T23:06:12.287764",
+      "id": "main.jsx::main.jsx:chunk_3"
+    },
+    {
+      "type": "code",
+      "chunk_type": "code_block",
+      "name": "main.jsx:chunk_4",
+      "file_path": "main.jsx",
+      "language": "javascript",
+      "repo_name": "enterprise-copilot",
+      "user_id": "CHIEF_STRATEGY_OFFICER",
+      "start_line": 0,
+      "end_line": 0,
+      "char_count": 2205,
+      "ingested_at": "2026-01-16T23:06:12.287769",
+      "id": "main.jsx::main.jsx:chunk_4"
+    },
+    {
+      "type": "code",
+      "chunk_type": "code_block",
+      "name": "main.jsx:chunk_5",
+      "file_path": "main.jsx",
+      "language": "javascript",
+      "repo_name": "enterprise-copilot",
+      "user_id": "CHIEF_STRATEGY_OFFICER",
+      "start_line": 0,
+      "end_line": 0,
+      "char_count": 1030,
+      "ingested_at": "2026-01-16T23:06:12.287779",
+      "id": "main.jsx::main.jsx:chunk_5"
+    },
+    {
+      "type": "code",
+      "chunk_type": "code_block",
+      "name": "main.jsx:chunk_6",
+      "file_path": "main.jsx",
+      "language": "javascript",
+      "repo_name": "enterprise-copilot",
+      "user_id": "CHIEF_STRATEGY_OFFICER",
+      "start_line": 0,
+      "end_line": 0,
+      "char_count": 897,
+      "ingested_at": "2026-01-16T23:06:12.287793",
+      "id": "main.jsx::main.jsx:chunk_6"
+    },
+    {
+      "type": "code",
+      "chunk_type": "code_block",
+      "name": "main.jsx:chunk_7",
+      "file_path": "main.jsx",
+      "language": "javascript",
+      "repo_name": "enterprise-copilot",
+      "user_id": "CHIEF_STRATEGY_OFFICER",
+      "start_line": 0,
+      "end_line": 0,
+      "char_count": 296,
+      "ingested_at": "2026-01-16T23:06:12.287797",
+      "id": "main.jsx::main.jsx:chunk_7"
+    },
+    {
+      "type": "code",
+      "chunk_type": "code_block",
+      "name": "main.jsx:chunk_8",
+      "file_path": "main.jsx",
+      "language": "javascript",
+      "repo_name": "enterprise-copilot",
+      "user_id": "CHIEF_STRATEGY_OFFICER",
+      "start_line": 0,
+      "end_line": 0,
+      "char_count": 842,
+      "ingested_at": "2026-01-16T23:06:12.287801",
+      "id": "main.jsx::main.jsx:chunk_8"
+    },
+    {
+      "type": "code",
+      "chunk_type": "code_block",
+      "name": "main.jsx:chunk_9",
+      "file_path": "main.jsx",
+      "language": "javascript",
+      "repo_name": "enterprise-copilot",
+      "user_id": "CHIEF_STRATEGY_OFFICER",
+      "start_line": 0,
+      "end_line": 0,
+      "char_count": 998,
+      "ingested_at": "2026-01-16T23:06:12.287806",
+      "id": "main.jsx::main.jsx:chunk_9"
+    },
+    {
+      "type": "code",
+      "chunk_type": "code_block",
+      "name": "main.jsx:chunk_10",
+      "file_path": "main.jsx",
+      "language": "javascript",
+      "repo_name": "enterprise-copilot",
+      "user_id": "CHIEF_STRATEGY_OFFICER",
+      "start_line": 0,
+      "end_line": 0,
+      "char_count": 775,
+      "ingested_at": "2026-01-16T23:06:12.287810",
+      "id": "main.jsx::main.jsx:chunk_10"
+    },
+    {
+      "type": "code",
+      "chunk_type": "code_block",
+      "name": "main.jsx:chunk_11",
+      "file_path": "main.jsx",
+      "language": "javascript",
+      "repo_name": "enterprise-copilot",
+      "user_id": "CHIEF_STRATEGY_OFFICER",
+      "start_line": 0,
+      "end_line": 0,
+      "char_count": 295,
+      "ingested_at": "2026-01-16T23:06:12.287814",
+      "id": "main.jsx::main.jsx:chunk_11"
+    },
+    {
+      "type": "code",
+      "chunk_type": "code_block",
+      "name": "main.jsx:chunk_12",
+      "file_path": "main.jsx",
+      "language": "javascript",
+      "repo_name": "enterprise-copilot",
+      "user_id": "CHIEF_STRATEGY_OFFICER",
+      "start_line": 0,
+      "end_line": 0,
+      "char_count": 892,
+      "ingested_at": "2026-01-16T23:06:12.287819",
+      "id": "main.jsx::main.jsx:chunk_12"
+    },
+    {
+      "type": "code",
+      "chunk_type": "code_block",
+      "name": "main.jsx:chunk_13",
+      "file_path": "main.jsx",
+      "language": "javascript",
+      "repo_name": "enterprise-copilot",
+      "user_id": "CHIEF_STRATEGY_OFFICER",
+      "start_line": 0,
+      "end_line": 0,
+      "char_count": 982,
+      "ingested_at": "2026-01-16T23:06:12.287823",
+      "id": "main.jsx::main.jsx:chunk_13"
+    },
+    {
+      "type": "code",
+      "chunk_type": "code_block",
+      "name": "main.jsx:chunk_14",
+      "file_path": "main.jsx",
+      "language": "javascript",
+      "repo_name": "enterprise-copilot",
+      "user_id": "CHIEF_STRATEGY_OFFICER",
+      "start_line": 0,
+      "end_line": 0,
+      "char_count": 706,
+      "ingested_at": "2026-01-16T23:06:12.287827",
+      "id": "main.jsx::main.jsx:chunk_14"
+    },
+    {
+      "type": "code",
+      "chunk_type": "code_block",
+      "name": "main.jsx:chunk_15",
+      "file_path": "main.jsx",
+      "language": "javascript",
+      "repo_name": "enterprise-copilot",
+      "user_id": "CHIEF_STRATEGY_OFFICER",
+      "start_line": 0,
+      "end_line": 0,
+      "char_count": 932,
+      "ingested_at": "2026-01-16T23:06:12.287836",
+      "id": "main.jsx::main.jsx:chunk_15"
+    },
+    {
+      "type": "code",
+      "chunk_type": "code_block",
+      "name": "main.jsx:chunk_16",
+      "file_path": "main.jsx",
+      "language": "javascript",
+      "repo_name": "enterprise-copilot",
+      "user_id": "CHIEF_STRATEGY_OFFICER",
+      "start_line": 0,
+      "end_line": 0,
+      "char_count": 1729,
+      "ingested_at": "2026-01-16T23:06:12.287840",
+      "id": "main.jsx::main.jsx:chunk_16"
+    },
+    {
+      "type": "code",
+      "chunk_type": "code_block",
+      "name": "main.jsx:chunk_17",
+      "file_path": "main.jsx",
+      "language": "javascript",
+      "repo_name": "enterprise-copilot",
+      "user_id": "CHIEF_STRATEGY_OFFICER",
+      "start_line": 0,
+      "end_line": 0,
+      "char_count": 1284,
+      "ingested_at": "2026-01-16T23:06:12.287843",
+      "id": "main.jsx::main.jsx:chunk_17"
+    },
+    {
+      "type": "code",
+      "chunk_type": "code_block",
+      "name": "main.jsx:chunk_18",
+      "file_path": "main.jsx",
+      "language": "javascript",
+      "repo_name": "enterprise-copilot",
+      "user_id": "CHIEF_STRATEGY_OFFICER",
+      "start_line": 0,
+      "end_line": 0,
+      "char_count": 1654,
+      "ingested_at": "2026-01-16T23:06:12.287847",
+      "id": "main.jsx::main.jsx:chunk_18"
+    },
+    {
+      "type": "code",
+      "chunk_type": "code_block",
+      "name": "main.jsx:chunk_19",
+      "file_path": "main.jsx",
+      "language": "javascript",
+      "repo_name": "enterprise-copilot",
+      "user_id": "CHIEF_STRATEGY_OFFICER",
+      "start_line": 0,
+      "end_line": 0,
+      "char_count": 1602,
+      "ingested_at": "2026-01-16T23:06:12.287851",
+      "id": "main.jsx::main.jsx:chunk_19"
+    },
+    {
+      "type": "code",
+      "chunk_type": "code_block",
+      "name": "main.jsx:chunk_20",
+      "file_path": "main.jsx",
+      "language": "javascript",
+      "repo_name": "enterprise-copilot",
+      "user_id": "CHIEF_STRATEGY_OFFICER",
+      "start_line": 0,
+      "end_line": 0,
+      "char_count": 2353,
+      "ingested_at": "2026-01-16T23:06:12.287855",
+      "id": "main.jsx::main.jsx:chunk_20"
+    },
+    {
+      "type": "code",
+      "chunk_type": "code_block",
+      "name": "main.jsx:chunk_21",
+      "file_path": "main.jsx",
+      "language": "javascript",
+      "repo_name": "enterprise-copilot",
+      "user_id": "CHIEF_STRATEGY_OFFICER",
+      "start_line": 0,
+      "end_line": 0,
+      "char_count": 1883,
+      "ingested_at": "2026-01-16T23:06:12.287859",
+      "id": "main.jsx::main.jsx:chunk_21"
+    },
+    {
+      "type": "code",
+      "chunk_type": "code_block",
+      "name": "main.jsx:chunk_22",
+      "file_path": "main.jsx",
+      "language": "javascript",
+      "repo_name": "enterprise-copilot",
+      "user_id": "CHIEF_STRATEGY_OFFICER",
+      "start_line": 0,
+      "end_line": 0,
+      "char_count": 1601,
+      "ingested_at": "2026-01-16T23:06:12.287864",
+      "id": "main.jsx::main.jsx:chunk_22"
+    },
+    {
+      "type": "code",
+      "chunk_type": "code_block",
+      "name": "main.jsx:chunk_23",
+      "file_path": "main.jsx",
+      "language": "javascript",
+      "repo_name": "enterprise-copilot",
+      "user_id": "CHIEF_STRATEGY_OFFICER",
+      "start_line": 0,
+      "end_line": 0,
+      "char_count": 772,
+      "ingested_at": "2026-01-16T23:06:12.287868",
+      "id": "main.jsx::main.jsx:chunk_23"
+    },
+    {
+      "type": "code",
+      "chunk_type": "code_block",
+      "name": "main.jsx:chunk_24",
+      "file_path": "main.jsx",
+      "language": "javascript",
+      "repo_name": "enterprise-copilot",
+      "user_id": "CHIEF_STRATEGY_OFFICER",
+      "start_line": 0,
+      "end_line": 0,
+      "char_count": 671,
+      "ingested_at": "2026-01-16T23:06:12.287871",
+      "id": "main.jsx::main.jsx:chunk_24"
+    },
+    {
+      "type": "code",
+      "chunk_type": "code_block",
+      "name": "main.jsx:chunk_25",
+      "file_path": "main.jsx",
+      "language": "javascript",
+      "repo_name": "enterprise-copilot",
+      "user_id": "CHIEF_STRATEGY_OFFICER",
+      "start_line": 0,
+      "end_line": 0,
+      "char_count": 1229,
+      "ingested_at": "2026-01-16T23:06:12.287875",
+      "id": "main.jsx::main.jsx:chunk_25"
+    },
+    {
+      "type": "code",
+      "chunk_type": "code_block",
+      "name": "main.jsx:chunk_26",
+      "file_path": "main.jsx",
+      "language": "javascript",
+      "repo_name": "enterprise-copilot",
+      "user_id": "CHIEF_STRATEGY_OFFICER",
+      "start_line": 0,
+      "end_line": 0,
+      "char_count": 988,
+      "ingested_at": "2026-01-16T23:06:12.287878",
+      "id": "main.jsx::main.jsx:chunk_26"
+    },
+    {
+      "type": "code",
+      "chunk_type": "code_block",
+      "name": "main.jsx:chunk_27",
+      "file_path": "main.jsx",
+      "language": "javascript",
+      "repo_name": "enterprise-copilot",
+      "user_id": "CHIEF_STRATEGY_OFFICER",
+      "start_line": 0,
+      "end_line": 0,
+      "char_count": 17,
+      "ingested_at": "2026-01-16T23:06:12.287882",
+      "id": "main.jsx::main.jsx:chunk_27"
+    },
+    {
+      "type": "code",
+      "chunk_type": "code_block",
+      "name": "main.jsx:chunk_28",
+      "file_path": "main.jsx",
+      "language": "javascript",
+      "repo_name": "enterprise-copilot",
+      "user_id": "CHIEF_STRATEGY_OFFICER",
+      "start_line": 0,
+      "end_line": 0,
+      "char_count": 1542,
+      "ingested_at": "2026-01-16T23:06:12.287885",
+      "id": "main.jsx::main.jsx:chunk_28"
+    },
+    {
+      "type": "code",
+      "chunk_type": "code_block",
+      "name": "check_db_quick.py:chunk_1",
+      "file_path": "check_db_quick.py",
+      "language": "python",
+      "repo_name": "enterprise-copilot",
+      "user_id": "CHIEF_STRATEGY_OFFICER",
+      "start_line": 0,
+      "end_line": 0,
+      "char_count": 649,
+      "ingested_at": "2026-01-16T23:06:12.289594",
+      "id": "check_db_quick.py::check_db_quick.py:chunk_1"
+    },
+    {
+      "type": "file",
+      "label": "check_db_quick.py",
+      "id": "check_db_quick.py::FILE"
+    },
+    {
+      "type": "code",
+      "chunk_type": "code_block",
+      "name": "frontend/tailwind.config.js:chunk_1",
+      "file_path": "frontend/tailwind.config.js",
+      "language": "javascript",
+      "repo_name": "enterprise-copilot",
+      "user_id": "CHIEF_STRATEGY_OFFICER",
+      "start_line": 0,
+      "end_line": 0,
+      "char_count": 504,
+      "ingested_at": "2026-01-16T23:06:12.290849",
+      "id": "frontend/tailwind.config.js::frontend/tailwind.config.js:chunk_1"
+    },
+    {
+      "type": "file",
+      "label": "tailwind.config.js",
+      "id": "frontend/tailwind.config.js::FILE"
+    },
+    {
+      "type": "code",
+      "chunk_type": "code_block",
+      "name": "frontend/tailwind.config.js:chunk_2",
+      "file_path": "frontend/tailwind.config.js",
+      "language": "javascript",
+      "repo_name": "enterprise-copilot",
+      "user_id": "CHIEF_STRATEGY_OFFICER",
+      "start_line": 0,
+      "end_line": 0,
+      "char_count": 728,
+      "ingested_at": "2026-01-16T23:06:12.290855",
+      "id": "frontend/tailwind.config.js::frontend/tailwind.config.js:chunk_2"
+    },
+    {
+      "type": "code",
+      "chunk_type": "code_block",
+      "name": "frontend/vite.config.js:chunk_1",
+      "file_path": "frontend/vite.config.js",
+      "language": "javascript",
+      "repo_name": "enterprise-copilot",
+      "user_id": "CHIEF_STRATEGY_OFFICER",
+      "start_line": 0,
+      "end_line": 0,
+      "char_count": 356,
+      "ingested_at": "2026-01-16T23:06:12.291617",
+      "id": "frontend/vite.config.js::frontend/vite.config.js:chunk_1"
+    },
+    {
+      "type": "file",
+      "label": "vite.config.js",
+      "id": "frontend/vite.config.js::FILE"
+    },
+    {
+      "type": "code",
+      "chunk_type": "code_block",
+      "name": "frontend/postcss.config.js:chunk_1",
+      "file_path": "frontend/postcss.config.js",
+      "language": "javascript",
+      "repo_name": "enterprise-copilot",
+      "user_id": "CHIEF_STRATEGY_OFFICER",
+      "start_line": 0,
+      "end_line": 0,
+      "char_count": 80,
+      "ingested_at": "2026-01-16T23:06:12.292415",
+      "id": "frontend/postcss.config.js::frontend/postcss.config.js:chunk_1"
+    },
+    {
+      "type": "file",
+      "label": "postcss.config.js",
+      "id": "frontend/postcss.config.js::FILE"
+    },
+    {
+      "type": "code",
+      "chunk_type": "code_block",
+      "name": "backend/build_treesitter.py:chunk_1",
+      "file_path": "backend/build_treesitter.py",
+      "language": "python",
+      "repo_name": "enterprise-copilot",
+      "user_id": "CHIEF_STRATEGY_OFFICER",
+      "start_line": 0,
+      "end_line": 0,
+      "char_count": 630,
+      "ingested_at": "2026-01-16T23:06:12.293884",
+      "id": "backend/build_treesitter.py::backend/build_treesitter.py:chunk_1"
+    },
+    {
+      "type": "file",
+      "label": "build_treesitter.py",
+      "id": "backend/build_treesitter.py::FILE"
+    },
+    {
+      "type": "code",
+      "chunk_type": "code_block",
+      "name": "backend/build_treesitter.py:chunk_2",
+      "file_path": "backend/build_treesitter.py",
+      "language": "python",
+      "repo_name": "enterprise-copilot",
+      "user_id": "CHIEF_STRATEGY_OFFICER",
+      "start_line": 0,
+      "end_line": 0,
+      "char_count": 969,
+      "ingested_at": "2026-01-16T23:06:12.293890",
+      "id": "backend/build_treesitter.py::backend/build_treesitter.py:chunk_2"
+    },
+    {
+      "type": "code",
+      "chunk_type": "code_block",
+      "name": "backend/main.py:chunk_1",
+      "file_path": "backend/main.py",
+      "language": "python",
+      "repo_name": "enterprise-copilot",
+      "user_id": "CHIEF_STRATEGY_OFFICER",
+      "start_line": 0,
+      "end_line": 0,
+      "char_count": 3424,
+      "ingested_at": "2026-01-16T23:06:12.297799",
+      "id": "backend/main.py::backend/main.py:chunk_1"
+    },
+    {
+      "type": "file",
+      "label": "main.py",
+      "id": "backend/main.py::FILE"
+    },
+    {
+      "type": "code",
+      "chunk_type": "code_block",
+      "name": "backend/main.py:chunk_2",
+      "file_path": "backend/main.py",
+      "language": "python",
+      "repo_name": "enterprise-copilot",
+      "user_id": "CHIEF_STRATEGY_OFFICER",
+      "start_line": 0,
+      "end_line": 0,
+      "char_count": 560,
+      "ingested_at": "2026-01-16T23:06:12.297804",
+      "id": "backend/main.py::backend/main.py:chunk_2"
+    },
+    {
+      "type": "code",
+      "chunk_type": "code_block",
+      "name": "backend/main.py:chunk_3",
+      "file_path": "backend/main.py",
+      "language": "python",
+      "repo_name": "enterprise-copilot",
+      "user_id": "CHIEF_STRATEGY_OFFICER",
+      "start_line": 0,
+      "end_line": 0,
+      "char_count": 19677,
+      "ingested_at": "2026-01-16T23:06:12.297819",
+      "id": "backend/main.py::backend/main.py:chunk_3"
+    },
+    {
+      "type": "code",
+      "chunk_type": "code_block",
+      "name": "backend/config/iam_config.py:chunk_1",
+      "file_path": "backend/config/iam_config.py",
+      "language": "python",
+      "repo_name": "enterprise-copilot",
+      "user_id": "CHIEF_STRATEGY_OFFICER",
+      "start_line": 0,
+      "end_line": 0,
+      "char_count": 182,
+      "ingested_at": "2026-01-16T23:06:12.301236",
+      "id": "backend/config/iam_config.py::backend/config/iam_config.py:chunk_1"
+    },
+    {
+      "type": "file",
+      "label": "iam_config.py",
+      "id": "backend/config/iam_config.py::FILE"
+    },
+    {
+      "type": "code",
+      "chunk_type": "code_block",
+      "name": "backend/config/iam_config.py:chunk_2",
+      "file_path": "backend/config/iam_config.py",
+      "language": "python",
+      "repo_name": "enterprise-copilot",
+      "user_id": "CHIEF_STRATEGY_OFFICER",
+      "start_line": 0,
+      "end_line": 0,
+      "char_count": 2483,
+      "ingested_at": "2026-01-16T23:06:12.301242",
+      "id": "backend/config/iam_config.py::backend/config/iam_config.py:chunk_2"
+    },
+    {
+      "type": "code",
+      "chunk_type": "code_block",
+      "name": "backend/config/iam_config.py:chunk_3",
+      "file_path": "backend/config/iam_config.py",
+      "language": "python",
+      "repo_name": "enterprise-copilot",
+      "user_id": "CHIEF_STRATEGY_OFFICER",
+      "start_line": 0,
+      "end_line": 0,
+      "char_count": 1837,
+      "ingested_at": "2026-01-16T23:06:12.301246",
+      "id": "backend/config/iam_config.py::backend/config/iam_config.py:chunk_3"
+    },
+    {
+      "type": "code",
+      "chunk_type": "code_block",
+      "name": "backend/services/document_ingestion.py:chunk_1",
+      "file_path": "backend/services/document_ingestion.py",
+      "language": "python",
+      "repo_name": "enterprise-copilot",
+      "user_id": "CHIEF_STRATEGY_OFFICER",
+      "start_line": 0,
+      "end_line": 0,
+      "char_count": 516,
+      "ingested_at": "2026-01-16T23:06:12.303507",
+      "id": "backend/services/document_ingestion.py::backend/services/document_ingestion.py:chunk_1"
+    },
+    {
+      "type": "file",
+      "label": "document_ingestion.py",
+      "id": "backend/services/document_ingestion.py::FILE"
+    },
+    {
+      "type": "code",
+      "chunk_type": "code_block",
+      "name": "backend/services/document_ingestion.py:chunk_2",
+      "file_path": "backend/services/document_ingestion.py",
+      "language": "python",
+      "repo_name": "enterprise-copilot",
+      "user_id": "CHIEF_STRATEGY_OFFICER",
+      "start_line": 0,
+      "end_line": 0,
+      "char_count": 9751,
+      "ingested_at": "2026-01-16T23:06:12.303516",
+      "id": "backend/services/document_ingestion.py::backend/services/document_ingestion.py:chunk_2"
+    },
+    {
+      "type": "code",
+      "chunk_type": "code_block",
+      "name": "backend/services/rag_service.py:chunk_1",
+      "file_path": "backend/services/rag_service.py",
+      "language": "python",
+      "repo_name": "enterprise-copilot",
+      "user_id": "CHIEF_STRATEGY_OFFICER",
+      "start_line": 0,
+      "end_line": 0,
+      "char_count": 331,
+      "ingested_at": "2026-01-16T23:06:12.305506",
+      "id": "backend/services/rag_service.py::backend/services/rag_service.py:chunk_1"
+    },
+    {
+      "type": "file",
+      "label": "rag_service.py",
+      "id": "backend/services/rag_service.py::FILE"
+    },
+    {
+      "type": "code",
+      "chunk_type": "code_block",
+      "name": "backend/services/rag_service.py:chunk_2",
+      "file_path": "backend/services/rag_service.py",
+      "language": "python",
+      "repo_name": "enterprise-copilot",
+      "user_id": "CHIEF_STRATEGY_OFFICER",
+      "start_line": 0,
+      "end_line": 0,
+      "char_count": 9106,
+      "ingested_at": "2026-01-16T23:06:12.305515",
+      "id": "backend/services/rag_service.py::backend/services/rag_service.py:chunk_2"
+    },
+    {
+      "type": "code",
+      "chunk_type": "code_block",
+      "name": "backend/services/agent_loop.py:chunk_1",
+      "file_path": "backend/services/agent_loop.py",
+      "language": "python",
+      "repo_name": "enterprise-copilot",
+      "user_id": "CHIEF_STRATEGY_OFFICER",
+      "start_line": 0,
+      "end_line": 0,
+      "char_count": 607,
+      "ingested_at": "2026-01-16T23:06:12.308217",
+      "id": "backend/services/agent_loop.py::backend/services/agent_loop.py:chunk_1"
+    },
+    {
+      "type": "file",
+      "label": "agent_loop.py",
+      "id": "backend/services/agent_loop.py::FILE"
+    },
+    {
+      "type": "code",
+      "chunk_type": "code_block",
+      "name": "backend/services/agent_loop.py:chunk_2",
+      "file_path": "backend/services/agent_loop.py",
+      "language": "python",
+      "repo_name": "enterprise-copilot",
+      "user_id": "CHIEF_STRATEGY_OFFICER",
+      "start_line": 0,
+      "end_line": 0,
+      "char_count": 11095,
+      "ingested_at": "2026-01-16T23:06:12.308230",
+      "id": "backend/services/agent_loop.py::backend/services/agent_loop.py:chunk_2"
+    },
+    {
+      "type": "code",
+      "chunk_type": "code_block",
+      "name": "backend/services/code_intelligence.py:chunk_1",
+      "file_path": "backend/services/code_intelligence.py",
+      "language": "python",
+      "repo_name": "enterprise-copilot",
+      "user_id": "CHIEF_STRATEGY_OFFICER",
+      "start_line": 0,
+      "end_line": 0,
+      "char_count": 297,
+      "ingested_at": "2026-01-16T23:06:12.310178",
+      "id": "backend/services/code_intelligence.py::backend/services/code_intelligence.py:chunk_1"
+    },
+    {
+      "type": "file",
+      "label": "code_intelligence.py",
+      "id": "backend/services/code_intelligence.py::FILE"
+    },
+    {
+      "type": "code",
+      "chunk_type": "code_block",
+      "name": "backend/services/code_intelligence.py:chunk_2",
+      "file_path": "backend/services/code_intelligence.py",
+      "language": "python",
+      "repo_name": "enterprise-copilot",
+      "user_id": "CHIEF_STRATEGY_OFFICER",
+      "start_line": 0,
+      "end_line": 0,
+      "char_count": 8310,
+      "ingested_at": "2026-01-16T23:06:12.310206",
+      "id": "backend/services/code_intelligence.py::backend/services/code_intelligence.py:chunk_2"
+    },
+    {
+      "type": "code",
+      "chunk_type": "code_block",
+      "name": "backend/services/code_ingestion.py:chunk_1",
+      "file_path": "backend/services/code_ingestion.py",
+      "language": "python",
+      "repo_name": "enterprise-copilot",
+      "user_id": "CHIEF_STRATEGY_OFFICER",
+      "start_line": 0,
+      "end_line": 0,
+      "char_count": 561,
+      "ingested_at": "2026-01-16T23:06:12.312871",
+      "id": "backend/services/code_ingestion.py::backend/services/code_ingestion.py:chunk_1"
+    },
+    {
+      "type": "file",
+      "label": "code_ingestion.py",
+      "id": "backend/services/code_ingestion.py::FILE"
+    },
+    {
+      "type": "code",
+      "chunk_type": "code_block",
+      "name": "backend/services/code_ingestion.py:chunk_2",
+      "file_path": "backend/services/code_ingestion.py",
+      "language": "python",
+      "repo_name": "enterprise-copilot",
+      "user_id": "CHIEF_STRATEGY_OFFICER",
+      "start_line": 0,
+      "end_line": 0,
+      "char_count": 15364,
+      "ingested_at": "2026-01-16T23:06:12.312878",
+      "id": "backend/services/code_ingestion.py::backend/services/code_ingestion.py:chunk_2"
+    },
+    {
+      "type": "code",
+      "chunk_type": "code_block",
+      "name": "backend/services/llm_service.py:chunk_1",
+      "file_path": "backend/services/llm_service.py",
+      "language": "python",
+      "repo_name": "enterprise-copilot",
+      "user_id": "CHIEF_STRATEGY_OFFICER",
+      "start_line": 0,
+      "end_line": 0,
+      "char_count": 592,
+      "ingested_at": "2026-01-16T23:06:12.315395",
+      "id": "backend/services/llm_service.py::backend/services/llm_service.py:chunk_1"
+    },
+    {
+      "type": "file",
+      "label": "llm_service.py",
+      "id": "backend/services/llm_service.py::FILE"
+    },
+    {
+      "type": "code",
+      "chunk_type": "code_block",
+      "name": "backend/services/llm_service.py:chunk_2",
+      "file_path": "backend/services/llm_service.py",
+      "language": "python",
+      "repo_name": "enterprise-copilot",
+      "user_id": "CHIEF_STRATEGY_OFFICER",
+      "start_line": 0,
+      "end_line": 0,
+      "char_count": 17663,
+      "ingested_at": "2026-01-16T23:06:12.315413",
+      "id": "backend/services/llm_service.py::backend/services/llm_service.py:chunk_2"
+    },
+    {
+      "type": "code",
+      "chunk_type": "code_block",
+      "name": "backend/services/audit_logger.py:chunk_1",
+      "file_path": "backend/services/audit_logger.py",
+      "language": "python",
+      "repo_name": "enterprise-copilot",
+      "user_id": "CHIEF_STRATEGY_OFFICER",
+      "start_line": 0,
+      "end_line": 0,
+      "char_count": 781,
+      "ingested_at": "2026-01-16T23:06:12.317152",
+      "id": "backend/services/audit_logger.py::backend/services/audit_logger.py:chunk_1"
+    },
+    {
+      "type": "file",
+      "label": "audit_logger.py",
+      "id": "backend/services/audit_logger.py::FILE"
+    },
+    {
+      "type": "code",
+      "chunk_type": "code_block",
+      "name": "backend/services/audit_logger.py:chunk_2",
+      "file_path": "backend/services/audit_logger.py",
+      "language": "python",
+      "repo_name": "enterprise-copilot",
+      "user_id": "CHIEF_STRATEGY_OFFICER",
+      "start_line": 0,
+      "end_line": 0,
+      "char_count": 2776,
+      "ingested_at": "2026-01-16T23:06:12.317200",
+      "id": "backend/services/audit_logger.py::backend/services/audit_logger.py:chunk_2"
+    },
+    {
+      "type": "code",
+      "chunk_type": "code_block",
+      "name": "backend/services/action_executor.py:chunk_1",
+      "file_path": "backend/services/action_executor.py",
+      "language": "python",
+      "repo_name": "enterprise-copilot",
+      "user_id": "CHIEF_STRATEGY_OFFICER",
+      "start_line": 0,
+      "end_line": 0,
+      "char_count": 959,
+      "ingested_at": "2026-01-16T23:06:12.319417",
+      "id": "backend/services/action_executor.py::backend/services/action_executor.py:chunk_1"
+    },
+    {
+      "type": "file",
+      "label": "action_executor.py",
+      "id": "backend/services/action_executor.py::FILE"
+    },
+    {
+      "type": "code",
+      "chunk_type": "code_block",
+      "name": "backend/services/action_executor.py:chunk_2",
+      "file_path": "backend/services/action_executor.py",
+      "language": "python",
+      "repo_name": "enterprise-copilot",
+      "user_id": "CHIEF_STRATEGY_OFFICER",
+      "start_line": 0,
+      "end_line": 0,
+      "char_count": 354,
+      "ingested_at": "2026-01-16T23:06:12.319426",
+      "id": "backend/services/action_executor.py::backend/services/action_executor.py:chunk_2"
+    },
+    {
+      "type": "code",
+      "chunk_type": "code_block",
+      "name": "backend/services/action_executor.py:chunk_3",
+      "file_path": "backend/services/action_executor.py",
+      "language": "python",
+      "repo_name": "enterprise-copilot",
+      "user_id": "CHIEF_STRATEGY_OFFICER",
+      "start_line": 0,
+      "end_line": 0,
+      "char_count": 5348,
+      "ingested_at": "2026-01-16T23:06:12.319431",
+      "id": "backend/services/action_executor.py::backend/services/action_executor.py:chunk_3"
+    },
+    {
+      "type": "code",
+      "chunk_type": "code_block",
+      "name": "backend/services/agentic_rag.py:chunk_1",
+      "file_path": "backend/services/agentic_rag.py",
+      "language": "python",
+      "repo_name": "enterprise-copilot",
+      "user_id": "CHIEF_STRATEGY_OFFICER",
+      "start_line": 0,
+      "end_line": 0,
+      "char_count": 191,
+      "ingested_at": "2026-01-16T23:06:12.321572",
+      "id": "backend/services/agentic_rag.py::backend/services/agentic_rag.py:chunk_1"
+    },
+    {
+      "type": "file",
+      "label": "agentic_rag.py",
+      "id": "backend/services/agentic_rag.py::FILE"
+    },
+    {
+      "type": "code",
+      "chunk_type": "code_block",
+      "name": "backend/services/agentic_rag.py:chunk_2",
+      "file_path": "backend/services/agentic_rag.py",
+      "language": "python",
+      "repo_name": "enterprise-copilot",
+      "user_id": "CHIEF_STRATEGY_OFFICER",
+      "start_line": 0,
+      "end_line": 0,
+      "char_count": 9175,
+      "ingested_at": "2026-01-16T23:06:12.321580",
+      "id": "backend/services/agentic_rag.py::backend/services/agentic_rag.py:chunk_2"
+    },
+    {
+      "type": "code",
+      "chunk_type": "code_block",
+      "name": "backend/services/background_agent.py:chunk_1",
+      "file_path": "backend/services/background_agent.py",
+      "language": "python",
+      "repo_name": "enterprise-copilot",
+      "user_id": "CHIEF_STRATEGY_OFFICER",
+      "start_line": 0,
+      "end_line": 0,
+      "char_count": 115,
+      "ingested_at": "2026-01-16T23:06:12.322759",
+      "id": "backend/services/background_agent.py::backend/services/background_agent.py:chunk_1"
+    },
+    {
+      "type": "file",
+      "label": "background_agent.py",
+      "id": "backend/services/background_agent.py::FILE"
+    },
+    {
+      "type": "code",
+      "chunk_type": "code_block",
+      "name": "backend/services/background_agent.py:chunk_2",
+      "file_path": "backend/services/background_agent.py",
+      "language": "python",
+      "repo_name": "enterprise-copilot",
+      "user_id": "CHIEF_STRATEGY_OFFICER",
+      "start_line": 0,
+      "end_line": 0,
+      "char_count": 1559,
+      "ingested_at": "2026-01-16T23:06:12.322763",
+      "id": "backend/services/background_agent.py::backend/services/background_agent.py:chunk_2"
+    },
+    {
+      "type": "code",
+      "chunk_type": "code_block",
+      "name": "backend/services/background_agent.py:chunk_3",
+      "file_path": "backend/services/background_agent.py",
+      "language": "python",
+      "repo_name": "enterprise-copilot",
+      "user_id": "CHIEF_STRATEGY_OFFICER",
+      "start_line": 0,
+      "end_line": 0,
+      "char_count": 132,
+      "ingested_at": "2026-01-16T23:06:12.322767",
+      "id": "backend/services/background_agent.py::backend/services/background_agent.py:chunk_3"
+    },
+    {
+      "type": "code",
+      "chunk_type": "code_block",
+      "name": "backend/services/hybrid_retriever.py:chunk_1",
+      "file_path": "backend/services/hybrid_retriever.py",
+      "language": "python",
+      "repo_name": "enterprise-copilot",
+      "user_id": "CHIEF_STRATEGY_OFFICER",
+      "start_line": 0,
+      "end_line": 0,
+      "char_count": 458,
+      "ingested_at": "2026-01-16T23:06:12.324872",
+      "id": "backend/services/hybrid_retriever.py::backend/services/hybrid_retriever.py:chunk_1"
+    },
+    {
+      "type": "file",
+      "label": "hybrid_retriever.py",
+      "id": "backend/services/hybrid_retriever.py::FILE"
+    },
+    {
+      "type": "code",
+      "chunk_type": "code_block",
+      "name": "backend/services/hybrid_retriever.py:chunk_2",
+      "file_path": "backend/services/hybrid_retriever.py",
+      "language": "python",
+      "repo_name": "enterprise-copilot",
+      "user_id": "CHIEF_STRATEGY_OFFICER",
+      "start_line": 0,
+      "end_line": 0,
+      "char_count": 10307,
+      "ingested_at": "2026-01-16T23:06:12.324881",
+      "id": "backend/services/hybrid_retriever.py::backend/services/hybrid_retriever.py:chunk_2"
+    },
+    {
+      "type": "code",
+      "chunk_type": "code_block",
+      "name": "backend/services/db_service.py:chunk_1",
+      "file_path": "backend/services/db_service.py",
+      "language": "python",
+      "repo_name": "enterprise-copilot",
+      "user_id": "CHIEF_STRATEGY_OFFICER",
+      "start_line": 0,
+      "end_line": 0,
+      "char_count": 295,
+      "ingested_at": "2026-01-16T23:06:12.327529",
+      "id": "backend/services/db_service.py::backend/services/db_service.py:chunk_1"
+    },
+    {
+      "type": "file",
+      "label": "db_service.py",
+      "id": "backend/services/db_service.py::FILE"
+    },
+    {
+      "type": "code",
+      "chunk_type": "code_block",
+      "name": "backend/services/db_service.py:chunk_2",
+      "file_path": "backend/services/db_service.py",
+      "language": "python",
+      "repo_name": "enterprise-copilot",
+      "user_id": "CHIEF_STRATEGY_OFFICER",
+      "start_line": 0,
+      "end_line": 0,
+      "char_count": 17739,
+      "ingested_at": "2026-01-16T23:06:12.327550",
+      "id": "backend/services/db_service.py::backend/services/db_service.py:chunk_2"
+    },
+    {
+      "type": "code",
+      "chunk_type": "code_block",
+      "name": "frontend/src/main.jsx:chunk_1",
+      "file_path": "frontend/src/main.jsx",
+      "language": "javascript",
+      "repo_name": "enterprise-copilot",
+      "user_id": "CHIEF_STRATEGY_OFFICER",
+      "start_line": 0,
+      "end_line": 0,
+      "char_count": 231,
+      "ingested_at": "2026-01-16T23:06:12.328979",
+      "id": "frontend/src/main.jsx::frontend/src/main.jsx:chunk_1"
+    },
+    {
+      "type": "file",
+      "label": "main.jsx",
+      "id": "frontend/src/main.jsx::FILE"
+    },
+    {
+      "type": "code",
+      "chunk_type": "code_block",
+      "name": "frontend/src/App.jsx:chunk_1",
+      "file_path": "frontend/src/App.jsx",
+      "language": "javascript",
+      "repo_name": "enterprise-copilot",
+      "user_id": "CHIEF_STRATEGY_OFFICER",
+      "start_line": 0,
+      "end_line": 0,
+      "char_count": 510,
+      "ingested_at": "2026-01-16T23:06:12.329732",
+      "id": "frontend/src/App.jsx::frontend/src/App.jsx:chunk_1"
+    },
+    {
+      "type": "file",
+      "label": "App.jsx",
+      "id": "frontend/src/App.jsx::FILE"
+    },
+    {
+      "type": "code",
+      "chunk_type": "code_block",
+      "name": "frontend/src/App.jsx:chunk_2",
+      "file_path": "frontend/src/App.jsx",
+      "language": "javascript",
+      "repo_name": "enterprise-copilot",
+      "user_id": "CHIEF_STRATEGY_OFFICER",
+      "start_line": 0,
+      "end_line": 0,
+      "char_count": 629,
+      "ingested_at": "2026-01-16T23:06:12.329737",
+      "id": "frontend/src/App.jsx::frontend/src/App.jsx:chunk_2"
+    },
+    {
+      "type": "code",
+      "chunk_type": "code_block",
+      "name": "frontend/src/components/Layout.jsx:chunk_1",
+      "file_path": "frontend/src/components/Layout.jsx",
+      "language": "javascript",
+      "repo_name": "enterprise-copilot",
+      "user_id": "CHIEF_STRATEGY_OFFICER",
+      "start_line": 0,
+      "end_line": 0,
+      "char_count": 885,
+      "ingested_at": "2026-01-16T23:06:12.330809",
+      "id": "frontend/src/components/Layout.jsx::frontend/src/components/Layout.jsx:chunk_1"
+    },
+    {
+      "type": "file",
+      "label": "Layout.jsx",
+      "id": "frontend/src/components/Layout.jsx::FILE"
+    },
+    {
+      "type": "code",
+      "chunk_type": "code_block",
+      "name": "frontend/src/components/Layout.jsx:chunk_2",
+      "file_path": "frontend/src/components/Layout.jsx",
+      "language": "javascript",
+      "repo_name": "enterprise-copilot",
+      "user_id": "CHIEF_STRATEGY_OFFICER",
+      "start_line": 0,
+      "end_line": 0,
+      "char_count": 2302,
+      "ingested_at": "2026-01-16T23:06:12.330814",
+      "id": "frontend/src/components/Layout.jsx::frontend/src/components/Layout.jsx:chunk_2"
+    },
+    {
+      "type": "code",
+      "chunk_type": "code_block",
+      "name": "frontend/src/components/Layout.jsx:chunk_3",
+      "file_path": "frontend/src/components/Layout.jsx",
+      "language": "javascript",
+      "repo_name": "enterprise-copilot",
+      "user_id": "CHIEF_STRATEGY_OFFICER",
+      "start_line": 0,
+      "end_line": 0,
+      "char_count": 768,
+      "ingested_at": "2026-01-16T23:06:12.330818",
+      "id": "frontend/src/components/Layout.jsx::frontend/src/components/Layout.jsx:chunk_3"
+    },
+    {
+      "type": "code",
+      "chunk_type": "code_block",
+      "name": "frontend/src/components/Layout.jsx:chunk_4",
+      "file_path": "frontend/src/components/Layout.jsx",
+      "language": "javascript",
+      "repo_name": "enterprise-copilot",
+      "user_id": "CHIEF_STRATEGY_OFFICER",
+      "start_line": 0,
+      "end_line": 0,
+      "char_count": 1120,
+      "ingested_at": "2026-01-16T23:06:12.330821",
+      "id": "frontend/src/components/Layout.jsx::frontend/src/components/Layout.jsx:chunk_4"
+    },
+    {
+      "type": "code",
+      "chunk_type": "code_block",
+      "name": "frontend/src/components/Layout.jsx:chunk_5",
+      "file_path": "frontend/src/components/Layout.jsx",
+      "language": "javascript",
+      "repo_name": "enterprise-copilot",
+      "user_id": "CHIEF_STRATEGY_OFFICER",
+      "start_line": 0,
+      "end_line": 0,
+      "char_count": 880,
+      "ingested_at": "2026-01-16T23:06:12.330825",
+      "id": "frontend/src/components/Layout.jsx::frontend/src/components/Layout.jsx:chunk_5"
+    },
+    {
+      "type": "code",
+      "chunk_type": "code_block",
+      "name": "frontend/src/components/Layout.jsx:chunk_6",
+      "file_path": "frontend/src/components/Layout.jsx",
+      "language": "javascript",
+      "repo_name": "enterprise-copilot",
+      "user_id": "CHIEF_STRATEGY_OFFICER",
+      "start_line": 0,
+      "end_line": 0,
+      "char_count": 452,
+      "ingested_at": "2026-01-16T23:06:12.330828",
+      "id": "frontend/src/components/Layout.jsx::frontend/src/components/Layout.jsx:chunk_6"
+    },
+    {
+      "type": "code",
+      "chunk_type": "code_block",
+      "name": "frontend/src/components/RepoInspectorModal.jsx:chunk_1",
+      "file_path": "frontend/src/components/RepoInspectorModal.jsx",
+      "language": "javascript",
+      "repo_name": "enterprise-copilot",
+      "user_id": "CHIEF_STRATEGY_OFFICER",
+      "start_line": 0,
+      "end_line": 0,
+      "char_count": 659,
+      "ingested_at": "2026-01-16T23:06:12.332648",
+      "id": "frontend/src/components/RepoInspectorModal.jsx::frontend/src/components/RepoInspectorModal.jsx:chunk_1"
+    },
+    {
+      "type": "file",
+      "label": "RepoInspectorModal.jsx",
+      "id": "frontend/src/components/RepoInspectorModal.jsx::FILE"
+    },
+    {
+      "type": "code",
+      "chunk_type": "code_block",
+      "name": "frontend/src/components/RepoInspectorModal.jsx:chunk_2",
+      "file_path": "frontend/src/components/RepoInspectorModal.jsx",
+      "language": "javascript",
+      "repo_name": "enterprise-copilot",
+      "user_id": "CHIEF_STRATEGY_OFFICER",
+      "start_line": 0,
+      "end_line": 0,
+      "char_count": 1841,
+      "ingested_at": "2026-01-16T23:06:12.332652",
+      "id": "frontend/src/components/RepoInspectorModal.jsx::frontend/src/components/RepoInspectorModal.jsx:chunk_2"
+    },
+    {
+      "type": "code",
+      "chunk_type": "code_block",
+      "name": "frontend/src/components/RepoInspectorModal.jsx:chunk_3",
+      "file_path": "frontend/src/components/RepoInspectorModal.jsx",
+      "language": "javascript",
+      "repo_name": "enterprise-copilot",
+      "user_id": "CHIEF_STRATEGY_OFFICER",
+      "start_line": 0,
+      "end_line": 0,
+      "char_count": 29,
+      "ingested_at": "2026-01-16T23:06:12.332656",
+      "id": "frontend/src/components/RepoInspectorModal.jsx::frontend/src/components/RepoInspectorModal.jsx:chunk_3"
+    },
+    {
+      "type": "code",
+      "chunk_type": "code_block",
+      "name": "frontend/src/components/RepoInspectorModal.jsx:chunk_4",
+      "file_path": "frontend/src/components/RepoInspectorModal.jsx",
+      "language": "javascript",
+      "repo_name": "enterprise-copilot",
+      "user_id": "CHIEF_STRATEGY_OFFICER",
+      "start_line": 0,
+      "end_line": 0,
+      "char_count": 3092,
+      "ingested_at": "2026-01-16T23:06:12.332659",
+      "id": "frontend/src/components/RepoInspectorModal.jsx::frontend/src/components/RepoInspectorModal.jsx:chunk_4"
+    },
+    {
+      "type": "code",
+      "chunk_type": "code_block",
+      "name": "frontend/src/components/RepoInspectorModal.jsx:chunk_5",
+      "file_path": "frontend/src/components/RepoInspectorModal.jsx",
+      "language": "javascript",
+      "repo_name": "enterprise-copilot",
+      "user_id": "CHIEF_STRATEGY_OFFICER",
+      "start_line": 0,
+      "end_line": 0,
+      "char_count": 2431,
+      "ingested_at": "2026-01-16T23:06:12.332663",
+      "id": "frontend/src/components/RepoInspectorModal.jsx::frontend/src/components/RepoInspectorModal.jsx:chunk_5"
+    },
+    {
+      "type": "code",
+      "chunk_type": "code_block",
+      "name": "frontend/src/components/RepoInspectorModal.jsx:chunk_6",
+      "file_path": "frontend/src/components/RepoInspectorModal.jsx",
+      "language": "javascript",
+      "repo_name": "enterprise-copilot",
+      "user_id": "CHIEF_STRATEGY_OFFICER",
+      "start_line": 0,
+      "end_line": 0,
+      "char_count": 3551,
+      "ingested_at": "2026-01-16T23:06:12.332666",
+      "id": "frontend/src/components/RepoInspectorModal.jsx::frontend/src/components/RepoInspectorModal.jsx:chunk_6"
+    },
+    {
+      "type": "code",
+      "chunk_type": "code_block",
+      "name": "frontend/src/components/RepoInspectorModal.jsx:chunk_7",
+      "file_path": "frontend/src/components/RepoInspectorModal.jsx",
+      "language": "javascript",
+      "repo_name": "enterprise-copilot",
+      "user_id": "CHIEF_STRATEGY_OFFICER",
+      "start_line": 0,
+      "end_line": 0,
+      "char_count": 876,
+      "ingested_at": "2026-01-16T23:06:12.332670",
+      "id": "frontend/src/components/RepoInspectorModal.jsx::frontend/src/components/RepoInspectorModal.jsx:chunk_7"
+    },
+    {
+      "type": "code",
+      "chunk_type": "code_block",
+      "name": "frontend/src/components/ThinkingStep.jsx:chunk_1",
+      "file_path": "frontend/src/components/ThinkingStep.jsx",
+      "language": "javascript",
+      "repo_name": "enterprise-copilot",
+      "user_id": "CHIEF_STRATEGY_OFFICER",
+      "start_line": 0,
+      "end_line": 0,
+      "char_count": 975,
+      "ingested_at": "2026-01-16T23:06:12.333874",
+      "id": "frontend/src/components/ThinkingStep.jsx::frontend/src/components/ThinkingStep.jsx:chunk_1"
+    },
+    {
+      "type": "file",
+      "label": "ThinkingStep.jsx",
+      "id": "frontend/src/components/ThinkingStep.jsx::FILE"
+    },
+    {
+      "type": "code",
+      "chunk_type": "code_block",
+      "name": "frontend/src/components/ThinkingStep.jsx:chunk_2",
+      "file_path": "frontend/src/components/ThinkingStep.jsx",
+      "language": "javascript",
+      "repo_name": "enterprise-copilot",
+      "user_id": "CHIEF_STRATEGY_OFFICER",
+      "start_line": 0,
+      "end_line": 0,
+      "char_count": 29,
+      "ingested_at": "2026-01-16T23:06:12.333883",
+      "id": "frontend/src/components/ThinkingStep.jsx::frontend/src/components/ThinkingStep.jsx:chunk_2"
+    },
+    {
+      "type": "code",
+      "chunk_type": "code_block",
+      "name": "frontend/src/components/IAMBadge.jsx:chunk_1",
+      "file_path": "frontend/src/components/IAMBadge.jsx",
+      "language": "javascript",
+      "repo_name": "enterprise-copilot",
+      "user_id": "CHIEF_STRATEGY_OFFICER",
+      "start_line": 0,
+      "end_line": 0,
+      "char_count": 545,
+      "ingested_at": "2026-01-16T23:06:12.334830",
+      "id": "frontend/src/components/IAMBadge.jsx::frontend/src/components/IAMBadge.jsx:chunk_1"
+    },
+    {
+      "type": "file",
+      "label": "IAMBadge.jsx",
+      "id": "frontend/src/components/IAMBadge.jsx::FILE"
+    },
+    {
+      "type": "code",
+      "chunk_type": "code_block",
+      "name": "frontend/src/components/DashboardWidget.jsx:chunk_1",
+      "file_path": "frontend/src/components/DashboardWidget.jsx",
+      "language": "javascript",
+      "repo_name": "enterprise-copilot",
+      "user_id": "CHIEF_STRATEGY_OFFICER",
+      "start_line": 0,
+      "end_line": 0,
+      "char_count": 226,
+      "ingested_at": "2026-01-16T23:06:12.335953",
+      "id": "frontend/src/components/DashboardWidget.jsx::frontend/src/components/DashboardWidget.jsx:chunk_1"
+    },
+    {
+      "type": "file",
+      "label": "DashboardWidget.jsx",
+      "id": "frontend/src/components/DashboardWidget.jsx::FILE"
+    },
+    {
+      "type": "code",
+      "chunk_type": "code_block",
+      "name": "frontend/src/components/DashboardWidget.jsx:chunk_2",
+      "file_path": "frontend/src/components/DashboardWidget.jsx",
+      "language": "javascript",
+      "repo_name": "enterprise-copilot",
+      "user_id": "CHIEF_STRATEGY_OFFICER",
+      "start_line": 0,
+      "end_line": 0,
+      "char_count": 950,
+      "ingested_at": "2026-01-16T23:06:12.335961",
+      "id": "frontend/src/components/DashboardWidget.jsx::frontend/src/components/DashboardWidget.jsx:chunk_2"
+    },
+    {
+      "type": "code",
+      "chunk_type": "code_block",
+      "name": "frontend/src/components/ActionCard.jsx:chunk_1",
+      "file_path": "frontend/src/components/ActionCard.jsx",
+      "language": "javascript",
+      "repo_name": "enterprise-copilot",
+      "user_id": "CHIEF_STRATEGY_OFFICER",
+      "start_line": 0,
+      "end_line": 0,
+      "char_count": 79,
+      "ingested_at": "2026-01-16T23:06:12.337217",
+      "id": "frontend/src/components/ActionCard.jsx::frontend/src/components/ActionCard.jsx:chunk_1"
+    },
+    {
+      "type": "file",
+      "label": "ActionCard.jsx",
+      "id": "frontend/src/components/ActionCard.jsx::FILE"
+    },
+    {
+      "type": "code",
+      "chunk_type": "code_block",
+      "name": "frontend/src/components/ActionCard.jsx:chunk_2",
+      "file_path": "frontend/src/components/ActionCard.jsx",
+      "language": "javascript",
+      "repo_name": "enterprise-copilot",
+      "user_id": "CHIEF_STRATEGY_OFFICER",
+      "start_line": 0,
+      "end_line": 0,
+      "char_count": 3605,
+      "ingested_at": "2026-01-16T23:06:12.337225",
+      "id": "frontend/src/components/ActionCard.jsx::frontend/src/components/ActionCard.jsx:chunk_2"
+    },
+    {
+      "type": "code",
+      "chunk_type": "code_block",
+      "name": "frontend/src/components/ActionCard.jsx:chunk_3",
+      "file_path": "frontend/src/components/ActionCard.jsx",
+      "language": "javascript",
+      "repo_name": "enterprise-copilot",
+      "user_id": "CHIEF_STRATEGY_OFFICER",
+      "start_line": 0,
+      "end_line": 0,
+      "char_count": 27,
+      "ingested_at": "2026-01-16T23:06:12.337230",
+      "id": "frontend/src/components/ActionCard.jsx::frontend/src/components/ActionCard.jsx:chunk_3"
+    },
+    {
+      "type": "code",
+      "chunk_type": "code_block",
+      "name": "frontend/src/components/ConversationSidebar.jsx:chunk_1",
+      "file_path": "frontend/src/components/ConversationSidebar.jsx",
+      "language": "javascript",
+      "repo_name": "enterprise-copilot",
+      "user_id": "CHIEF_STRATEGY_OFFICER",
+      "start_line": 0,
+      "end_line": 0,
+      "char_count": 862,
+      "ingested_at": "2026-01-16T23:06:12.338546",
+      "id": "frontend/src/components/ConversationSidebar.jsx::frontend/src/components/ConversationSidebar.jsx:chunk_1"
+    },
+    {
+      "type": "file",
+      "label": "ConversationSidebar.jsx",
+      "id": "frontend/src/components/ConversationSidebar.jsx::FILE"
+    },
+    {
+      "type": "code",
+      "chunk_type": "code_block",
+      "name": "frontend/src/components/ConversationSidebar.jsx:chunk_2",
+      "file_path": "frontend/src/components/ConversationSidebar.jsx",
+      "language": "javascript",
+      "repo_name": "enterprise-copilot",
+      "user_id": "CHIEF_STRATEGY_OFFICER",
+      "start_line": 0,
+      "end_line": 0,
+      "char_count": 934,
+      "ingested_at": "2026-01-16T23:06:12.338551",
+      "id": "frontend/src/components/ConversationSidebar.jsx::frontend/src/components/ConversationSidebar.jsx:chunk_2"
+    },
+    {
+      "type": "code",
+      "chunk_type": "code_block",
+      "name": "frontend/src/components/ConversationSidebar.jsx:chunk_3",
+      "file_path": "frontend/src/components/ConversationSidebar.jsx",
+      "language": "javascript",
+      "repo_name": "enterprise-copilot",
+      "user_id": "CHIEF_STRATEGY_OFFICER",
+      "start_line": 0,
+      "end_line": 0,
+      "char_count": 864,
+      "ingested_at": "2026-01-16T23:06:12.338555",
+      "id": "frontend/src/components/ConversationSidebar.jsx::frontend/src/components/ConversationSidebar.jsx:chunk_3"
+    },
+    {
+      "type": "code",
+      "chunk_type": "code_block",
+      "name": "frontend/src/components/ConversationSidebar.jsx:chunk_4",
+      "file_path": "frontend/src/components/ConversationSidebar.jsx",
+      "language": "javascript",
+      "repo_name": "enterprise-copilot",
+      "user_id": "CHIEF_STRATEGY_OFFICER",
+      "start_line": 0,
+      "end_line": 0,
+      "char_count": 639,
+      "ingested_at": "2026-01-16T23:06:12.338558",
+      "id": "frontend/src/components/ConversationSidebar.jsx::frontend/src/components/ConversationSidebar.jsx:chunk_4"
+    },
+    {
+      "type": "code",
+      "chunk_type": "code_block",
+      "name": "frontend/src/components/ConversationSidebar.jsx:chunk_5",
+      "file_path": "frontend/src/components/ConversationSidebar.jsx",
+      "language": "javascript",
+      "repo_name": "enterprise-copilot",
+      "user_id": "CHIEF_STRATEGY_OFFICER",
+      "start_line": 0,
+      "end_line": 0,
+      "char_count": 1697,
+      "ingested_at": "2026-01-16T23:06:12.338561",
+      "id": "frontend/src/components/ConversationSidebar.jsx::frontend/src/components/ConversationSidebar.jsx:chunk_5"
+    },
+    {
+      "type": "code",
+      "chunk_type": "code_block",
+      "name": "frontend/src/components/ConversationSidebar.jsx:chunk_6",
+      "file_path": "frontend/src/components/ConversationSidebar.jsx",
+      "language": "javascript",
+      "repo_name": "enterprise-copilot",
+      "user_id": "CHIEF_STRATEGY_OFFICER",
+      "start_line": 0,
+      "end_line": 0,
+      "char_count": 758,
+      "ingested_at": "2026-01-16T23:06:12.338565",
+      "id": "frontend/src/components/ConversationSidebar.jsx::frontend/src/components/ConversationSidebar.jsx:chunk_6"
+    },
+    {
+      "type": "code",
+      "chunk_type": "code_block",
+      "name": "frontend/src/components/ConversationSidebar.jsx:chunk_7",
+      "file_path": "frontend/src/components/ConversationSidebar.jsx",
+      "language": "javascript",
+      "repo_name": "enterprise-copilot",
+      "user_id": "CHIEF_STRATEGY_OFFICER",
+      "start_line": 0,
+      "end_line": 0,
+      "char_count": 364,
+      "ingested_at": "2026-01-16T23:06:12.338568",
+      "id": "frontend/src/components/ConversationSidebar.jsx::frontend/src/components/ConversationSidebar.jsx:chunk_7"
+    },
+    {
+      "type": "code",
+      "chunk_type": "code_block",
+      "name": "frontend/src/components/ChatMessage.jsx:chunk_1",
+      "file_path": "frontend/src/components/ChatMessage.jsx",
+      "language": "javascript",
+      "repo_name": "enterprise-copilot",
+      "user_id": "CHIEF_STRATEGY_OFFICER",
+      "start_line": 0,
+      "end_line": 0,
+      "char_count": 825,
+      "ingested_at": "2026-01-16T23:06:12.339843",
+      "id": "frontend/src/components/ChatMessage.jsx::frontend/src/components/ChatMessage.jsx:chunk_1"
+    },
+    {
+      "type": "file",
+      "label": "ChatMessage.jsx",
+      "id": "frontend/src/components/ChatMessage.jsx::FILE"
+    },
+    {
+      "type": "code",
+      "chunk_type": "code_block",
+      "name": "frontend/src/components/ChatMessage.jsx:chunk_2",
+      "file_path": "frontend/src/components/ChatMessage.jsx",
+      "language": "javascript",
+      "repo_name": "enterprise-copilot",
+      "user_id": "CHIEF_STRATEGY_OFFICER",
+      "start_line": 0,
+      "end_line": 0,
+      "char_count": 506,
+      "ingested_at": "2026-01-16T23:06:12.339849",
+      "id": "frontend/src/components/ChatMessage.jsx::frontend/src/components/ChatMessage.jsx:chunk_2"
+    },
+    {
+      "type": "code",
+      "chunk_type": "code_block",
+      "name": "frontend/src/components/ChatMessage.jsx:chunk_3",
+      "file_path": "frontend/src/components/ChatMessage.jsx",
+      "language": "javascript",
+      "repo_name": "enterprise-copilot",
+      "user_id": "CHIEF_STRATEGY_OFFICER",
+      "start_line": 0,
+      "end_line": 0,
+      "char_count": 1169,
+      "ingested_at": "2026-01-16T23:06:12.339853",
+      "id": "frontend/src/components/ChatMessage.jsx::frontend/src/components/ChatMessage.jsx:chunk_3"
+    },
+    {
+      "type": "code",
+      "chunk_type": "code_block",
+      "name": "frontend/src/components/ChatMessage.jsx:chunk_4",
+      "file_path": "frontend/src/components/ChatMessage.jsx",
+      "language": "javascript",
+      "repo_name": "enterprise-copilot",
+      "user_id": "CHIEF_STRATEGY_OFFICER",
+      "start_line": 0,
+      "end_line": 0,
+      "char_count": 714,
+      "ingested_at": "2026-01-16T23:06:12.339857",
+      "id": "frontend/src/components/ChatMessage.jsx::frontend/src/components/ChatMessage.jsx:chunk_4"
+    },
+    {
+      "type": "code",
+      "chunk_type": "code_block",
+      "name": "frontend/src/components/ChatMessage.jsx:chunk_5",
+      "file_path": "frontend/src/components/ChatMessage.jsx",
+      "language": "javascript",
+      "repo_name": "enterprise-copilot",
+      "user_id": "CHIEF_STRATEGY_OFFICER",
+      "start_line": 0,
+      "end_line": 0,
+      "char_count": 1000,
+      "ingested_at": "2026-01-16T23:06:12.339861",
+      "id": "frontend/src/components/ChatMessage.jsx::frontend/src/components/ChatMessage.jsx:chunk_5"
+    },
+    {
+      "type": "code",
+      "chunk_type": "code_block",
+      "name": "frontend/src/components/ChatMessage.jsx:chunk_6",
+      "file_path": "frontend/src/components/ChatMessage.jsx",
+      "language": "javascript",
+      "repo_name": "enterprise-copilot",
+      "user_id": "CHIEF_STRATEGY_OFFICER",
+      "start_line": 0,
+      "end_line": 0,
+      "char_count": 830,
+      "ingested_at": "2026-01-16T23:06:12.339864",
+      "id": "frontend/src/components/ChatMessage.jsx::frontend/src/components/ChatMessage.jsx:chunk_6"
+    },
+    {
+      "type": "code",
+      "chunk_type": "code_block",
+      "name": "frontend/src/components/ChatMessage.jsx:chunk_7",
+      "file_path": "frontend/src/components/ChatMessage.jsx",
+      "language": "javascript",
+      "repo_name": "enterprise-copilot",
+      "user_id": "CHIEF_STRATEGY_OFFICER",
+      "start_line": 0,
+      "end_line": 0,
+      "char_count": 464,
+      "ingested_at": "2026-01-16T23:06:12.339868",
+      "id": "frontend/src/components/ChatMessage.jsx::frontend/src/components/ChatMessage.jsx:chunk_7"
+    },
+    {
+      "type": "code",
+      "chunk_type": "code_block",
+      "name": "frontend/src/components/Sidebar.jsx:chunk_1",
+      "file_path": "frontend/src/components/Sidebar.jsx",
+      "language": "javascript",
+      "repo_name": "enterprise-copilot",
+      "user_id": "CHIEF_STRATEGY_OFFICER",
+      "start_line": 0,
+      "end_line": 0,
+      "char_count": 811,
+      "ingested_at": "2026-01-16T23:06:12.341446",
+      "id": "frontend/src/components/Sidebar.jsx::frontend/src/components/Sidebar.jsx:chunk_1"
+    },
+    {
+      "type": "file",
+      "label": "Sidebar.jsx",
+      "id": "frontend/src/components/Sidebar.jsx::FILE"
+    },
+    {
+      "type": "code",
+      "chunk_type": "code_block",
+      "name": "frontend/src/components/Sidebar.jsx:chunk_2",
+      "file_path": "frontend/src/components/Sidebar.jsx",
+      "language": "javascript",
+      "repo_name": "enterprise-copilot",
+      "user_id": "CHIEF_STRATEGY_OFFICER",
+      "start_line": 0,
+      "end_line": 0,
+      "char_count": 444,
+      "ingested_at": "2026-01-16T23:06:12.341454",
+      "id": "frontend/src/components/Sidebar.jsx::frontend/src/components/Sidebar.jsx:chunk_2"
+    },
+    {
+      "type": "code",
+      "chunk_type": "code_block",
+      "name": "frontend/src/components/Sidebar.jsx:chunk_3",
+      "file_path": "frontend/src/components/Sidebar.jsx",
+      "language": "javascript",
+      "repo_name": "enterprise-copilot",
+      "user_id": "CHIEF_STRATEGY_OFFICER",
+      "start_line": 0,
+      "end_line": 0,
+      "char_count": 1186,
+      "ingested_at": "2026-01-16T23:06:12.341459",
+      "id": "frontend/src/components/Sidebar.jsx::frontend/src/components/Sidebar.jsx:chunk_3"
+    },
+    {
+      "type": "code",
+      "chunk_type": "code_block",
+      "name": "frontend/src/components/Sidebar.jsx:chunk_4",
+      "file_path": "frontend/src/components/Sidebar.jsx",
+      "language": "javascript",
+      "repo_name": "enterprise-copilot",
+      "user_id": "CHIEF_STRATEGY_OFFICER",
+      "start_line": 0,
+      "end_line": 0,
+      "char_count": 1734,
+      "ingested_at": "2026-01-16T23:06:12.341463",
+      "id": "frontend/src/components/Sidebar.jsx::frontend/src/components/Sidebar.jsx:chunk_4"
+    },
+    {
+      "type": "code",
+      "chunk_type": "code_block",
+      "name": "frontend/src/components/Sidebar.jsx:chunk_5",
+      "file_path": "frontend/src/components/Sidebar.jsx",
+      "language": "javascript",
+      "repo_name": "enterprise-copilot",
+      "user_id": "CHIEF_STRATEGY_OFFICER",
+      "start_line": 0,
+      "end_line": 0,
+      "char_count": 1364,
+      "ingested_at": "2026-01-16T23:06:12.341508",
+      "id": "frontend/src/components/Sidebar.jsx::frontend/src/components/Sidebar.jsx:chunk_5"
+    },
+    {
+      "type": "code",
+      "chunk_type": "code_block",
+      "name": "frontend/src/components/Sidebar.jsx:chunk_6",
+      "file_path": "frontend/src/components/Sidebar.jsx",
+      "language": "javascript",
+      "repo_name": "enterprise-copilot",
+      "user_id": "CHIEF_STRATEGY_OFFICER",
+      "start_line": 0,
+      "end_line": 0,
+      "char_count": 1179,
+      "ingested_at": "2026-01-16T23:06:12.341515",
+      "id": "frontend/src/components/Sidebar.jsx::frontend/src/components/Sidebar.jsx:chunk_6"
+    },
+    {
+      "type": "code",
+      "chunk_type": "code_block",
+      "name": "frontend/src/components/Sidebar.jsx:chunk_7",
+      "file_path": "frontend/src/components/Sidebar.jsx",
+      "language": "javascript",
+      "repo_name": "enterprise-copilot",
+      "user_id": "CHIEF_STRATEGY_OFFICER",
+      "start_line": 0,
+      "end_line": 0,
+      "char_count": 321,
+      "ingested_at": "2026-01-16T23:06:12.341519",
+      "id": "frontend/src/components/Sidebar.jsx::frontend/src/components/Sidebar.jsx:chunk_7"
+    },
+    {
+      "type": "code",
+      "chunk_type": "code_block",
+      "name": "frontend/src/components/DocumentsPanel.jsx:chunk_1",
+      "file_path": "frontend/src/components/DocumentsPanel.jsx",
+      "language": "javascript",
+      "repo_name": "enterprise-copilot",
+      "user_id": "CHIEF_STRATEGY_OFFICER",
+      "start_line": 0,
+      "end_line": 0,
+      "char_count": 936,
+      "ingested_at": "2026-01-16T23:06:12.344080",
+      "id": "frontend/src/components/DocumentsPanel.jsx::frontend/src/components/DocumentsPanel.jsx:chunk_1"
+    },
+    {
+      "type": "file",
+      "label": "DocumentsPanel.jsx",
+      "id": "frontend/src/components/DocumentsPanel.jsx::FILE"
+    },
+    {
+      "type": "code",
+      "chunk_type": "code_block",
+      "name": "frontend/src/components/DocumentsPanel.jsx:chunk_2",
+      "file_path": "frontend/src/components/DocumentsPanel.jsx",
+      "language": "javascript",
+      "repo_name": "enterprise-copilot",
+      "user_id": "CHIEF_STRATEGY_OFFICER",
+      "start_line": 0,
+      "end_line": 0,
+      "char_count": 928,
+      "ingested_at": "2026-01-16T23:06:12.344087",
+      "id": "frontend/src/components/DocumentsPanel.jsx::frontend/src/components/DocumentsPanel.jsx:chunk_2"
+    },
+    {
+      "type": "code",
+      "chunk_type": "code_block",
+      "name": "frontend/src/components/DocumentsPanel.jsx:chunk_3",
+      "file_path": "frontend/src/components/DocumentsPanel.jsx",
+      "language": "javascript",
+      "repo_name": "enterprise-copilot",
+      "user_id": "CHIEF_STRATEGY_OFFICER",
+      "start_line": 0,
+      "end_line": 0,
+      "char_count": 782,
+      "ingested_at": "2026-01-16T23:06:12.344091",
+      "id": "frontend/src/components/DocumentsPanel.jsx::frontend/src/components/DocumentsPanel.jsx:chunk_3"
+    },
+    {
+      "type": "code",
+      "chunk_type": "code_block",
+      "name": "frontend/src/components/DocumentsPanel.jsx:chunk_4",
+      "file_path": "frontend/src/components/DocumentsPanel.jsx",
+      "language": "javascript",
+      "repo_name": "enterprise-copilot",
+      "user_id": "CHIEF_STRATEGY_OFFICER",
+      "start_line": 0,
+      "end_line": 0,
+      "char_count": 395,
+      "ingested_at": "2026-01-16T23:06:12.344095",
+      "id": "frontend/src/components/DocumentsPanel.jsx::frontend/src/components/DocumentsPanel.jsx:chunk_4"
+    },
+    {
+      "type": "code",
+      "chunk_type": "code_block",
+      "name": "frontend/src/components/DocumentsPanel.jsx:chunk_5",
+      "file_path": "frontend/src/components/DocumentsPanel.jsx",
+      "language": "javascript",
+      "repo_name": "enterprise-copilot",
+      "user_id": "CHIEF_STRATEGY_OFFICER",
+      "start_line": 0,
+      "end_line": 0,
+      "char_count": 722,
+      "ingested_at": "2026-01-16T23:06:12.344099",
+      "id": "frontend/src/components/DocumentsPanel.jsx::frontend/src/components/DocumentsPanel.jsx:chunk_5"
+    },
+    {
+      "type": "code",
+      "chunk_type": "code_block",
+      "name": "frontend/src/components/DocumentsPanel.jsx:chunk_6",
+      "file_path": "frontend/src/components/DocumentsPanel.jsx",
+      "language": "javascript",
+      "repo_name": "enterprise-copilot",
+      "user_id": "CHIEF_STRATEGY_OFFICER",
+      "start_line": 0,
+      "end_line": 0,
+      "char_count": 977,
+      "ingested_at": "2026-01-16T23:06:12.344103",
+      "id": "frontend/src/components/DocumentsPanel.jsx::frontend/src/components/DocumentsPanel.jsx:chunk_6"
+    },
+    {
+      "type": "code",
+      "chunk_type": "code_block",
+      "name": "frontend/src/components/DocumentsPanel.jsx:chunk_7",
+      "file_path": "frontend/src/components/DocumentsPanel.jsx",
+      "language": "javascript",
+      "repo_name": "enterprise-copilot",
+      "user_id": "CHIEF_STRATEGY_OFFICER",
+      "start_line": 0,
+      "end_line": 0,
+      "char_count": 262,
+      "ingested_at": "2026-01-16T23:06:12.344107",
+      "id": "frontend/src/components/DocumentsPanel.jsx::frontend/src/components/DocumentsPanel.jsx:chunk_7"
+    },
+    {
+      "type": "code",
+      "chunk_type": "code_block",
+      "name": "frontend/src/components/DocumentsPanel.jsx:chunk_8",
+      "file_path": "frontend/src/components/DocumentsPanel.jsx",
+      "language": "javascript",
+      "repo_name": "enterprise-copilot",
+      "user_id": "CHIEF_STRATEGY_OFFICER",
+      "start_line": 0,
+      "end_line": 0,
+      "char_count": 1304,
+      "ingested_at": "2026-01-16T23:06:12.344112",
+      "id": "frontend/src/components/DocumentsPanel.jsx::frontend/src/components/DocumentsPanel.jsx:chunk_8"
+    },
+    {
+      "type": "code",
+      "chunk_type": "code_block",
+      "name": "frontend/src/components/DocumentsPanel.jsx:chunk_9",
+      "file_path": "frontend/src/components/DocumentsPanel.jsx",
+      "language": "javascript",
+      "repo_name": "enterprise-copilot",
+      "user_id": "CHIEF_STRATEGY_OFFICER",
+      "start_line": 0,
+      "end_line": 0,
+      "char_count": 683,
+      "ingested_at": "2026-01-16T23:06:12.344116",
+      "id": "frontend/src/components/DocumentsPanel.jsx::frontend/src/components/DocumentsPanel.jsx:chunk_9"
+    },
+    {
+      "type": "code",
+      "chunk_type": "code_block",
+      "name": "frontend/src/components/DocumentsPanel.jsx:chunk_10",
+      "file_path": "frontend/src/components/DocumentsPanel.jsx",
+      "language": "javascript",
+      "repo_name": "enterprise-copilot",
+      "user_id": "CHIEF_STRATEGY_OFFICER",
+      "start_line": 0,
+      "end_line": 0,
+      "char_count": 1322,
+      "ingested_at": "2026-01-16T23:06:12.344121",
+      "id": "frontend/src/components/DocumentsPanel.jsx::frontend/src/components/DocumentsPanel.jsx:chunk_10"
+    },
+    {
+      "type": "code",
+      "chunk_type": "code_block",
+      "name": "frontend/src/components/DocumentsPanel.jsx:chunk_11",
+      "file_path": "frontend/src/components/DocumentsPanel.jsx",
+      "language": "javascript",
+      "repo_name": "enterprise-copilot",
+      "user_id": "CHIEF_STRATEGY_OFFICER",
+      "start_line": 0,
+      "end_line": 0,
+      "char_count": 529,
+      "ingested_at": "2026-01-16T23:06:12.344125",
+      "id": "frontend/src/components/DocumentsPanel.jsx::frontend/src/components/DocumentsPanel.jsx:chunk_11"
+    },
+    {
+      "type": "code",
+      "chunk_type": "code_block",
+      "name": "frontend/src/components/AuditLogPanel.jsx:chunk_1",
+      "file_path": "frontend/src/components/AuditLogPanel.jsx",
+      "language": "javascript",
+      "repo_name": "enterprise-copilot",
+      "user_id": "CHIEF_STRATEGY_OFFICER",
+      "start_line": 0,
+      "end_line": 0,
+      "char_count": 948,
+      "ingested_at": "2026-01-16T23:06:12.345123",
+      "id": "frontend/src/components/AuditLogPanel.jsx::frontend/src/components/AuditLogPanel.jsx:chunk_1"
+    },
+    {
+      "type": "file",
+      "label": "AuditLogPanel.jsx",
+      "id": "frontend/src/components/AuditLogPanel.jsx::FILE"
+    },
+    {
+      "type": "code",
+      "chunk_type": "code_block",
+      "name": "frontend/src/components/AuditLogPanel.jsx:chunk_2",
+      "file_path": "frontend/src/components/AuditLogPanel.jsx",
+      "language": "javascript",
+      "repo_name": "enterprise-copilot",
+      "user_id": "CHIEF_STRATEGY_OFFICER",
+      "start_line": 0,
+      "end_line": 0,
+      "char_count": 676,
+      "ingested_at": "2026-01-16T23:06:12.345129",
+      "id": "frontend/src/components/AuditLogPanel.jsx::frontend/src/components/AuditLogPanel.jsx:chunk_2"
+    },
+    {
+      "type": "code",
+      "chunk_type": "code_block",
+      "name": "frontend/src/components/AuditLogPanel.jsx:chunk_3",
+      "file_path": "frontend/src/components/AuditLogPanel.jsx",
+      "language": "javascript",
+      "repo_name": "enterprise-copilot",
+      "user_id": "CHIEF_STRATEGY_OFFICER",
+      "start_line": 0,
+      "end_line": 0,
+      "char_count": 588,
+      "ingested_at": "2026-01-16T23:06:12.345136",
+      "id": "frontend/src/components/AuditLogPanel.jsx::frontend/src/components/AuditLogPanel.jsx:chunk_3"
+    },
+    {
+      "type": "code",
+      "chunk_type": "code_block",
+      "name": "frontend/src/views/ChatView.jsx:chunk_1",
+      "file_path": "frontend/src/views/ChatView.jsx",
+      "language": "javascript",
+      "repo_name": "enterprise-copilot",
+      "user_id": "CHIEF_STRATEGY_OFFICER",
+      "start_line": 0,
+      "end_line": 0,
+      "char_count": 755,
+      "ingested_at": "2026-01-16T23:06:12.346995",
+      "id": "frontend/src/views/ChatView.jsx::frontend/src/views/ChatView.jsx:chunk_1"
+    },
+    {
+      "type": "file",
+      "label": "ChatView.jsx",
+      "id": "frontend/src/views/ChatView.jsx::FILE"
+    },
+    {
+      "type": "code",
+      "chunk_type": "code_block",
+      "name": "frontend/src/views/ChatView.jsx:chunk_2",
+      "file_path": "frontend/src/views/ChatView.jsx",
+      "language": "javascript",
+      "repo_name": "enterprise-copilot",
+      "user_id": "CHIEF_STRATEGY_OFFICER",
+      "start_line": 0,
+      "end_line": 0,
+      "char_count": 784,
+      "ingested_at": "2026-01-16T23:06:12.346999",
+      "id": "frontend/src/views/ChatView.jsx::frontend/src/views/ChatView.jsx:chunk_2"
+    },
+    {
+      "type": "code",
+      "chunk_type": "code_block",
+      "name": "frontend/src/views/ChatView.jsx:chunk_3",
+      "file_path": "frontend/src/views/ChatView.jsx",
+      "language": "javascript",
+      "repo_name": "enterprise-copilot",
+      "user_id": "CHIEF_STRATEGY_OFFICER",
+      "start_line": 0,
+      "end_line": 0,
+      "char_count": 676,
+      "ingested_at": "2026-01-16T23:06:12.347003",
+      "id": "frontend/src/views/ChatView.jsx::frontend/src/views/ChatView.jsx:chunk_3"
+    },
+    {
+      "type": "code",
+      "chunk_type": "code_block",
+      "name": "frontend/src/views/ChatView.jsx:chunk_4",
+      "file_path": "frontend/src/views/ChatView.jsx",
+      "language": "javascript",
+      "repo_name": "enterprise-copilot",
+      "user_id": "CHIEF_STRATEGY_OFFICER",
+      "start_line": 0,
+      "end_line": 0,
+      "char_count": 835,
+      "ingested_at": "2026-01-16T23:06:12.347006",
+      "id": "frontend/src/views/ChatView.jsx::frontend/src/views/ChatView.jsx:chunk_4"
+    },
+    {
+      "type": "code",
+      "chunk_type": "code_block",
+      "name": "frontend/src/views/ChatView.jsx:chunk_5",
+      "file_path": "frontend/src/views/ChatView.jsx",
+      "language": "javascript",
+      "repo_name": "enterprise-copilot",
+      "user_id": "CHIEF_STRATEGY_OFFICER",
+      "start_line": 0,
+      "end_line": 0,
+      "char_count": 993,
+      "ingested_at": "2026-01-16T23:06:12.347009",
+      "id": "frontend/src/views/ChatView.jsx::frontend/src/views/ChatView.jsx:chunk_5"
+    },
+    {
+      "type": "code",
+      "chunk_type": "code_block",
+      "name": "frontend/src/views/ChatView.jsx:chunk_6",
+      "file_path": "frontend/src/views/ChatView.jsx",
+      "language": "javascript",
+      "repo_name": "enterprise-copilot",
+      "user_id": "CHIEF_STRATEGY_OFFICER",
+      "start_line": 0,
+      "end_line": 0,
+      "char_count": 997,
+      "ingested_at": "2026-01-16T23:06:12.347013",
+      "id": "frontend/src/views/ChatView.jsx::frontend/src/views/ChatView.jsx:chunk_6"
+    },
+    {
+      "type": "code",
+      "chunk_type": "code_block",
+      "name": "frontend/src/views/ChatView.jsx:chunk_7",
+      "file_path": "frontend/src/views/ChatView.jsx",
+      "language": "javascript",
+      "repo_name": "enterprise-copilot",
+      "user_id": "CHIEF_STRATEGY_OFFICER",
+      "start_line": 0,
+      "end_line": 0,
+      "char_count": 1723,
+      "ingested_at": "2026-01-16T23:06:12.347016",
+      "id": "frontend/src/views/ChatView.jsx::frontend/src/views/ChatView.jsx:chunk_7"
+    },
+    {
+      "type": "code",
+      "chunk_type": "code_block",
+      "name": "frontend/src/views/ChatView.jsx:chunk_8",
+      "file_path": "frontend/src/views/ChatView.jsx",
+      "language": "javascript",
+      "repo_name": "enterprise-copilot",
+      "user_id": "CHIEF_STRATEGY_OFFICER",
+      "start_line": 0,
+      "end_line": 0,
+      "char_count": 976,
+      "ingested_at": "2026-01-16T23:06:12.347019",
+      "id": "frontend/src/views/ChatView.jsx::frontend/src/views/ChatView.jsx:chunk_8"
+    },
+    {
+      "type": "code",
+      "chunk_type": "code_block",
+      "name": "frontend/src/views/ChatView.jsx:chunk_9",
+      "file_path": "frontend/src/views/ChatView.jsx",
+      "language": "javascript",
+      "repo_name": "enterprise-copilot",
+      "user_id": "CHIEF_STRATEGY_OFFICER",
+      "start_line": 0,
+      "end_line": 0,
+      "char_count": 2625,
+      "ingested_at": "2026-01-16T23:06:12.347023",
+      "id": "frontend/src/views/ChatView.jsx::frontend/src/views/ChatView.jsx:chunk_9"
+    },
+    {
+      "type": "code",
+      "chunk_type": "code_block",
+      "name": "frontend/src/views/ChatView.jsx:chunk_10",
+      "file_path": "frontend/src/views/ChatView.jsx",
+      "language": "javascript",
+      "repo_name": "enterprise-copilot",
+      "user_id": "CHIEF_STRATEGY_OFFICER",
+      "start_line": 0,
+      "end_line": 0,
+      "char_count": 1080,
+      "ingested_at": "2026-01-16T23:06:12.347026",
+      "id": "frontend/src/views/ChatView.jsx::frontend/src/views/ChatView.jsx:chunk_10"
+    },
+    {
+      "type": "code",
+      "chunk_type": "code_block",
+      "name": "frontend/src/views/ChatView.jsx:chunk_11",
+      "file_path": "frontend/src/views/ChatView.jsx",
+      "language": "javascript",
+      "repo_name": "enterprise-copilot",
+      "user_id": "CHIEF_STRATEGY_OFFICER",
+      "start_line": 0,
+      "end_line": 0,
+      "char_count": 1336,
+      "ingested_at": "2026-01-16T23:06:12.347029",
+      "id": "frontend/src/views/ChatView.jsx::frontend/src/views/ChatView.jsx:chunk_11"
+    },
+    {
+      "type": "code",
+      "chunk_type": "code_block",
+      "name": "frontend/src/views/ChatView.jsx:chunk_12",
+      "file_path": "frontend/src/views/ChatView.jsx",
+      "language": "javascript",
+      "repo_name": "enterprise-copilot",
+      "user_id": "CHIEF_STRATEGY_OFFICER",
+      "start_line": 0,
+      "end_line": 0,
+      "char_count": 626,
+      "ingested_at": "2026-01-16T23:06:12.347032",
+      "id": "frontend/src/views/ChatView.jsx::frontend/src/views/ChatView.jsx:chunk_12"
+    },
+    {
+      "type": "code",
+      "chunk_type": "code_block",
+      "name": "frontend/src/views/ChatView.jsx:chunk_13",
+      "file_path": "frontend/src/views/ChatView.jsx",
+      "language": "javascript",
+      "repo_name": "enterprise-copilot",
+      "user_id": "CHIEF_STRATEGY_OFFICER",
+      "start_line": 0,
+      "end_line": 0,
+      "char_count": 557,
+      "ingested_at": "2026-01-16T23:06:12.347035",
+      "id": "frontend/src/views/ChatView.jsx::frontend/src/views/ChatView.jsx:chunk_13"
+    },
+    {
+      "type": "code",
+      "chunk_type": "code_block",
+      "name": "frontend/src/views/ChatView.jsx:chunk_14",
+      "file_path": "frontend/src/views/ChatView.jsx",
+      "language": "javascript",
+      "repo_name": "enterprise-copilot",
+      "user_id": "CHIEF_STRATEGY_OFFICER",
+      "start_line": 0,
+      "end_line": 0,
+      "char_count": 1961,
+      "ingested_at": "2026-01-16T23:06:12.347038",
+      "id": "frontend/src/views/ChatView.jsx::frontend/src/views/ChatView.jsx:chunk_14"
+    },
+    {
+      "type": "code",
+      "chunk_type": "code_block",
+      "name": "frontend/src/views/ChatView.jsx:chunk_15",
+      "file_path": "frontend/src/views/ChatView.jsx",
+      "language": "javascript",
+      "repo_name": "enterprise-copilot",
+      "user_id": "CHIEF_STRATEGY_OFFICER",
+      "start_line": 0,
+      "end_line": 0,
+      "char_count": 25,
+      "ingested_at": "2026-01-16T23:06:12.347041",
+      "id": "frontend/src/views/ChatView.jsx::frontend/src/views/ChatView.jsx:chunk_15"
+    },
+    {
+      "type": "code",
+      "chunk_type": "code_block",
+      "name": "frontend/src/views/LiveOpsView.jsx:chunk_1",
+      "file_path": "frontend/src/views/LiveOpsView.jsx",
+      "language": "javascript",
+      "repo_name": "enterprise-copilot",
+      "user_id": "CHIEF_STRATEGY_OFFICER",
+      "start_line": 0,
+      "end_line": 0,
+      "char_count": 493,
+      "ingested_at": "2026-01-16T23:06:12.348951",
+      "id": "frontend/src/views/LiveOpsView.jsx::frontend/src/views/LiveOpsView.jsx:chunk_1"
+    },
+    {
+      "type": "file",
+      "label": "LiveOpsView.jsx",
+      "id": "frontend/src/views/LiveOpsView.jsx::FILE"
+    },
+    {
+      "type": "code",
+      "chunk_type": "code_block",
+      "name": "frontend/src/views/LiveOpsView.jsx:chunk_2",
+      "file_path": "frontend/src/views/LiveOpsView.jsx",
+      "language": "javascript",
+      "repo_name": "enterprise-copilot",
+      "user_id": "CHIEF_STRATEGY_OFFICER",
+      "start_line": 0,
+      "end_line": 0,
+      "char_count": 884,
+      "ingested_at": "2026-01-16T23:06:12.348955",
+      "id": "frontend/src/views/LiveOpsView.jsx::frontend/src/views/LiveOpsView.jsx:chunk_2"
+    },
+    {
+      "type": "code",
+      "chunk_type": "code_block",
+      "name": "frontend/src/views/LiveOpsView.jsx:chunk_3",
+      "file_path": "frontend/src/views/LiveOpsView.jsx",
+      "language": "javascript",
+      "repo_name": "enterprise-copilot",
+      "user_id": "CHIEF_STRATEGY_OFFICER",
+      "start_line": 0,
+      "end_line": 0,
+      "char_count": 497,
+      "ingested_at": "2026-01-16T23:06:12.348959",
+      "id": "frontend/src/views/LiveOpsView.jsx::frontend/src/views/LiveOpsView.jsx:chunk_3"
+    },
+    {
+      "type": "code",
+      "chunk_type": "code_block",
+      "name": "frontend/src/views/LiveOpsView.jsx:chunk_4",
+      "file_path": "frontend/src/views/LiveOpsView.jsx",
+      "language": "javascript",
+      "repo_name": "enterprise-copilot",
+      "user_id": "CHIEF_STRATEGY_OFFICER",
+      "start_line": 0,
+      "end_line": 0,
+      "char_count": 614,
+      "ingested_at": "2026-01-16T23:06:12.348962",
+      "id": "frontend/src/views/LiveOpsView.jsx::frontend/src/views/LiveOpsView.jsx:chunk_4"
+    },
+    {
+      "type": "code",
+      "chunk_type": "code_block",
+      "name": "frontend/src/views/LiveOpsView.jsx:chunk_5",
+      "file_path": "frontend/src/views/LiveOpsView.jsx",
+      "language": "javascript",
+      "repo_name": "enterprise-copilot",
+      "user_id": "CHIEF_STRATEGY_OFFICER",
+      "start_line": 0,
+      "end_line": 0,
+      "char_count": 964,
+      "ingested_at": "2026-01-16T23:06:12.348966",
+      "id": "frontend/src/views/LiveOpsView.jsx::frontend/src/views/LiveOpsView.jsx:chunk_5"
+    },
+    {
+      "type": "code",
+      "chunk_type": "code_block",
+      "name": "frontend/src/views/LiveOpsView.jsx:chunk_6",
+      "file_path": "frontend/src/views/LiveOpsView.jsx",
+      "language": "javascript",
+      "repo_name": "enterprise-copilot",
+      "user_id": "CHIEF_STRATEGY_OFFICER",
+      "start_line": 0,
+      "end_line": 0,
+      "char_count": 710,
+      "ingested_at": "2026-01-16T23:06:12.348969",
+      "id": "frontend/src/views/LiveOpsView.jsx::frontend/src/views/LiveOpsView.jsx:chunk_6"
+    },
+    {
+      "type": "code",
+      "chunk_type": "code_block",
+      "name": "frontend/src/views/LiveOpsView.jsx:chunk_7",
+      "file_path": "frontend/src/views/LiveOpsView.jsx",
+      "language": "javascript",
+      "repo_name": "enterprise-copilot",
+      "user_id": "CHIEF_STRATEGY_OFFICER",
+      "start_line": 0,
+      "end_line": 0,
+      "char_count": 2116,
+      "ingested_at": "2026-01-16T23:06:12.348972",
+      "id": "frontend/src/views/LiveOpsView.jsx::frontend/src/views/LiveOpsView.jsx:chunk_7"
+    },
+    {
+      "type": "code",
+      "chunk_type": "code_block",
+      "name": "frontend/src/views/LiveOpsView.jsx:chunk_8",
+      "file_path": "frontend/src/views/LiveOpsView.jsx",
+      "language": "javascript",
+      "repo_name": "enterprise-copilot",
+      "user_id": "CHIEF_STRATEGY_OFFICER",
+      "start_line": 0,
+      "end_line": 0,
+      "char_count": 57,
+      "ingested_at": "2026-01-16T23:06:12.348975",
+      "id": "frontend/src/views/LiveOpsView.jsx::frontend/src/views/LiveOpsView.jsx:chunk_8"
+    },
+    {
+      "type": "code",
+      "chunk_type": "code_block",
+      "name": "frontend/src/views/LiveOpsView.jsx:chunk_9",
+      "file_path": "frontend/src/views/LiveOpsView.jsx",
+      "language": "javascript",
+      "repo_name": "enterprise-copilot",
+      "user_id": "CHIEF_STRATEGY_OFFICER",
+      "start_line": 0,
+      "end_line": 0,
+      "char_count": 1957,
+      "ingested_at": "2026-01-16T23:06:12.348978",
+      "id": "frontend/src/views/LiveOpsView.jsx::frontend/src/views/LiveOpsView.jsx:chunk_9"
+    },
+    {
+      "type": "code",
+      "chunk_type": "code_block",
+      "name": "frontend/src/views/LiveOpsView.jsx:chunk_10",
+      "file_path": "frontend/src/views/LiveOpsView.jsx",
+      "language": "javascript",
+      "repo_name": "enterprise-copilot",
+      "user_id": "CHIEF_STRATEGY_OFFICER",
+      "start_line": 0,
+      "end_line": 0,
+      "char_count": 1583,
+      "ingested_at": "2026-01-16T23:06:12.348981",
+      "id": "frontend/src/views/LiveOpsView.jsx::frontend/src/views/LiveOpsView.jsx:chunk_10"
+    },
+    {
+      "type": "code",
+      "chunk_type": "code_block",
+      "name": "frontend/src/views/LiveOpsView.jsx:chunk_11",
+      "file_path": "frontend/src/views/LiveOpsView.jsx",
+      "language": "javascript",
+      "repo_name": "enterprise-copilot",
+      "user_id": "CHIEF_STRATEGY_OFFICER",
+      "start_line": 0,
+      "end_line": 0,
+      "char_count": 713,
+      "ingested_at": "2026-01-16T23:06:12.348984",
+      "id": "frontend/src/views/LiveOpsView.jsx::frontend/src/views/LiveOpsView.jsx:chunk_11"
+    },
+    {
+      "type": "code",
+      "chunk_type": "code_block",
+      "name": "frontend/src/views/LiveOpsView.jsx:chunk_12",
+      "file_path": "frontend/src/views/LiveOpsView.jsx",
+      "language": "javascript",
+      "repo_name": "enterprise-copilot",
+      "user_id": "CHIEF_STRATEGY_OFFICER",
+      "start_line": 0,
+      "end_line": 0,
+      "char_count": 699,
+      "ingested_at": "2026-01-16T23:06:12.348987",
+      "id": "frontend/src/views/LiveOpsView.jsx::frontend/src/views/LiveOpsView.jsx:chunk_12"
+    },
+    {
+      "type": "code",
+      "chunk_type": "code_block",
+      "name": "frontend/src/views/LiveOpsView.jsx:chunk_13",
+      "file_path": "frontend/src/views/LiveOpsView.jsx",
+      "language": "javascript",
+      "repo_name": "enterprise-copilot",
+      "user_id": "CHIEF_STRATEGY_OFFICER",
+      "start_line": 0,
+      "end_line": 0,
+      "char_count": 566,
+      "ingested_at": "2026-01-16T23:06:12.348991",
+      "id": "frontend/src/views/LiveOpsView.jsx::frontend/src/views/LiveOpsView.jsx:chunk_13"
+    },
+    {
+      "type": "code",
+      "chunk_type": "code_block",
+      "name": "frontend/src/views/LiveOpsView.jsx:chunk_14",
+      "file_path": "frontend/src/views/LiveOpsView.jsx",
+      "language": "javascript",
+      "repo_name": "enterprise-copilot",
+      "user_id": "CHIEF_STRATEGY_OFFICER",
+      "start_line": 0,
+      "end_line": 0,
+      "char_count": 1763,
+      "ingested_at": "2026-01-16T23:06:12.348993",
+      "id": "frontend/src/views/LiveOpsView.jsx::frontend/src/views/LiveOpsView.jsx:chunk_14"
+    },
+    {
+      "type": "code",
+      "chunk_type": "code_block",
+      "name": "frontend/src/views/LiveOpsView.jsx:chunk_15",
+      "file_path": "frontend/src/views/LiveOpsView.jsx",
+      "language": "javascript",
+      "repo_name": "enterprise-copilot",
+      "user_id": "CHIEF_STRATEGY_OFFICER",
+      "start_line": 0,
+      "end_line": 0,
+      "char_count": 1057,
+      "ingested_at": "2026-01-16T23:06:12.348997",
+      "id": "frontend/src/views/LiveOpsView.jsx::frontend/src/views/LiveOpsView.jsx:chunk_15"
+    },
+    {
+      "type": "code",
+      "chunk_type": "code_block",
+      "name": "frontend/src/views/LiveOpsView.jsx:chunk_16",
+      "file_path": "frontend/src/views/LiveOpsView.jsx",
+      "language": "javascript",
+      "repo_name": "enterprise-copilot",
+      "user_id": "CHIEF_STRATEGY_OFFICER",
+      "start_line": 0,
+      "end_line": 0,
+      "char_count": 393,
+      "ingested_at": "2026-01-16T23:06:12.349000",
+      "id": "frontend/src/views/LiveOpsView.jsx::frontend/src/views/LiveOpsView.jsx:chunk_16"
+    },
+    {
+      "type": "code",
+      "chunk_type": "code_block",
+      "name": "frontend/src/views/LiveOpsView.jsx:chunk_17",
+      "file_path": "frontend/src/views/LiveOpsView.jsx",
+      "language": "javascript",
+      "repo_name": "enterprise-copilot",
+      "user_id": "CHIEF_STRATEGY_OFFICER",
+      "start_line": 0,
+      "end_line": 0,
+      "char_count": 1537,
+      "ingested_at": "2026-01-16T23:06:12.349003",
+      "id": "frontend/src/views/LiveOpsView.jsx::frontend/src/views/LiveOpsView.jsx:chunk_17"
+    },
+    {
+      "type": "code",
+      "chunk_type": "code_block",
+      "name": "frontend/src/views/LiveOpsView.jsx:chunk_18",
+      "file_path": "frontend/src/views/LiveOpsView.jsx",
+      "language": "javascript",
+      "repo_name": "enterprise-copilot",
+      "user_id": "CHIEF_STRATEGY_OFFICER",
+      "start_line": 0,
+      "end_line": 0,
+      "char_count": 1457,
+      "ingested_at": "2026-01-16T23:06:12.349007",
+      "id": "frontend/src/views/LiveOpsView.jsx::frontend/src/views/LiveOpsView.jsx:chunk_18"
+    },
+    {
+      "type": "code",
+      "chunk_type": "code_block",
+      "name": "frontend/src/views/LiveOpsView.jsx:chunk_19",
+      "file_path": "frontend/src/views/LiveOpsView.jsx",
+      "language": "javascript",
+      "repo_name": "enterprise-copilot",
+      "user_id": "CHIEF_STRATEGY_OFFICER",
+      "start_line": 0,
+      "end_line": 0,
+      "char_count": 1129,
+      "ingested_at": "2026-01-16T23:06:12.349010",
+      "id": "frontend/src/views/LiveOpsView.jsx::frontend/src/views/LiveOpsView.jsx:chunk_19"
+    },
+    {
+      "type": "code",
+      "chunk_type": "code_block",
+      "name": "frontend/src/views/LiveOpsView.jsx:chunk_20",
+      "file_path": "frontend/src/views/LiveOpsView.jsx",
+      "language": "javascript",
+      "repo_name": "enterprise-copilot",
+      "user_id": "CHIEF_STRATEGY_OFFICER",
+      "start_line": 0,
+      "end_line": 0,
+      "char_count": 1551,
+      "ingested_at": "2026-01-16T23:06:12.349013",
+      "id": "frontend/src/views/LiveOpsView.jsx::frontend/src/views/LiveOpsView.jsx:chunk_20"
+    },
+    {
+      "type": "code",
+      "chunk_type": "code_block",
+      "name": "frontend/src/views/LiveOpsView.jsx:chunk_21",
+      "file_path": "frontend/src/views/LiveOpsView.jsx",
+      "language": "javascript",
+      "repo_name": "enterprise-copilot",
+      "user_id": "CHIEF_STRATEGY_OFFICER",
+      "start_line": 0,
+      "end_line": 0,
+      "char_count": 73,
+      "ingested_at": "2026-01-16T23:06:12.349016",
+      "id": "frontend/src/views/LiveOpsView.jsx::frontend/src/views/LiveOpsView.jsx:chunk_21"
+    },
+    {
+      "type": "code",
+      "chunk_type": "code_block",
+      "name": "frontend/src/views/IntegrationsView.jsx:chunk_1",
+      "file_path": "frontend/src/views/IntegrationsView.jsx",
+      "language": "javascript",
+      "repo_name": "enterprise-copilot",
+      "user_id": "CHIEF_STRATEGY_OFFICER",
+      "start_line": 0,
+      "end_line": 0,
+      "char_count": 463,
+      "ingested_at": "2026-01-16T23:06:12.350290",
+      "id": "frontend/src/views/IntegrationsView.jsx::frontend/src/views/IntegrationsView.jsx:chunk_1"
+    },
+    {
+      "type": "file",
+      "label": "IntegrationsView.jsx",
+      "id": "frontend/src/views/IntegrationsView.jsx::FILE"
+    },
+    {
+      "type": "code",
+      "chunk_type": "code_block",
+      "name": "frontend/src/views/IntegrationsView.jsx:chunk_2",
+      "file_path": "frontend/src/views/IntegrationsView.jsx",
+      "language": "javascript",
+      "repo_name": "enterprise-copilot",
+      "user_id": "CHIEF_STRATEGY_OFFICER",
+      "start_line": 0,
+      "end_line": 0,
+      "char_count": 2416,
+      "ingested_at": "2026-01-16T23:06:12.350298",
+      "id": "frontend/src/views/IntegrationsView.jsx::frontend/src/views/IntegrationsView.jsx:chunk_2"
+    },
+    {
+      "type": "code",
+      "chunk_type": "code_block",
+      "name": "frontend/src/views/IntegrationsView.jsx:chunk_3",
+      "file_path": "frontend/src/views/IntegrationsView.jsx",
+      "language": "javascript",
+      "repo_name": "enterprise-copilot",
+      "user_id": "CHIEF_STRATEGY_OFFICER",
+      "start_line": 0,
+      "end_line": 0,
+      "char_count": 1072,
+      "ingested_at": "2026-01-16T23:06:12.350303",
+      "id": "frontend/src/views/IntegrationsView.jsx::frontend/src/views/IntegrationsView.jsx:chunk_3"
+    },
+    {
+      "type": "code",
+      "chunk_type": "code_block",
+      "name": "frontend/src/views/IntegrationsView.jsx:chunk_4",
+      "file_path": "frontend/src/views/IntegrationsView.jsx",
+      "language": "javascript",
+      "repo_name": "enterprise-copilot",
+      "user_id": "CHIEF_STRATEGY_OFFICER",
+      "start_line": 0,
+      "end_line": 0,
+      "char_count": 512,
+      "ingested_at": "2026-01-16T23:06:12.350306",
+      "id": "frontend/src/views/IntegrationsView.jsx::frontend/src/views/IntegrationsView.jsx:chunk_4"
+    },
+    {
+      "type": "code",
+      "chunk_type": "code_block",
+      "name": "frontend/src/views/RepositoriesView.jsx:chunk_1",
+      "file_path": "frontend/src/views/RepositoriesView.jsx",
+      "language": "javascript",
+      "repo_name": "enterprise-copilot",
+      "user_id": "CHIEF_STRATEGY_OFFICER",
+      "start_line": 0,
+      "end_line": 0,
+      "char_count": 954,
+      "ingested_at": "2026-01-16T23:06:12.351502",
+      "id": "frontend/src/views/RepositoriesView.jsx::frontend/src/views/RepositoriesView.jsx:chunk_1"
+    },
+    {
+      "type": "file",
+      "label": "RepositoriesView.jsx",
+      "id": "frontend/src/views/RepositoriesView.jsx::FILE"
+    },
+    {
+      "type": "code",
+      "chunk_type": "code_block",
+      "name": "frontend/src/views/RepositoriesView.jsx:chunk_2",
+      "file_path": "frontend/src/views/RepositoriesView.jsx",
+      "language": "javascript",
+      "repo_name": "enterprise-copilot",
+      "user_id": "CHIEF_STRATEGY_OFFICER",
+      "start_line": 0,
+      "end_line": 0,
+      "char_count": 848,
+      "ingested_at": "2026-01-16T23:06:12.351507",
+      "id": "frontend/src/views/RepositoriesView.jsx::frontend/src/views/RepositoriesView.jsx:chunk_2"
+    },
+    {
+      "type": "code",
+      "chunk_type": "code_block",
+      "name": "frontend/src/views/RepositoriesView.jsx:chunk_3",
+      "file_path": "frontend/src/views/RepositoriesView.jsx",
+      "language": "javascript",
+      "repo_name": "enterprise-copilot",
+      "user_id": "CHIEF_STRATEGY_OFFICER",
+      "start_line": 0,
+      "end_line": 0,
+      "char_count": 738,
+      "ingested_at": "2026-01-16T23:06:12.351510",
+      "id": "frontend/src/views/RepositoriesView.jsx::frontend/src/views/RepositoriesView.jsx:chunk_3"
+    },
+    {
+      "type": "code",
+      "chunk_type": "code_block",
+      "name": "frontend/src/views/RepositoriesView.jsx:chunk_4",
+      "file_path": "frontend/src/views/RepositoriesView.jsx",
+      "language": "javascript",
+      "repo_name": "enterprise-copilot",
+      "user_id": "CHIEF_STRATEGY_OFFICER",
+      "start_line": 0,
+      "end_line": 0,
+      "char_count": 2358,
+      "ingested_at": "2026-01-16T23:06:12.351514",
+      "id": "frontend/src/views/RepositoriesView.jsx::frontend/src/views/RepositoriesView.jsx:chunk_4"
+    },
+    {
+      "type": "code",
+      "chunk_type": "code_block",
+      "name": "frontend/src/views/RepositoriesView.jsx:chunk_5",
+      "file_path": "frontend/src/views/RepositoriesView.jsx",
+      "language": "javascript",
+      "repo_name": "enterprise-copilot",
+      "user_id": "CHIEF_STRATEGY_OFFICER",
+      "start_line": 0,
+      "end_line": 0,
+      "char_count": 1048,
+      "ingested_at": "2026-01-16T23:06:12.351517",
+      "id": "frontend/src/views/RepositoriesView.jsx::frontend/src/views/RepositoriesView.jsx:chunk_5"
+    },
+    {
+      "type": "code",
+      "chunk_type": "code_block",
+      "name": "frontend/src/views/RepositoriesView.jsx:chunk_6",
+      "file_path": "frontend/src/views/RepositoriesView.jsx",
+      "language": "javascript",
+      "repo_name": "enterprise-copilot",
+      "user_id": "CHIEF_STRATEGY_OFFICER",
+      "start_line": 0,
+      "end_line": 0,
+      "char_count": 1321,
+      "ingested_at": "2026-01-16T23:06:12.351520",
+      "id": "frontend/src/views/RepositoriesView.jsx::frontend/src/views/RepositoriesView.jsx:chunk_6"
+    },
+    {
+      "type": "code",
+      "chunk_type": "code_block",
+      "name": "frontend/src/views/RepositoriesView.jsx:chunk_7",
+      "file_path": "frontend/src/views/RepositoriesView.jsx",
+      "language": "javascript",
+      "repo_name": "enterprise-copilot",
+      "user_id": "CHIEF_STRATEGY_OFFICER",
+      "start_line": 0,
+      "end_line": 0,
+      "char_count": 322,
+      "ingested_at": "2026-01-16T23:06:12.351523",
+      "id": "frontend/src/views/RepositoriesView.jsx::frontend/src/views/RepositoriesView.jsx:chunk_7"
+    },
+    {
+      "type": "code",
+      "chunk_type": "code_block",
+      "name": "frontend/src/views/DocumentsView.jsx:chunk_1",
+      "file_path": "frontend/src/views/DocumentsView.jsx",
+      "language": "javascript",
+      "repo_name": "enterprise-copilot",
+      "user_id": "CHIEF_STRATEGY_OFFICER",
+      "start_line": 0,
+      "end_line": 0,
+      "char_count": 528,
+      "ingested_at": "2026-01-16T23:06:12.353078",
+      "id": "frontend/src/views/DocumentsView.jsx::frontend/src/views/DocumentsView.jsx:chunk_1"
+    },
+    {
+      "type": "file",
+      "label": "DocumentsView.jsx",
+      "id": "frontend/src/views/DocumentsView.jsx::FILE"
+    },
+    {
+      "type": "code",
+      "chunk_type": "code_block",
+      "name": "frontend/src/views/DocumentsView.jsx:chunk_2",
+      "file_path": "frontend/src/views/DocumentsView.jsx",
+      "language": "javascript",
+      "repo_name": "enterprise-copilot",
+      "user_id": "CHIEF_STRATEGY_OFFICER",
+      "start_line": 0,
+      "end_line": 0,
+      "char_count": 969,
+      "ingested_at": "2026-01-16T23:06:12.353083",
+      "id": "frontend/src/views/DocumentsView.jsx::frontend/src/views/DocumentsView.jsx:chunk_2"
+    },
+    {
+      "type": "code",
+      "chunk_type": "code_block",
+      "name": "frontend/src/views/DocumentsView.jsx:chunk_3",
+      "file_path": "frontend/src/views/DocumentsView.jsx",
+      "language": "javascript",
+      "repo_name": "enterprise-copilot",
+      "user_id": "CHIEF_STRATEGY_OFFICER",
+      "start_line": 0,
+      "end_line": 0,
+      "char_count": 558,
+      "ingested_at": "2026-01-16T23:06:12.353086",
+      "id": "frontend/src/views/DocumentsView.jsx::frontend/src/views/DocumentsView.jsx:chunk_3"
+    },
+    {
+      "type": "code",
+      "chunk_type": "code_block",
+      "name": "frontend/src/views/DocumentsView.jsx:chunk_4",
+      "file_path": "frontend/src/views/DocumentsView.jsx",
+      "language": "javascript",
+      "repo_name": "enterprise-copilot",
+      "user_id": "CHIEF_STRATEGY_OFFICER",
+      "start_line": 0,
+      "end_line": 0,
+      "char_count": 2336,
+      "ingested_at": "2026-01-16T23:06:12.353089",
+      "id": "frontend/src/views/DocumentsView.jsx::frontend/src/views/DocumentsView.jsx:chunk_4"
+    },
+    {
+      "type": "code",
+      "chunk_type": "code_block",
+      "name": "frontend/src/views/DocumentsView.jsx:chunk_5",
+      "file_path": "frontend/src/views/DocumentsView.jsx",
+      "language": "javascript",
+      "repo_name": "enterprise-copilot",
+      "user_id": "CHIEF_STRATEGY_OFFICER",
+      "start_line": 0,
+      "end_line": 0,
+      "char_count": 1117,
+      "ingested_at": "2026-01-16T23:06:12.353092",
+      "id": "frontend/src/views/DocumentsView.jsx::frontend/src/views/DocumentsView.jsx:chunk_5"
+    },
+    {
+      "type": "code",
+      "chunk_type": "code_block",
+      "name": "frontend/src/views/DocumentsView.jsx:chunk_6",
+      "file_path": "frontend/src/views/DocumentsView.jsx",
+      "language": "javascript",
+      "repo_name": "enterprise-copilot",
+      "user_id": "CHIEF_STRATEGY_OFFICER",
+      "start_line": 0,
+      "end_line": 0,
+      "char_count": 1687,
+      "ingested_at": "2026-01-16T23:06:12.353096",
+      "id": "frontend/src/views/DocumentsView.jsx::frontend/src/views/DocumentsView.jsx:chunk_6"
+    },
+    {
+      "type": "code",
+      "chunk_type": "code_block",
+      "name": "frontend/src/views/DocumentsView.jsx:chunk_7",
+      "file_path": "frontend/src/views/DocumentsView.jsx",
+      "language": "javascript",
+      "repo_name": "enterprise-copilot",
+      "user_id": "CHIEF_STRATEGY_OFFICER",
+      "start_line": 0,
+      "end_line": 0,
+      "char_count": 883,
+      "ingested_at": "2026-01-16T23:06:12.353099",
+      "id": "frontend/src/views/DocumentsView.jsx::frontend/src/views/DocumentsView.jsx:chunk_7"
+    },
+    {
+      "type": "code",
+      "chunk_type": "code_block",
+      "name": "frontend/src/views/DocumentsView.jsx:chunk_8",
+      "file_path": "frontend/src/views/DocumentsView.jsx",
+      "language": "javascript",
+      "repo_name": "enterprise-copilot",
+      "user_id": "CHIEF_STRATEGY_OFFICER",
+      "start_line": 0,
+      "end_line": 0,
+      "char_count": 2658,
+      "ingested_at": "2026-01-16T23:06:12.353102",
+      "id": "frontend/src/views/DocumentsView.jsx::frontend/src/views/DocumentsView.jsx:chunk_8"
+    },
+    {
+      "type": "code",
+      "chunk_type": "code_block",
+      "name": "frontend/src/views/DocumentsView.jsx:chunk_9",
+      "file_path": "frontend/src/views/DocumentsView.jsx",
+      "language": "javascript",
+      "repo_name": "enterprise-copilot",
+      "user_id": "CHIEF_STRATEGY_OFFICER",
+      "start_line": 0,
+      "end_line": 0,
+      "char_count": 30,
+      "ingested_at": "2026-01-16T23:06:12.353105",
+      "id": "frontend/src/views/DocumentsView.jsx::frontend/src/views/DocumentsView.jsx:chunk_9"
+    },
+    {
+      "type": "code",
+      "chunk_type": "code_block",
+      "name": "frontend/src/views/IAMConfigView.jsx:chunk_1",
+      "file_path": "frontend/src/views/IAMConfigView.jsx",
+      "language": "javascript",
+      "repo_name": "enterprise-copilot",
+      "user_id": "CHIEF_STRATEGY_OFFICER",
+      "start_line": 0,
+      "end_line": 0,
+      "char_count": 496,
+      "ingested_at": "2026-01-16T23:06:12.354010",
+      "id": "frontend/src/views/IAMConfigView.jsx::frontend/src/views/IAMConfigView.jsx:chunk_1"
+    },
+    {
+      "type": "file",
+      "label": "IAMConfigView.jsx",
+      "id": "frontend/src/views/IAMConfigView.jsx::FILE"
+    },
+    {
+      "type": "code",
+      "chunk_type": "code_block",
+      "name": "frontend/src/views/IAMConfigView.jsx:chunk_2",
+      "file_path": "frontend/src/views/IAMConfigView.jsx",
+      "language": "javascript",
+      "repo_name": "enterprise-copilot",
+      "user_id": "CHIEF_STRATEGY_OFFICER",
+      "start_line": 0,
+      "end_line": 0,
+      "char_count": 775,
+      "ingested_at": "2026-01-16T23:06:12.354014",
+      "id": "frontend/src/views/IAMConfigView.jsx::frontend/src/views/IAMConfigView.jsx:chunk_2"
+    },
+    {
+      "type": "code",
+      "chunk_type": "code_block",
+      "name": "frontend/src/views/IAMConfigView.jsx:chunk_3",
+      "file_path": "frontend/src/views/IAMConfigView.jsx",
+      "language": "javascript",
+      "repo_name": "enterprise-copilot",
+      "user_id": "CHIEF_STRATEGY_OFFICER",
+      "start_line": 0,
+      "end_line": 0,
+      "char_count": 693,
+      "ingested_at": "2026-01-16T23:06:12.354018",
+      "id": "frontend/src/views/IAMConfigView.jsx::frontend/src/views/IAMConfigView.jsx:chunk_3"
+    },
+    {
+      "type": "code",
+      "chunk_type": "code_block",
+      "name": "frontend/src/views/IAMConfigView.jsx:chunk_4",
+      "file_path": "frontend/src/views/IAMConfigView.jsx",
+      "language": "javascript",
+      "repo_name": "enterprise-copilot",
+      "user_id": "CHIEF_STRATEGY_OFFICER",
+      "start_line": 0,
+      "end_line": 0,
+      "char_count": 936,
+      "ingested_at": "2026-01-16T23:06:12.354021",
+      "id": "frontend/src/views/IAMConfigView.jsx::frontend/src/views/IAMConfigView.jsx:chunk_4"
+    },
+    {
+      "type": "code",
+      "chunk_type": "code_block",
+      "name": "frontend/src/views/IAMConfigView.jsx:chunk_5",
+      "file_path": "frontend/src/views/IAMConfigView.jsx",
+      "language": "javascript",
+      "repo_name": "enterprise-copilot",
+      "user_id": "CHIEF_STRATEGY_OFFICER",
+      "start_line": 0,
+      "end_line": 0,
+      "char_count": 2016,
+      "ingested_at": "2026-01-16T23:06:12.354024",
+      "id": "frontend/src/views/IAMConfigView.jsx::frontend/src/views/IAMConfigView.jsx:chunk_5"
+    },
+    {
+      "type": "code",
+      "chunk_type": "code_block",
+      "name": "frontend/src/views/IAMConfigView.jsx:chunk_6",
+      "file_path": "frontend/src/views/IAMConfigView.jsx",
+      "language": "javascript",
+      "repo_name": "enterprise-copilot",
+      "user_id": "CHIEF_STRATEGY_OFFICER",
+      "start_line": 0,
+      "end_line": 0,
+      "char_count": 1396,
+      "ingested_at": "2026-01-16T23:06:12.354027",
+      "id": "frontend/src/views/IAMConfigView.jsx::frontend/src/views/IAMConfigView.jsx:chunk_6"
+    },
+    {
+      "type": "code",
+      "chunk_type": "code_block",
+      "name": "frontend/src/views/IAMConfigView.jsx:chunk_7",
+      "file_path": "frontend/src/views/IAMConfigView.jsx",
+      "language": "javascript",
+      "repo_name": "enterprise-copilot",
+      "user_id": "CHIEF_STRATEGY_OFFICER",
+      "start_line": 0,
+      "end_line": 0,
+      "char_count": 30,
+      "ingested_at": "2026-01-16T23:06:12.354030",
+      "id": "frontend/src/views/IAMConfigView.jsx::frontend/src/views/IAMConfigView.jsx:chunk_7"
+    },
+    {
+      "type": "code",
+      "chunk_type": "code_block",
+      "name": "frontend/src/services/api.js:chunk_1",
+      "file_path": "frontend/src/services/api.js",
+      "language": "javascript",
+      "repo_name": "enterprise-copilot",
+      "user_id": "CHIEF_STRATEGY_OFFICER",
+      "start_line": 0,
+      "end_line": 0,
+      "char_count": 795,
+      "ingested_at": "2026-01-16T23:06:12.355574",
+      "id": "frontend/src/services/api.js::frontend/src/services/api.js:chunk_1"
+    },
+    {
+      "type": "file",
+      "label": "api.js",
+      "id": "frontend/src/services/api.js::FILE"
+    },
+    {
+      "type": "code",
+      "chunk_type": "code_block",
+      "name": "frontend/src/services/api.js:chunk_2",
+      "file_path": "frontend/src/services/api.js",
+      "language": "javascript",
+      "repo_name": "enterprise-copilot",
+      "user_id": "CHIEF_STRATEGY_OFFICER",
+      "start_line": 0,
+      "end_line": 0,
+      "char_count": 965,
+      "ingested_at": "2026-01-16T23:06:12.355578",
+      "id": "frontend/src/services/api.js::frontend/src/services/api.js:chunk_2"
+    },
+    {
+      "type": "code",
+      "chunk_type": "code_block",
+      "name": "frontend/src/services/api.js:chunk_3",
+      "file_path": "frontend/src/services/api.js",
+      "language": "javascript",
+      "repo_name": "enterprise-copilot",
+      "user_id": "CHIEF_STRATEGY_OFFICER",
+      "start_line": 0,
+      "end_line": 0,
+      "char_count": 938,
+      "ingested_at": "2026-01-16T23:06:12.355581",
+      "id": "frontend/src/services/api.js::frontend/src/services/api.js:chunk_3"
+    },
+    {
+      "type": "code",
+      "chunk_type": "code_block",
+      "name": "frontend/src/services/api.js:chunk_4",
+      "file_path": "frontend/src/services/api.js",
+      "language": "javascript",
+      "repo_name": "enterprise-copilot",
+      "user_id": "CHIEF_STRATEGY_OFFICER",
+      "start_line": 0,
+      "end_line": 0,
+      "char_count": 909,
+      "ingested_at": "2026-01-16T23:06:12.355585",
+      "id": "frontend/src/services/api.js::frontend/src/services/api.js:chunk_4"
+    },
+    {
+      "type": "code",
+      "chunk_type": "code_block",
+      "name": "frontend/src/services/api.js:chunk_5",
+      "file_path": "frontend/src/services/api.js",
+      "language": "javascript",
+      "repo_name": "enterprise-copilot",
+      "user_id": "CHIEF_STRATEGY_OFFICER",
+      "start_line": 0,
+      "end_line": 0,
+      "char_count": 842,
+      "ingested_at": "2026-01-16T23:06:12.355588",
+      "id": "frontend/src/services/api.js::frontend/src/services/api.js:chunk_5"
+    },
+    {
+      "type": "code",
+      "chunk_type": "code_block",
+      "name": "frontend/src/services/api.js:chunk_6",
+      "file_path": "frontend/src/services/api.js",
+      "language": "javascript",
+      "repo_name": "enterprise-copilot",
+      "user_id": "CHIEF_STRATEGY_OFFICER",
+      "start_line": 0,
+      "end_line": 0,
+      "char_count": 971,
+      "ingested_at": "2026-01-16T23:06:12.355591",
+      "id": "frontend/src/services/api.js::frontend/src/services/api.js:chunk_6"
+    },
+    {
+      "type": "code",
+      "chunk_type": "code_block",
+      "name": "frontend/src/services/api.js:chunk_7",
+      "file_path": "frontend/src/services/api.js",
+      "language": "javascript",
+      "repo_name": "enterprise-copilot",
+      "user_id": "CHIEF_STRATEGY_OFFICER",
+      "start_line": 0,
+      "end_line": 0,
+      "char_count": 790,
+      "ingested_at": "2026-01-16T23:06:12.355594",
+      "id": "frontend/src/services/api.js::frontend/src/services/api.js:chunk_7"
+    },
+    {
+      "type": "code",
+      "chunk_type": "code_block",
+      "name": "frontend/src/services/api.js:chunk_8",
+      "file_path": "frontend/src/services/api.js",
+      "language": "javascript",
+      "repo_name": "enterprise-copilot",
+      "user_id": "CHIEF_STRATEGY_OFFICER",
+      "start_line": 0,
+      "end_line": 0,
+      "char_count": 950,
+      "ingested_at": "2026-01-16T23:06:12.355597",
+      "id": "frontend/src/services/api.js::frontend/src/services/api.js:chunk_8"
+    },
+    {
+      "type": "code",
+      "chunk_type": "code_block",
+      "name": "frontend/src/services/api.js:chunk_9",
+      "file_path": "frontend/src/services/api.js",
+      "language": "javascript",
+      "repo_name": "enterprise-copilot",
+      "user_id": "CHIEF_STRATEGY_OFFICER",
+      "start_line": 0,
+      "end_line": 0,
+      "char_count": 919,
+      "ingested_at": "2026-01-16T23:06:12.355600",
+      "id": "frontend/src/services/api.js::frontend/src/services/api.js:chunk_9"
+    }
+  ],
+  "links": [
+    {
+      "type": "CONTAINS",
+      "source": "check_db.py::FILE",
+      "target": "check_db.py::check_db.py:chunk_1"
+    },
+    {
+      "type": "CONTAINS",
+      "source": "main.jsx::FILE",
+      "target": "main.jsx::main.jsx:chunk_1"
+    },
+    {
+      "type": "CONTAINS",
+      "source": "main.jsx::FILE",
+      "target": "main.jsx::main.jsx:chunk_2"
+    },
+    {
+      "type": "CONTAINS",
+      "source": "main.jsx::FILE",
+      "target": "main.jsx::main.jsx:chunk_3"
+    },
+    {
+      "type": "CONTAINS",
+      "source": "main.jsx::FILE",
+      "target": "main.jsx::main.jsx:chunk_4"
+    },
+    {
+      "type": "CONTAINS",
+      "source": "main.jsx::FILE",
+      "target": "main.jsx::main.jsx:chunk_5"
+    },
+    {
+      "type": "CONTAINS",
+      "source": "main.jsx::FILE",
+      "target": "main.jsx::main.jsx:chunk_6"
+    },
+    {
+      "type": "CONTAINS",
+      "source": "main.jsx::FILE",
+      "target": "main.jsx::main.jsx:chunk_7"
+    },
+    {
+      "type": "CONTAINS",
+      "source": "main.jsx::FILE",
+      "target": "main.jsx::main.jsx:chunk_8"
+    },
+    {
+      "type": "CONTAINS",
+      "source": "main.jsx::FILE",
+      "target": "main.jsx::main.jsx:chunk_9"
+    },
+    {
+      "type": "CONTAINS",
+      "source": "main.jsx::FILE",
+      "target": "main.jsx::main.jsx:chunk_10"
+    },
+    {
+      "type": "CONTAINS",
+      "source": "main.jsx::FILE",
+      "target": "main.jsx::main.jsx:chunk_11"
+    },
+    {
+      "type": "CONTAINS",
+      "source": "main.jsx::FILE",
+      "target": "main.jsx::main.jsx:chunk_12"
+    },
+    {
+      "type": "CONTAINS",
+      "source": "main.jsx::FILE",
+      "target": "main.jsx::main.jsx:chunk_13"
+    },
+    {
+      "type": "CONTAINS",
+      "source": "main.jsx::FILE",
+      "target": "main.jsx::main.jsx:chunk_14"
+    },
+    {
+      "type": "CONTAINS",
+      "source": "main.jsx::FILE",
+      "target": "main.jsx::main.jsx:chunk_15"
+    },
+    {
+      "type": "CONTAINS",
+      "source": "main.jsx::FILE",
+      "target": "main.jsx::main.jsx:chunk_16"
+    },
+    {
+      "type": "CONTAINS",
+      "source": "main.jsx::FILE",
+      "target": "main.jsx::main.jsx:chunk_17"
+    },
+    {
+      "type": "CONTAINS",
+      "source": "main.jsx::FILE",
+      "target": "main.jsx::main.jsx:chunk_18"
+    },
+    {
+      "type": "CONTAINS",
+      "source": "main.jsx::FILE",
+      "target": "main.jsx::main.jsx:chunk_19"
+    },
+    {
+      "type": "CONTAINS",
+      "source": "main.jsx::FILE",
+      "target": "main.jsx::main.jsx:chunk_20"
+    },
+    {
+      "type": "CONTAINS",
+      "source": "main.jsx::FILE",
+      "target": "main.jsx::main.jsx:chunk_21"
+    },
+    {
+      "type": "CONTAINS",
+      "source": "main.jsx::FILE",
+      "target": "main.jsx::main.jsx:chunk_22"
+    },
+    {
+      "type": "CONTAINS",
+      "source": "main.jsx::FILE",
+      "target": "main.jsx::main.jsx:chunk_23"
+    },
+    {
+      "type": "CONTAINS",
+      "source": "main.jsx::FILE",
+      "target": "main.jsx::main.jsx:chunk_24"
+    },
+    {
+      "type": "CONTAINS",
+      "source": "main.jsx::FILE",
+      "target": "main.jsx::main.jsx:chunk_25"
+    },
+    {
+      "type": "CONTAINS",
+      "source": "main.jsx::FILE",
+      "target": "main.jsx::main.jsx:chunk_26"
+    },
+    {
+      "type": "CONTAINS",
+      "source": "main.jsx::FILE",
+      "target": "main.jsx::main.jsx:chunk_27"
+    },
+    {
+      "type": "CONTAINS",
+      "source": "main.jsx::FILE",
+      "target": "main.jsx::main.jsx:chunk_28"
+    },
+    {
+      "type": "CONTAINS",
+      "source": "check_db_quick.py::FILE",
+      "target": "check_db_quick.py::check_db_quick.py:chunk_1"
+    },
+    {
+      "type": "CONTAINS",
+      "source": "frontend/tailwind.config.js::FILE",
+      "target": "frontend/tailwind.config.js::frontend/tailwind.config.js:chunk_1"
+    },
+    {
+      "type": "CONTAINS",
+      "source": "frontend/tailwind.config.js::FILE",
+      "target": "frontend/tailwind.config.js::frontend/tailwind.config.js:chunk_2"
+    },
+    {
+      "type": "CONTAINS",
+      "source": "frontend/vite.config.js::FILE",
+      "target": "frontend/vite.config.js::frontend/vite.config.js:chunk_1"
+    },
+    {
+      "type": "CONTAINS",
+      "source": "frontend/postcss.config.js::FILE",
+      "target": "frontend/postcss.config.js::frontend/postcss.config.js:chunk_1"
+    },
+    {
+      "type": "CONTAINS",
+      "source": "backend/build_treesitter.py::FILE",
+      "target": "backend/build_treesitter.py::backend/build_treesitter.py:chunk_1"
+    },
+    {
+      "type": "CONTAINS",
+      "source": "backend/build_treesitter.py::FILE",
+      "target": "backend/build_treesitter.py::backend/build_treesitter.py:chunk_2"
+    },
+    {
+      "type": "CONTAINS",
+      "source": "backend/main.py::FILE",
+      "target": "backend/main.py::backend/main.py:chunk_1"
+    },
+    {
+      "type": "CONTAINS",
+      "source": "backend/main.py::FILE",
+      "target": "backend/main.py::backend/main.py:chunk_2"
+    },
+    {
+      "type": "CONTAINS",
+      "source": "backend/main.py::FILE",
+      "target": "backend/main.py::backend/main.py:chunk_3"
+    },
+    {
+      "type": "CONTAINS",
+      "source": "backend/config/iam_config.py::FILE",
+      "target": "backend/config/iam_config.py::backend/config/iam_config.py:chunk_1"
+    },
+    {
+      "type": "CONTAINS",
+      "source": "backend/config/iam_config.py::FILE",
+      "target": "backend/config/iam_config.py::backend/config/iam_config.py:chunk_2"
+    },
+    {
+      "type": "CONTAINS",
+      "source": "backend/config/iam_config.py::FILE",
+      "target": "backend/config/iam_config.py::backend/config/iam_config.py:chunk_3"
+    },
+    {
+      "type": "CONTAINS",
+      "source": "backend/services/document_ingestion.py::FILE",
+      "target": "backend/services/document_ingestion.py::backend/services/document_ingestion.py:chunk_1"
+    },
+    {
+      "type": "CONTAINS",
+      "source": "backend/services/document_ingestion.py::FILE",
+      "target": "backend/services/document_ingestion.py::backend/services/document_ingestion.py:chunk_2"
+    },
+    {
+      "type": "CONTAINS",
+      "source": "backend/services/rag_service.py::FILE",
+      "target": "backend/services/rag_service.py::backend/services/rag_service.py:chunk_1"
+    },
+    {
+      "type": "CONTAINS",
+      "source": "backend/services/rag_service.py::FILE",
+      "target": "backend/services/rag_service.py::backend/services/rag_service.py:chunk_2"
+    },
+    {
+      "type": "CONTAINS",
+      "source": "backend/services/agent_loop.py::FILE",
+      "target": "backend/services/agent_loop.py::backend/services/agent_loop.py:chunk_1"
+    },
+    {
+      "type": "CONTAINS",
+      "source": "backend/services/agent_loop.py::FILE",
+      "target": "backend/services/agent_loop.py::backend/services/agent_loop.py:chunk_2"
+    },
+    {
+      "type": "CONTAINS",
+      "source": "backend/services/code_intelligence.py::FILE",
+      "target": "backend/services/code_intelligence.py::backend/services/code_intelligence.py:chunk_1"
+    },
+    {
+      "type": "CONTAINS",
+      "source": "backend/services/code_intelligence.py::FILE",
+      "target": "backend/services/code_intelligence.py::backend/services/code_intelligence.py:chunk_2"
+    },
+    {
+      "type": "CONTAINS",
+      "source": "backend/services/code_ingestion.py::FILE",
+      "target": "backend/services/code_ingestion.py::backend/services/code_ingestion.py:chunk_1"
+    },
+    {
+      "type": "CONTAINS",
+      "source": "backend/services/code_ingestion.py::FILE",
+      "target": "backend/services/code_ingestion.py::backend/services/code_ingestion.py:chunk_2"
+    },
+    {
+      "type": "CONTAINS",
+      "source": "backend/services/llm_service.py::FILE",
+      "target": "backend/services/llm_service.py::backend/services/llm_service.py:chunk_1"
+    },
+    {
+      "type": "CONTAINS",
+      "source": "backend/services/llm_service.py::FILE",
+      "target": "backend/services/llm_service.py::backend/services/llm_service.py:chunk_2"
+    },
+    {
+      "type": "CONTAINS",
+      "source": "backend/services/audit_logger.py::FILE",
+      "target": "backend/services/audit_logger.py::backend/services/audit_logger.py:chunk_1"
+    },
+    {
+      "type": "CONTAINS",
+      "source": "backend/services/audit_logger.py::FILE",
+      "target": "backend/services/audit_logger.py::backend/services/audit_logger.py:chunk_2"
+    },
+    {
+      "type": "CONTAINS",
+      "source": "backend/services/action_executor.py::FILE",
+      "target": "backend/services/action_executor.py::backend/services/action_executor.py:chunk_1"
+    },
+    {
+      "type": "CONTAINS",
+      "source": "backend/services/action_executor.py::FILE",
+      "target": "backend/services/action_executor.py::backend/services/action_executor.py:chunk_2"
+    },
+    {
+      "type": "CONTAINS",
+      "source": "backend/services/action_executor.py::FILE",
+      "target": "backend/services/action_executor.py::backend/services/action_executor.py:chunk_3"
+    },
+    {
+      "type": "CONTAINS",
+      "source": "backend/services/agentic_rag.py::FILE",
+      "target": "backend/services/agentic_rag.py::backend/services/agentic_rag.py:chunk_1"
+    },
+    {
+      "type": "CONTAINS",
+      "source": "backend/services/agentic_rag.py::FILE",
+      "target": "backend/services/agentic_rag.py::backend/services/agentic_rag.py:chunk_2"
+    },
+    {
+      "type": "CONTAINS",
+      "source": "backend/services/background_agent.py::FILE",
+      "target": "backend/services/background_agent.py::backend/services/background_agent.py:chunk_1"
+    },
+    {
+      "type": "CONTAINS",
+      "source": "backend/services/background_agent.py::FILE",
+      "target": "backend/services/background_agent.py::backend/services/background_agent.py:chunk_2"
+    },
+    {
+      "type": "CONTAINS",
+      "source": "backend/services/background_agent.py::FILE",
+      "target": "backend/services/background_agent.py::backend/services/background_agent.py:chunk_3"
+    },
+    {
+      "type": "CONTAINS",
+      "source": "backend/services/hybrid_retriever.py::FILE",
+      "target": "backend/services/hybrid_retriever.py::backend/services/hybrid_retriever.py:chunk_1"
+    },
+    {
+      "type": "CONTAINS",
+      "source": "backend/services/hybrid_retriever.py::FILE",
+      "target": "backend/services/hybrid_retriever.py::backend/services/hybrid_retriever.py:chunk_2"
+    },
+    {
+      "type": "CONTAINS",
+      "source": "backend/services/db_service.py::FILE",
+      "target": "backend/services/db_service.py::backend/services/db_service.py:chunk_1"
+    },
+    {
+      "type": "CONTAINS",
+      "source": "backend/services/db_service.py::FILE",
+      "target": "backend/services/db_service.py::backend/services/db_service.py:chunk_2"
+    },
+    {
+      "type": "CONTAINS",
+      "source": "frontend/src/main.jsx::FILE",
+      "target": "frontend/src/main.jsx::frontend/src/main.jsx:chunk_1"
+    },
+    {
+      "type": "CONTAINS",
+      "source": "frontend/src/App.jsx::FILE",
+      "target": "frontend/src/App.jsx::frontend/src/App.jsx:chunk_1"
+    },
+    {
+      "type": "CONTAINS",
+      "source": "frontend/src/App.jsx::FILE",
+      "target": "frontend/src/App.jsx::frontend/src/App.jsx:chunk_2"
+    },
+    {
+      "type": "CONTAINS",
+      "source": "frontend/src/components/Layout.jsx::FILE",
+      "target": "frontend/src/components/Layout.jsx::frontend/src/components/Layout.jsx:chunk_1"
+    },
+    {
+      "type": "CONTAINS",
+      "source": "frontend/src/components/Layout.jsx::FILE",
+      "target": "frontend/src/components/Layout.jsx::frontend/src/components/Layout.jsx:chunk_2"
+    },
+    {
+      "type": "CONTAINS",
+      "source": "frontend/src/components/Layout.jsx::FILE",
+      "target": "frontend/src/components/Layout.jsx::frontend/src/components/Layout.jsx:chunk_3"
+    },
+    {
+      "type": "CONTAINS",
+      "source": "frontend/src/components/Layout.jsx::FILE",
+      "target": "frontend/src/components/Layout.jsx::frontend/src/components/Layout.jsx:chunk_4"
+    },
+    {
+      "type": "CONTAINS",
+      "source": "frontend/src/components/Layout.jsx::FILE",
+      "target": "frontend/src/components/Layout.jsx::frontend/src/components/Layout.jsx:chunk_5"
+    },
+    {
+      "type": "CONTAINS",
+      "source": "frontend/src/components/Layout.jsx::FILE",
+      "target": "frontend/src/components/Layout.jsx::frontend/src/components/Layout.jsx:chunk_6"
+    },
+    {
+      "type": "CONTAINS",
+      "source": "frontend/src/components/RepoInspectorModal.jsx::FILE",
+      "target": "frontend/src/components/RepoInspectorModal.jsx::frontend/src/components/RepoInspectorModal.jsx:chunk_1"
+    },
+    {
+      "type": "CONTAINS",
+      "source": "frontend/src/components/RepoInspectorModal.jsx::FILE",
+      "target": "frontend/src/components/RepoInspectorModal.jsx::frontend/src/components/RepoInspectorModal.jsx:chunk_2"
+    },
+    {
+      "type": "CONTAINS",
+      "source": "frontend/src/components/RepoInspectorModal.jsx::FILE",
+      "target": "frontend/src/components/RepoInspectorModal.jsx::frontend/src/components/RepoInspectorModal.jsx:chunk_3"
+    },
+    {
+      "type": "CONTAINS",
+      "source": "frontend/src/components/RepoInspectorModal.jsx::FILE",
+      "target": "frontend/src/components/RepoInspectorModal.jsx::frontend/src/components/RepoInspectorModal.jsx:chunk_4"
+    },
+    {
+      "type": "CONTAINS",
+      "source": "frontend/src/components/RepoInspectorModal.jsx::FILE",
+      "target": "frontend/src/components/RepoInspectorModal.jsx::frontend/src/components/RepoInspectorModal.jsx:chunk_5"
+    },
+    {
+      "type": "CONTAINS",
+      "source": "frontend/src/components/RepoInspectorModal.jsx::FILE",
+      "target": "frontend/src/components/RepoInspectorModal.jsx::frontend/src/components/RepoInspectorModal.jsx:chunk_6"
+    },
+    {
+      "type": "CONTAINS",
+      "source": "frontend/src/components/RepoInspectorModal.jsx::FILE",
+      "target": "frontend/src/components/RepoInspectorModal.jsx::frontend/src/components/RepoInspectorModal.jsx:chunk_7"
+    },
+    {
+      "type": "CONTAINS",
+      "source": "frontend/src/components/ThinkingStep.jsx::FILE",
+      "target": "frontend/src/components/ThinkingStep.jsx::frontend/src/components/ThinkingStep.jsx:chunk_1"
+    },
+    {
+      "type": "CONTAINS",
+      "source": "frontend/src/components/ThinkingStep.jsx::FILE",
+      "target": "frontend/src/components/ThinkingStep.jsx::frontend/src/components/ThinkingStep.jsx:chunk_2"
+    },
+    {
+      "type": "CONTAINS",
+      "source": "frontend/src/components/IAMBadge.jsx::FILE",
+      "target": "frontend/src/components/IAMBadge.jsx::frontend/src/components/IAMBadge.jsx:chunk_1"
+    },
+    {
+      "type": "CONTAINS",
+      "source": "frontend/src/components/DashboardWidget.jsx::FILE",
+      "target": "frontend/src/components/DashboardWidget.jsx::frontend/src/components/DashboardWidget.jsx:chunk_1"
+    },
+    {
+      "type": "CONTAINS",
+      "source": "frontend/src/components/DashboardWidget.jsx::FILE",
+      "target": "frontend/src/components/DashboardWidget.jsx::frontend/src/components/DashboardWidget.jsx:chunk_2"
+    },
+    {
+      "type": "CONTAINS",
+      "source": "frontend/src/components/ActionCard.jsx::FILE",
+      "target": "frontend/src/components/ActionCard.jsx::frontend/src/components/ActionCard.jsx:chunk_1"
+    },
+    {
+      "type": "CONTAINS",
+      "source": "frontend/src/components/ActionCard.jsx::FILE",
+      "target": "frontend/src/components/ActionCard.jsx::frontend/src/components/ActionCard.jsx:chunk_2"
+    },
+    {
+      "type": "CONTAINS",
+      "source": "frontend/src/components/ActionCard.jsx::FILE",
+      "target": "frontend/src/components/ActionCard.jsx::frontend/src/components/ActionCard.jsx:chunk_3"
+    },
+    {
+      "type": "CONTAINS",
+      "source": "frontend/src/components/ConversationSidebar.jsx::FILE",
+      "target": "frontend/src/components/ConversationSidebar.jsx::frontend/src/components/ConversationSidebar.jsx:chunk_1"
+    },
+    {
+      "type": "CONTAINS",
+      "source": "frontend/src/components/ConversationSidebar.jsx::FILE",
+      "target": "frontend/src/components/ConversationSidebar.jsx::frontend/src/components/ConversationSidebar.jsx:chunk_2"
+    },
+    {
+      "type": "CONTAINS",
+      "source": "frontend/src/components/ConversationSidebar.jsx::FILE",
+      "target": "frontend/src/components/ConversationSidebar.jsx::frontend/src/components/ConversationSidebar.jsx:chunk_3"
+    },
+    {
+      "type": "CONTAINS",
+      "source": "frontend/src/components/ConversationSidebar.jsx::FILE",
+      "target": "frontend/src/components/ConversationSidebar.jsx::frontend/src/components/ConversationSidebar.jsx:chunk_4"
+    },
+    {
+      "type": "CONTAINS",
+      "source": "frontend/src/components/ConversationSidebar.jsx::FILE",
+      "target": "frontend/src/components/ConversationSidebar.jsx::frontend/src/components/ConversationSidebar.jsx:chunk_5"
+    },
+    {
+      "type": "CONTAINS",
+      "source": "frontend/src/components/ConversationSidebar.jsx::FILE",
+      "target": "frontend/src/components/ConversationSidebar.jsx::frontend/src/components/ConversationSidebar.jsx:chunk_6"
+    },
+    {
+      "type": "CONTAINS",
+      "source": "frontend/src/components/ConversationSidebar.jsx::FILE",
+      "target": "frontend/src/components/ConversationSidebar.jsx::frontend/src/components/ConversationSidebar.jsx:chunk_7"
+    },
+    {
+      "type": "CONTAINS",
+      "source": "frontend/src/components/ChatMessage.jsx::FILE",
+      "target": "frontend/src/components/ChatMessage.jsx::frontend/src/components/ChatMessage.jsx:chunk_1"
+    },
+    {
+      "type": "CONTAINS",
+      "source": "frontend/src/components/ChatMessage.jsx::FILE",
+      "target": "frontend/src/components/ChatMessage.jsx::frontend/src/components/ChatMessage.jsx:chunk_2"
+    },
+    {
+      "type": "CONTAINS",
+      "source": "frontend/src/components/ChatMessage.jsx::FILE",
+      "target": "frontend/src/components/ChatMessage.jsx::frontend/src/components/ChatMessage.jsx:chunk_3"
+    },
+    {
+      "type": "CONTAINS",
+      "source": "frontend/src/components/ChatMessage.jsx::FILE",
+      "target": "frontend/src/components/ChatMessage.jsx::frontend/src/components/ChatMessage.jsx:chunk_4"
+    },
+    {
+      "type": "CONTAINS",
+      "source": "frontend/src/components/ChatMessage.jsx::FILE",
+      "target": "frontend/src/components/ChatMessage.jsx::frontend/src/components/ChatMessage.jsx:chunk_5"
+    },
+    {
+      "type": "CONTAINS",
+      "source": "frontend/src/components/ChatMessage.jsx::FILE",
+      "target": "frontend/src/components/ChatMessage.jsx::frontend/src/components/ChatMessage.jsx:chunk_6"
+    },
+    {
+      "type": "CONTAINS",
+      "source": "frontend/src/components/ChatMessage.jsx::FILE",
+      "target": "frontend/src/components/ChatMessage.jsx::frontend/src/components/ChatMessage.jsx:chunk_7"
+    },
+    {
+      "type": "CONTAINS",
+      "source": "frontend/src/components/Sidebar.jsx::FILE",
+      "target": "frontend/src/components/Sidebar.jsx::frontend/src/components/Sidebar.jsx:chunk_1"
+    },
+    {
+      "type": "CONTAINS",
+      "source": "frontend/src/components/Sidebar.jsx::FILE",
+      "target": "frontend/src/components/Sidebar.jsx::frontend/src/components/Sidebar.jsx:chunk_2"
+    },
+    {
+      "type": "CONTAINS",
+      "source": "frontend/src/components/Sidebar.jsx::FILE",
+      "target": "frontend/src/components/Sidebar.jsx::frontend/src/components/Sidebar.jsx:chunk_3"
+    },
+    {
+      "type": "CONTAINS",
+      "source": "frontend/src/components/Sidebar.jsx::FILE",
+      "target": "frontend/src/components/Sidebar.jsx::frontend/src/components/Sidebar.jsx:chunk_4"
+    },
+    {
+      "type": "CONTAINS",
+      "source": "frontend/src/components/Sidebar.jsx::FILE",
+      "target": "frontend/src/components/Sidebar.jsx::frontend/src/components/Sidebar.jsx:chunk_5"
+    },
+    {
+      "type": "CONTAINS",
+      "source": "frontend/src/components/Sidebar.jsx::FILE",
+      "target": "frontend/src/components/Sidebar.jsx::frontend/src/components/Sidebar.jsx:chunk_6"
+    },
+    {
+      "type": "CONTAINS",
+      "source": "frontend/src/components/Sidebar.jsx::FILE",
+      "target": "frontend/src/components/Sidebar.jsx::frontend/src/components/Sidebar.jsx:chunk_7"
+    },
+    {
+      "type": "CONTAINS",
+      "source": "frontend/src/components/DocumentsPanel.jsx::FILE",
+      "target": "frontend/src/components/DocumentsPanel.jsx::frontend/src/components/DocumentsPanel.jsx:chunk_1"
+    },
+    {
+      "type": "CONTAINS",
+      "source": "frontend/src/components/DocumentsPanel.jsx::FILE",
+      "target": "frontend/src/components/DocumentsPanel.jsx::frontend/src/components/DocumentsPanel.jsx:chunk_2"
+    },
+    {
+      "type": "CONTAINS",
+      "source": "frontend/src/components/DocumentsPanel.jsx::FILE",
+      "target": "frontend/src/components/DocumentsPanel.jsx::frontend/src/components/DocumentsPanel.jsx:chunk_3"
+    },
+    {
+      "type": "CONTAINS",
+      "source": "frontend/src/components/DocumentsPanel.jsx::FILE",
+      "target": "frontend/src/components/DocumentsPanel.jsx::frontend/src/components/DocumentsPanel.jsx:chunk_4"
+    },
+    {
+      "type": "CONTAINS",
+      "source": "frontend/src/components/DocumentsPanel.jsx::FILE",
+      "target": "frontend/src/components/DocumentsPanel.jsx::frontend/src/components/DocumentsPanel.jsx:chunk_5"
+    },
+    {
+      "type": "CONTAINS",
+      "source": "frontend/src/components/DocumentsPanel.jsx::FILE",
+      "target": "frontend/src/components/DocumentsPanel.jsx::frontend/src/components/DocumentsPanel.jsx:chunk_6"
+    },
+    {
+      "type": "CONTAINS",
+      "source": "frontend/src/components/DocumentsPanel.jsx::FILE",
+      "target": "frontend/src/components/DocumentsPanel.jsx::frontend/src/components/DocumentsPanel.jsx:chunk_7"
+    },
+    {
+      "type": "CONTAINS",
+      "source": "frontend/src/components/DocumentsPanel.jsx::FILE",
+      "target": "frontend/src/components/DocumentsPanel.jsx::frontend/src/components/DocumentsPanel.jsx:chunk_8"
+    },
+    {
+      "type": "CONTAINS",
+      "source": "frontend/src/components/DocumentsPanel.jsx::FILE",
+      "target": "frontend/src/components/DocumentsPanel.jsx::frontend/src/components/DocumentsPanel.jsx:chunk_9"
+    },
+    {
+      "type": "CONTAINS",
+      "source": "frontend/src/components/DocumentsPanel.jsx::FILE",
+      "target": "frontend/src/components/DocumentsPanel.jsx::frontend/src/components/DocumentsPanel.jsx:chunk_10"
+    },
+    {
+      "type": "CONTAINS",
+      "source": "frontend/src/components/DocumentsPanel.jsx::FILE",
+      "target": "frontend/src/components/DocumentsPanel.jsx::frontend/src/components/DocumentsPanel.jsx:chunk_11"
+    },
+    {
+      "type": "CONTAINS",
+      "source": "frontend/src/components/AuditLogPanel.jsx::FILE",
+      "target": "frontend/src/components/AuditLogPanel.jsx::frontend/src/components/AuditLogPanel.jsx:chunk_1"
+    },
+    {
+      "type": "CONTAINS",
+      "source": "frontend/src/components/AuditLogPanel.jsx::FILE",
+      "target": "frontend/src/components/AuditLogPanel.jsx::frontend/src/components/AuditLogPanel.jsx:chunk_2"
+    },
+    {
+      "type": "CONTAINS",
+      "source": "frontend/src/components/AuditLogPanel.jsx::FILE",
+      "target": "frontend/src/components/AuditLogPanel.jsx::frontend/src/components/AuditLogPanel.jsx:chunk_3"
+    },
+    {
+      "type": "CONTAINS",
+      "source": "frontend/src/views/ChatView.jsx::FILE",
+      "target": "frontend/src/views/ChatView.jsx::frontend/src/views/ChatView.jsx:chunk_1"
+    },
+    {
+      "type": "CONTAINS",
+      "source": "frontend/src/views/ChatView.jsx::FILE",
+      "target": "frontend/src/views/ChatView.jsx::frontend/src/views/ChatView.jsx:chunk_2"
+    },
+    {
+      "type": "CONTAINS",
+      "source": "frontend/src/views/ChatView.jsx::FILE",
+      "target": "frontend/src/views/ChatView.jsx::frontend/src/views/ChatView.jsx:chunk_3"
+    },
+    {
+      "type": "CONTAINS",
+      "source": "frontend/src/views/ChatView.jsx::FILE",
+      "target": "frontend/src/views/ChatView.jsx::frontend/src/views/ChatView.jsx:chunk_4"
+    },
+    {
+      "type": "CONTAINS",
+      "source": "frontend/src/views/ChatView.jsx::FILE",
+      "target": "frontend/src/views/ChatView.jsx::frontend/src/views/ChatView.jsx:chunk_5"
+    },
+    {
+      "type": "CONTAINS",
+      "source": "frontend/src/views/ChatView.jsx::FILE",
+      "target": "frontend/src/views/ChatView.jsx::frontend/src/views/ChatView.jsx:chunk_6"
+    },
+    {
+      "type": "CONTAINS",
+      "source": "frontend/src/views/ChatView.jsx::FILE",
+      "target": "frontend/src/views/ChatView.jsx::frontend/src/views/ChatView.jsx:chunk_7"
+    },
+    {
+      "type": "CONTAINS",
+      "source": "frontend/src/views/ChatView.jsx::FILE",
+      "target": "frontend/src/views/ChatView.jsx::frontend/src/views/ChatView.jsx:chunk_8"
+    },
+    {
+      "type": "CONTAINS",
+      "source": "frontend/src/views/ChatView.jsx::FILE",
+      "target": "frontend/src/views/ChatView.jsx::frontend/src/views/ChatView.jsx:chunk_9"
+    },
+    {
+      "type": "CONTAINS",
+      "source": "frontend/src/views/ChatView.jsx::FILE",
+      "target": "frontend/src/views/ChatView.jsx::frontend/src/views/ChatView.jsx:chunk_10"
+    },
+    {
+      "type": "CONTAINS",
+      "source": "frontend/src/views/ChatView.jsx::FILE",
+      "target": "frontend/src/views/ChatView.jsx::frontend/src/views/ChatView.jsx:chunk_11"
+    },
+    {
+      "type": "CONTAINS",
+      "source": "frontend/src/views/ChatView.jsx::FILE",
+      "target": "frontend/src/views/ChatView.jsx::frontend/src/views/ChatView.jsx:chunk_12"
+    },
+    {
+      "type": "CONTAINS",
+      "source": "frontend/src/views/ChatView.jsx::FILE",
+      "target": "frontend/src/views/ChatView.jsx::frontend/src/views/ChatView.jsx:chunk_13"
+    },
+    {
+      "type": "CONTAINS",
+      "source": "frontend/src/views/ChatView.jsx::FILE",
+      "target": "frontend/src/views/ChatView.jsx::frontend/src/views/ChatView.jsx:chunk_14"
+    },
+    {
+      "type": "CONTAINS",
+      "source": "frontend/src/views/ChatView.jsx::FILE",
+      "target": "frontend/src/views/ChatView.jsx::frontend/src/views/ChatView.jsx:chunk_15"
+    },
+    {
+      "type": "CONTAINS",
+      "source": "frontend/src/views/LiveOpsView.jsx::FILE",
+      "target": "frontend/src/views/LiveOpsView.jsx::frontend/src/views/LiveOpsView.jsx:chunk_1"
+    },
+    {
+      "type": "CONTAINS",
+      "source": "frontend/src/views/LiveOpsView.jsx::FILE",
+      "target": "frontend/src/views/LiveOpsView.jsx::frontend/src/views/LiveOpsView.jsx:chunk_2"
+    },
+    {
+      "type": "CONTAINS",
+      "source": "frontend/src/views/LiveOpsView.jsx::FILE",
+      "target": "frontend/src/views/LiveOpsView.jsx::frontend/src/views/LiveOpsView.jsx:chunk_3"
+    },
+    {
+      "type": "CONTAINS",
+      "source": "frontend/src/views/LiveOpsView.jsx::FILE",
+      "target": "frontend/src/views/LiveOpsView.jsx::frontend/src/views/LiveOpsView.jsx:chunk_4"
+    },
+    {
+      "type": "CONTAINS",
+      "source": "frontend/src/views/LiveOpsView.jsx::FILE",
+      "target": "frontend/src/views/LiveOpsView.jsx::frontend/src/views/LiveOpsView.jsx:chunk_5"
+    },
+    {
+      "type": "CONTAINS",
+      "source": "frontend/src/views/LiveOpsView.jsx::FILE",
+      "target": "frontend/src/views/LiveOpsView.jsx::frontend/src/views/LiveOpsView.jsx:chunk_6"
+    },
+    {
+      "type": "CONTAINS",
+      "source": "frontend/src/views/LiveOpsView.jsx::FILE",
+      "target": "frontend/src/views/LiveOpsView.jsx::frontend/src/views/LiveOpsView.jsx:chunk_7"
+    },
+    {
+      "type": "CONTAINS",
+      "source": "frontend/src/views/LiveOpsView.jsx::FILE",
+      "target": "frontend/src/views/LiveOpsView.jsx::frontend/src/views/LiveOpsView.jsx:chunk_8"
+    },
+    {
+      "type": "CONTAINS",
+      "source": "frontend/src/views/LiveOpsView.jsx::FILE",
+      "target": "frontend/src/views/LiveOpsView.jsx::frontend/src/views/LiveOpsView.jsx:chunk_9"
+    },
+    {
+      "type": "CONTAINS",
+      "source": "frontend/src/views/LiveOpsView.jsx::FILE",
+      "target": "frontend/src/views/LiveOpsView.jsx::frontend/src/views/LiveOpsView.jsx:chunk_10"
+    },
+    {
+      "type": "CONTAINS",
+      "source": "frontend/src/views/LiveOpsView.jsx::FILE",
+      "target": "frontend/src/views/LiveOpsView.jsx::frontend/src/views/LiveOpsView.jsx:chunk_11"
+    },
+    {
+      "type": "CONTAINS",
+      "source": "frontend/src/views/LiveOpsView.jsx::FILE",
+      "target": "frontend/src/views/LiveOpsView.jsx::frontend/src/views/LiveOpsView.jsx:chunk_12"
+    },
+    {
+      "type": "CONTAINS",
+      "source": "frontend/src/views/LiveOpsView.jsx::FILE",
+      "target": "frontend/src/views/LiveOpsView.jsx::frontend/src/views/LiveOpsView.jsx:chunk_13"
+    },
+    {
+      "type": "CONTAINS",
+      "source": "frontend/src/views/LiveOpsView.jsx::FILE",
+      "target": "frontend/src/views/LiveOpsView.jsx::frontend/src/views/LiveOpsView.jsx:chunk_14"
+    },
+    {
+      "type": "CONTAINS",
+      "source": "frontend/src/views/LiveOpsView.jsx::FILE",
+      "target": "frontend/src/views/LiveOpsView.jsx::frontend/src/views/LiveOpsView.jsx:chunk_15"
+    },
+    {
+      "type": "CONTAINS",
+      "source": "frontend/src/views/LiveOpsView.jsx::FILE",
+      "target": "frontend/src/views/LiveOpsView.jsx::frontend/src/views/LiveOpsView.jsx:chunk_16"
+    },
+    {
+      "type": "CONTAINS",
+      "source": "frontend/src/views/LiveOpsView.jsx::FILE",
+      "target": "frontend/src/views/LiveOpsView.jsx::frontend/src/views/LiveOpsView.jsx:chunk_17"
+    },
+    {
+      "type": "CONTAINS",
+      "source": "frontend/src/views/LiveOpsView.jsx::FILE",
+      "target": "frontend/src/views/LiveOpsView.jsx::frontend/src/views/LiveOpsView.jsx:chunk_18"
+    },
+    {
+      "type": "CONTAINS",
+      "source": "frontend/src/views/LiveOpsView.jsx::FILE",
+      "target": "frontend/src/views/LiveOpsView.jsx::frontend/src/views/LiveOpsView.jsx:chunk_19"
+    },
+    {
+      "type": "CONTAINS",
+      "source": "frontend/src/views/LiveOpsView.jsx::FILE",
+      "target": "frontend/src/views/LiveOpsView.jsx::frontend/src/views/LiveOpsView.jsx:chunk_20"
+    },
+    {
+      "type": "CONTAINS",
+      "source": "frontend/src/views/LiveOpsView.jsx::FILE",
+      "target": "frontend/src/views/LiveOpsView.jsx::frontend/src/views/LiveOpsView.jsx:chunk_21"
+    },
+    {
+      "type": "CONTAINS",
+      "source": "frontend/src/views/IntegrationsView.jsx::FILE",
+      "target": "frontend/src/views/IntegrationsView.jsx::frontend/src/views/IntegrationsView.jsx:chunk_1"
+    },
+    {
+      "type": "CONTAINS",
+      "source": "frontend/src/views/IntegrationsView.jsx::FILE",
+      "target": "frontend/src/views/IntegrationsView.jsx::frontend/src/views/IntegrationsView.jsx:chunk_2"
+    },
+    {
+      "type": "CONTAINS",
+      "source": "frontend/src/views/IntegrationsView.jsx::FILE",
+      "target": "frontend/src/views/IntegrationsView.jsx::frontend/src/views/IntegrationsView.jsx:chunk_3"
+    },
+    {
+      "type": "CONTAINS",
+      "source": "frontend/src/views/IntegrationsView.jsx::FILE",
+      "target": "frontend/src/views/IntegrationsView.jsx::frontend/src/views/IntegrationsView.jsx:chunk_4"
+    },
+    {
+      "type": "CONTAINS",
+      "source": "frontend/src/views/RepositoriesView.jsx::FILE",
+      "target": "frontend/src/views/RepositoriesView.jsx::frontend/src/views/RepositoriesView.jsx:chunk_1"
+    },
+    {
+      "type": "CONTAINS",
+      "source": "frontend/src/views/RepositoriesView.jsx::FILE",
+      "target": "frontend/src/views/RepositoriesView.jsx::frontend/src/views/RepositoriesView.jsx:chunk_2"
+    },
+    {
+      "type": "CONTAINS",
+      "source": "frontend/src/views/RepositoriesView.jsx::FILE",
+      "target": "frontend/src/views/RepositoriesView.jsx::frontend/src/views/RepositoriesView.jsx:chunk_3"
+    },
+    {
+      "type": "CONTAINS",
+      "source": "frontend/src/views/RepositoriesView.jsx::FILE",
+      "target": "frontend/src/views/RepositoriesView.jsx::frontend/src/views/RepositoriesView.jsx:chunk_4"
+    },
+    {
+      "type": "CONTAINS",
+      "source": "frontend/src/views/RepositoriesView.jsx::FILE",
+      "target": "frontend/src/views/RepositoriesView.jsx::frontend/src/views/RepositoriesView.jsx:chunk_5"
+    },
+    {
+      "type": "CONTAINS",
+      "source": "frontend/src/views/RepositoriesView.jsx::FILE",
+      "target": "frontend/src/views/RepositoriesView.jsx::frontend/src/views/RepositoriesView.jsx:chunk_6"
+    },
+    {
+      "type": "CONTAINS",
+      "source": "frontend/src/views/RepositoriesView.jsx::FILE",
+      "target": "frontend/src/views/RepositoriesView.jsx::frontend/src/views/RepositoriesView.jsx:chunk_7"
+    },
+    {
+      "type": "CONTAINS",
+      "source": "frontend/src/views/DocumentsView.jsx::FILE",
+      "target": "frontend/src/views/DocumentsView.jsx::frontend/src/views/DocumentsView.jsx:chunk_1"
+    },
+    {
+      "type": "CONTAINS",
+      "source": "frontend/src/views/DocumentsView.jsx::FILE",
+      "target": "frontend/src/views/DocumentsView.jsx::frontend/src/views/DocumentsView.jsx:chunk_2"
+    },
+    {
+      "type": "CONTAINS",
+      "source": "frontend/src/views/DocumentsView.jsx::FILE",
+      "target": "frontend/src/views/DocumentsView.jsx::frontend/src/views/DocumentsView.jsx:chunk_3"
+    },
+    {
+      "type": "CONTAINS",
+      "source": "frontend/src/views/DocumentsView.jsx::FILE",
+      "target": "frontend/src/views/DocumentsView.jsx::frontend/src/views/DocumentsView.jsx:chunk_4"
+    },
+    {
+      "type": "CONTAINS",
+      "source": "frontend/src/views/DocumentsView.jsx::FILE",
+      "target": "frontend/src/views/DocumentsView.jsx::frontend/src/views/DocumentsView.jsx:chunk_5"
+    },
+    {
+      "type": "CONTAINS",
+      "source": "frontend/src/views/DocumentsView.jsx::FILE",
+      "target": "frontend/src/views/DocumentsView.jsx::frontend/src/views/DocumentsView.jsx:chunk_6"
+    },
+    {
+      "type": "CONTAINS",
+      "source": "frontend/src/views/DocumentsView.jsx::FILE",
+      "target": "frontend/src/views/DocumentsView.jsx::frontend/src/views/DocumentsView.jsx:chunk_7"
+    },
+    {
+      "type": "CONTAINS",
+      "source": "frontend/src/views/DocumentsView.jsx::FILE",
+      "target": "frontend/src/views/DocumentsView.jsx::frontend/src/views/DocumentsView.jsx:chunk_8"
+    },
+    {
+      "type": "CONTAINS",
+      "source": "frontend/src/views/DocumentsView.jsx::FILE",
+      "target": "frontend/src/views/DocumentsView.jsx::frontend/src/views/DocumentsView.jsx:chunk_9"
+    },
+    {
+      "type": "CONTAINS",
+      "source": "frontend/src/views/IAMConfigView.jsx::FILE",
+      "target": "frontend/src/views/IAMConfigView.jsx::frontend/src/views/IAMConfigView.jsx:chunk_1"
+    },
+    {
+      "type": "CONTAINS",
+      "source": "frontend/src/views/IAMConfigView.jsx::FILE",
+      "target": "frontend/src/views/IAMConfigView.jsx::frontend/src/views/IAMConfigView.jsx:chunk_2"
+    },
+    {
+      "type": "CONTAINS",
+      "source": "frontend/src/views/IAMConfigView.jsx::FILE",
+      "target": "frontend/src/views/IAMConfigView.jsx::frontend/src/views/IAMConfigView.jsx:chunk_3"
+    },
+    {
+      "type": "CONTAINS",
+      "source": "frontend/src/views/IAMConfigView.jsx::FILE",
+      "target": "frontend/src/views/IAMConfigView.jsx::frontend/src/views/IAMConfigView.jsx:chunk_4"
+    },
+    {
+      "type": "CONTAINS",
+      "source": "frontend/src/views/IAMConfigView.jsx::FILE",
+      "target": "frontend/src/views/IAMConfigView.jsx::frontend/src/views/IAMConfigView.jsx:chunk_5"
+    },
+    {
+      "type": "CONTAINS",
+      "source": "frontend/src/views/IAMConfigView.jsx::FILE",
+      "target": "frontend/src/views/IAMConfigView.jsx::frontend/src/views/IAMConfigView.jsx:chunk_6"
+    },
+    {
+      "type": "CONTAINS",
+      "source": "frontend/src/views/IAMConfigView.jsx::FILE",
+      "target": "frontend/src/views/IAMConfigView.jsx::frontend/src/views/IAMConfigView.jsx:chunk_7"
+    },
+    {
+      "type": "CONTAINS",
+      "source": "frontend/src/services/api.js::FILE",
+      "target": "frontend/src/services/api.js::frontend/src/services/api.js:chunk_1"
+    },
+    {
+      "type": "CONTAINS",
+      "source": "frontend/src/services/api.js::FILE",
+      "target": "frontend/src/services/api.js::frontend/src/services/api.js:chunk_2"
+    },
+    {
+      "type": "CONTAINS",
+      "source": "frontend/src/services/api.js::FILE",
+      "target": "frontend/src/services/api.js::frontend/src/services/api.js:chunk_3"
+    },
+    {
+      "type": "CONTAINS",
+      "source": "frontend/src/services/api.js::FILE",
+      "target": "frontend/src/services/api.js::frontend/src/services/api.js:chunk_4"
+    },
+    {
+      "type": "CONTAINS",
+      "source": "frontend/src/services/api.js::FILE",
+      "target": "frontend/src/services/api.js::frontend/src/services/api.js:chunk_5"
+    },
+    {
+      "type": "CONTAINS",
+      "source": "frontend/src/services/api.js::FILE",
+      "target": "frontend/src/services/api.js::frontend/src/services/api.js:chunk_6"
+    },
+    {
+      "type": "CONTAINS",
+      "source": "frontend/src/services/api.js::FILE",
+      "target": "frontend/src/services/api.js::frontend/src/services/api.js:chunk_7"
+    },
+    {
+      "type": "CONTAINS",
+      "source": "frontend/src/services/api.js::FILE",
+      "target": "frontend/src/services/api.js::frontend/src/services/api.js:chunk_8"
+    },
+    {
+      "type": "CONTAINS",
+      "source": "frontend/src/services/api.js::FILE",
+      "target": "frontend/src/services/api.js::frontend/src/services/api.js:chunk_9"
+    }
+  ]
+}

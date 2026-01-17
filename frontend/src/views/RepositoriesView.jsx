@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { GitBranch, Plus, Trash2, Eye, RefreshCw, Loader2 } from 'lucide-react';
+import { GitBranch, Plus, Trash2, Eye, RefreshCw, Loader2, X } from 'lucide-react';
 import api from '../services/api';
 import RepoInspectorModal from '../components/RepoInspectorModal';
+import AddRepoModal from '../components/AddRepoModal';
 
 const RepositoriesView = () => {
     const [repos, setRepos] = useState([]);
     const [loading, setLoading] = useState(true);
     const [inspectorOpen, setInspectorOpen] = useState(false);
+    const [addRepoOpen, setAddRepoOpen] = useState(false);
     const [selectedRepo, setSelectedRepo] = useState(null);
 
     const demoRepos = [
@@ -17,26 +19,34 @@ const RepositoriesView = () => {
 
     useEffect(() => {
         loadRepos();
+        // Poll for updates every 3 seconds
+        const interval = setInterval(loadRepos, 3000);
+        return () => clearInterval(interval);
     }, []);
 
     const loadRepos = async () => {
-        setLoading(true);
+        // Don't show full loading spinner on poll updates
+        if (repos.length === 0) setLoading(true);
+
         try {
             const res = await api.get('/api/github/repos', { headers: { 'x-iam-role': 'sde_ii' } });
-            if (res.data.repos.length === 0) {
-                setRepos(demoRepos);
+            const repoData = Array.isArray(res.data) ? res.data : (res.data.repos || []);
+
+            if (repoData.length === 0) {
+                setRepos([]);
             } else {
-                setRepos(res.data.repos.map((r, idx) => ({
-                    id: r.name || `repo_${idx}`,
+                setRepos(repoData.map((r) => ({
+                    id: r.id,
                     name: r.name,
-                    lang: 'UNKNOWN',
-                    nodes: '1.2k',
-                    updated: 'Just now',
-                    density: 'medium'
+                    lang: r.language || 'UNKNOWN',
+                    nodes: r.nodes_count || 0,
+                    updated: r.last_indexed_at ? new Date(r.last_indexed_at).toLocaleTimeString() : 'N/A',
+                    status: r.status || 'ready',
+                    error: r.error_message
                 })));
             }
         } catch (e) {
-            setRepos(demoRepos);
+            console.error("Failed to load repos", e);
         } finally {
             setLoading(false);
         }
@@ -55,7 +65,10 @@ const RepositoriesView = () => {
                         <h1 className="heading-1">Source Code Repositories</h1>
                         <p className="heading-2 text-slate-400">Manage AST parsing and Tree-sitter indexing for connected codebases.</p>
                     </div>
-                    <button className="px-4 py-2 bg-purple-600 hover:bg-purple-500 text-white rounded-lg font-medium flex items-center gap-2 shadow-lg shadow-purple-500/20 transition-all">
+                    <button
+                        onClick={() => setAddRepoOpen(true)}
+                        className="px-4 py-2 bg-purple-600 hover:bg-purple-500 text-white rounded-lg font-medium flex items-center gap-2 shadow-lg shadow-purple-500/20 transition-all"
+                    >
                         <Plus size={18} />
                         <span>Add Repository</span>
                     </button>
@@ -70,61 +83,56 @@ const RepositoriesView = () => {
                         {repos.map((repo, idx) => (
                             <div key={idx} className="glass-card p-5 flex items-center justify-between group">
                                 <div className="flex items-center gap-5">
-                                    <div className="w-12 h-12 rounded-xl bg-purple-900/30 border border-purple-500/30 flex items-center justify-center">
-                                        <GitBranch size={24} className="text-purple-400" />
+                                    <div className={`w-12 h-12 rounded-xl border flex items-center justify-center
+                                        ${repo.status === 'ready' ? 'bg-purple-900/30 border-purple-500/30' :
+                                            repo.status === 'error' ? 'bg-red-900/30 border-red-500/30' :
+                                                'bg-blue-900/30 border-blue-500/30 animate-pulse'}`}>
+                                        {repo.status === 'ready' ? <GitBranch size={24} className="text-purple-400" /> :
+                                            repo.status === 'error' ? <X size={24} className="text-red-400" /> :
+                                                <Loader2 size={24} className="text-blue-400 animate-spin" />}
                                     </div>
                                     <div>
                                         <div className="flex items-center gap-3">
                                             <h3 className="text-lg font-bold text-slate-100 group-hover:text-purple-400 transition-colors">
                                                 {repo.name}
                                             </h3>
-                                            <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-slate-800 border border-slate-700 text-slate-400 tracking-wider">
-                                                {repo.lang}
+                                            <span className={`px-2 py-0.5 rounded text-[10px] font-bold border tracking-wider uppercase
+                                                ${repo.status === 'ready' ? 'bg-slate-800 border-slate-700 text-slate-400' :
+                                                    repo.status === 'error' ? 'bg-red-900/20 border-red-500/30 text-red-400' :
+                                                        'bg-blue-900/20 border-blue-500/30 text-blue-400'
+                                                }`}>
+                                                {repo.status}
                                             </span>
                                         </div>
                                         <div className="flex items-center gap-4 text-xs text-slate-500 mt-1.5 font-mono">
-                                            <div className="flex items-center gap-1.5">
-                                                <GitBranch size={12} />
-                                                <span>{repo.nodes} AST Nodes</span>
-                                            </div>
-                                            <div className="flex items-center gap-1.5">
-                                                <RefreshCw size={12} />
-                                                <span>Updated {repo.updated}</span>
-                                            </div>
+                                            {repo.status === 'error' ? (
+                                                <span className="text-red-400">{repo.error || "Unknown Error"}</span>
+                                            ) : (
+                                                <>
+                                                    <div className="flex items-center gap-1.5">
+                                                        <GitBranch size={12} />
+                                                        <span>{repo.nodes} AST Nodes</span>
+                                                    </div>
+                                                    <div className="flex items-center gap-1.5">
+                                                        <RefreshCw size={12} />
+                                                        <span>Updated {repo.updated}</span>
+                                                    </div>
+                                                </>
+                                            )}
                                         </div>
                                     </div>
                                 </div>
 
-                                {/* Visualization Area */}
-                                <div className="flex items-center gap-8">
-                                    <div className="hidden lg:block text-right">
-                                        <div className="flex items-end gap-[2px] h-8 mb-1">
-                                            {[...Array(8)].map((_, i) => (
-                                                <div
-                                                    key={i}
-                                                    className="w-1.5 rounded-t-sm bg-emerald-500/80"
-                                                    style={{ height: `${Math.random() * 100}%`, opacity: 0.5 + (i * 0.05) }}
-                                                />
-                                            ))}
-                                        </div>
-                                        <span className="text-[10px] text-slate-600 font-bold uppercase tracking-wider">Tree Density</span>
-                                    </div>
-
-                                    <div className="flex items-center gap-2">
-                                        <button className="p-2 text-slate-500 hover:text-white hover:bg-slate-800 rounded-lg transition-colors">
-                                            <RefreshCw size={18} />
-                                        </button>
-                                        <button
-                                            onClick={() => handleOpenInspector(repo)}
-                                            className="p-2 text-slate-500 hover:text-purple-400 hover:bg-purple-900/20 rounded-lg transition-colors"
-                                            title="Inspect Repository"
-                                        >
-                                            <Eye size={18} />
-                                        </button>
-                                        <button className="p-2 text-slate-500 hover:text-red-400 hover:bg-red-900/20 rounded-lg transition-colors">
-                                            <Trash2 size={18} />
-                                        </button>
-                                    </div>
+                                {/* Actions */}
+                                <div className="flex items-center gap-2">
+                                    <button
+                                        onClick={() => handleOpenInspector(repo)}
+                                        disabled={repo.status !== 'ready'}
+                                        className="p-2 text-slate-500 hover:text-purple-400 hover:bg-purple-900/20 rounded-lg transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
+                                        title="Inspect Repository"
+                                    >
+                                        <Eye size={18} />
+                                    </button>
                                 </div>
                             </div>
                         ))}
@@ -138,6 +146,13 @@ const RepositoriesView = () => {
                 onClose={() => setInspectorOpen(false)}
                 repoId={selectedRepo?.id}
                 repoName={selectedRepo?.name}
+            />
+
+            {/* Add Repo Modal */}
+            <AddRepoModal
+                isOpen={addRepoOpen}
+                onClose={() => setAddRepoOpen(false)}
+                onAdded={loadRepos}
             />
         </>
     );

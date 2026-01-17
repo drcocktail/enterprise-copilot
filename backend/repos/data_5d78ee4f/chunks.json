@@ -1,0 +1,138 @@
+[
+  {
+    "id": "fastLM_README.md_README.md:chunk_1_ed39af10",
+    "text": "# CogAI4Sci - Custom Llama 3.2 Implementation\n\nA high-performance, from-scratch implementation of Llama 3.2 (1B/3B) with instant startup times and optimized inference.\n\n## \ud83d\ude80 Features\n\n- **From-scratch implementation** of Llama 3.2 architecture\n- **Instant startup** after first load (similar to Ollama) - 17,000x speedup\n- **High-performance inference** - 17+ tokens/second on Apple Silicon\n- **Multiple model sizes** - 1B and 3B parameter variants\n- **Optimized for Apple Silicon** with MPS acceleration\n- **KV caching** for efficient generation\n- **Clean, educational code** based on Sebastian Raschka's \"Build a Large Language Model From Scratch\"\n\n## \ud83d\udcca Performance\n\n| Metric | Performance |\n|--------|-------------|\n| **Startup Time** | 0.000s (after first load) |\n| **First Load** | ~20-25s |\n| **Generation Speed** | 17-25 tokens/second |\n| **Memory Usage** | ~6-7GB for 3B model |\n\n## \ud83d\udd27 Installation",
+    "metadata": {
+      "type": "code",
+      "chunk_type": "code_block",
+      "name": "README.md:chunk_1",
+      "file_path": "README.md",
+      "language": "markdown",
+      "repo_name": "fastLM",
+      "user_id": "sde_ii",
+      "start_line": 0,
+      "end_line": 0,
+      "char_count": 905,
+      "ingested_at": "2026-01-17T11:47:14.999379"
+    }
+  },
+  {
+    "id": "fastLM_README.md_README.md:chunk_2_97f77012",
+    "text": "```bash\n# Clone the repository\ngit clone https://github.com/yourusername/cogai4sci.git\ncd cogai4sci\n\n# Install dependencies\npip install torch safetensors tiktoken huggingface_hub blobfile\n```\n\n## \ud83c\udfc3 Quick Start\n\n### FastLLM - Instant Startup Version\n\n```python\nfrom fast_llm import FastLLM\n\n# Initialize model - first time loads model, subsequent times are instant!\nmodel = FastLLM(\"meta-llama/Llama-3.2-1B-Instruct\", use_float16=True)\n\n# Generate text with streaming\nprompt = \"What is the future of AI?\"\nprint(prompt, end=\"\")\n\nfor token in model.generate(\n    prompt, \n    max_new_tokens=100,\n    temperature=0.8,\n    top_k=40,\n    use_kv_cache=True\n):\n    print(token, end=\"\", flush=True)\n```\n\n### Jupyter Notebook Usage\n\nOpen `comprehensive_llama_demo.ipynb` for a complete interactive guide with all features, benchmarks, and educational content.\n\n## \ud83d\udcc1 Project Structure",
+    "metadata": {
+      "type": "code",
+      "chunk_type": "code_block",
+      "name": "README.md:chunk_2",
+      "file_path": "README.md",
+      "language": "markdown",
+      "repo_name": "fastLM",
+      "user_id": "sde_ii",
+      "start_line": 0,
+      "end_line": 0,
+      "char_count": 873,
+      "ingested_at": "2026-01-17T11:47:14.999405"
+    }
+  },
+  {
+    "id": "fastLM_README.md_README.md:chunk_3_3f77b631",
+    "text": "```\ncogai4sci/\n\u251c\u2500\u2500 fast_llm.py                    # Main FastLLM class with instant startup\n\u251c\u2500\u2500 comprehensive_llama_demo.ipynb # Complete interactive demo notebook\n\u2514\u2500\u2500 README.md                      # This documentation\n```\n\n## \ud83d\udd2c Key Implementation\n\n### FastLLM (`fast_llm.py`)\n- **Class-level model caching** for instant subsequent loads (similar to Ollama)\n- **Optimized weight loading** for both 1B and 3B models\n- **Streaming token generation** with proper tokenization\n- **KV cache optimization** for faster inference\n- **Complete architecture** including RoPE, GroupedQueryAttention, FeedForward\n- **Proper dtype handling** for Apple Silicon compatibility\n- **Comprehensive tokenizer** with special token support\n\n## \ud83e\udde0 Architecture Details",
+    "metadata": {
+      "type": "code",
+      "chunk_type": "code_block",
+      "name": "README.md:chunk_3",
+      "file_path": "README.md",
+      "language": "markdown",
+      "repo_name": "fastLM",
+      "user_id": "sde_ii",
+      "start_line": 0,
+      "end_line": 0,
+      "char_count": 745,
+      "ingested_at": "2026-01-17T11:47:14.999411"
+    }
+  },
+  {
+    "id": "fastLM_README.md_README.md:chunk_4_47632ef2",
+    "text": "### Model Architecture\n- **Transformer-based** with grouped query attention\n- **RoPE (Rotary Position Embedding)** with proper scaling\n- **SwiGLU activation** in feed-forward networks\n- **RMSNorm** for layer normalization\n- **Weight tying** between embedding and output layers\n\n### Optimizations\n- **Mixed precision** (float16/bfloat16) for memory efficiency\n- **KV caching** for faster autoregressive generation\n- **Repetition penalty** with sliding window\n- **Top-k sampling** for better text quality\n- **MPS acceleration** on Apple Silicon\n\n## \ud83d\udd27 Technical Fixes\n\n### Issues Resolved\n1. **Italian text generation bug** - Fixed tokenizer chat mode triggering\n2. **3B model loading** - Added support for multi-file safetensors\n3. **Performance optimization** - Achieved 17+ tokens/second\n4. **Memory efficiency** - Reduced memory usage with proper dtype handling\n5. **Startup time** - Implemented model caching for instant subsequent loads\n\n## \ud83d\udcc8 Benchmarks",
+    "metadata": {
+      "type": "code",
+      "chunk_type": "code_block",
+      "name": "README.md:chunk_4",
+      "file_path": "README.md",
+      "language": "markdown",
+      "repo_name": "fastLM",
+      "user_id": "sde_ii",
+      "start_line": 0,
+      "end_line": 0,
+      "char_count": 956,
+      "ingested_at": "2026-01-17T11:47:14.999417"
+    }
+  },
+  {
+    "id": "fastLM_README.md_README.md:chunk_5_74cff6da",
+    "text": "All benchmarks, tests, and demonstrations are included in the comprehensive notebook:\n```bash\njupyter notebook comprehensive_llama_demo.ipynb\n```\n\n## \ud83c\udfaf Use Cases\n\n- **Educational purposes** - Learn LLM internals\n- **Research experiments** - Modify architecture easily\n- **Local inference** - Run models without internet\n- **Performance testing** - Benchmark different configurations\n- **Prototype development** - Quick iteration on LLM applications\n\n## \ud83e\udd1d Contributing\n\nThis project is based on educational materials from Sebastian Raschka's \"Build a Large Language Model From Scratch\". Contributions welcome!\n\n## \ud83d\udcda References\n\n- [Build a Large Language Model From Scratch](http://mng.bz/orYv) by Sebastian Raschka\n- [Llama 3.2 Model Card](https://huggingface.co/meta-llama/Llama-3.2-1B-Instruct)\n- [RoPE: Rotary Position Embedding](https://arxiv.org/abs/2104.09864)\n\n## \ud83d\udcc4 License\n\nThis project is released under the Apache 2.0 License. See [LICENSE](LICENSE) for details.\n\n## \u26a1 Quick Commands",
+    "metadata": {
+      "type": "code",
+      "chunk_type": "code_block",
+      "name": "README.md:chunk_5",
+      "file_path": "README.md",
+      "language": "markdown",
+      "repo_name": "fastLM",
+      "user_id": "sde_ii",
+      "start_line": 0,
+      "end_line": 0,
+      "char_count": 992,
+      "ingested_at": "2026-01-17T11:47:14.999421"
+    }
+  },
+  {
+    "id": "fastLM_README.md_README.md:chunk_6_cd903b5b",
+    "text": "```bash\n# Complete interactive demo with all features\njupyter notebook comprehensive_llama_demo.ipynb\n\n# Quick Python usage\npython -c \"from fast_llm import FastLLM; model = FastLLM('meta-llama/Llama-3.2-1B-Instruct'); print(''.join(model.generate('Hello world', max_new_tokens=20)))\"\n```\n\n---\n\n**Note**: First model load requires downloading weights from Hugging Face (~2.5GB for 3B model). Subsequent loads are instant thanks to our caching system! ",
+    "metadata": {
+      "type": "code",
+      "chunk_type": "code_block",
+      "name": "README.md:chunk_6",
+      "file_path": "README.md",
+      "language": "markdown",
+      "repo_name": "fastLM",
+      "user_id": "sde_ii",
+      "start_line": 0,
+      "end_line": 0,
+      "char_count": 450,
+      "ingested_at": "2026-01-17T11:47:14.999426"
+    }
+  },
+  {
+    "id": "fastLM_fast_llm.py_fast_llm.py:chunk_1_cb743686",
+    "text": "import torch\nimport torch.nn as nn\nfrom transformers import AutoConfig\nimport os\nfrom pathlib import Path\nimport tiktoken\nfrom tiktoken.load import load_tiktoken_bpe\nimport time\nimport pickle\nimport hashlib\n\n# Import the model architecture from simplestLLM\nfrom simplestLLM import (\n    FeedForward, precompute_rope_params, compute_rope, SharedBuffers,\n    GroupedQueryAttention, TransformerBlock, Llama3Model, Tokenizer, rescale_theta\n)\n",
+    "metadata": {
+      "type": "code",
+      "chunk_type": "code_block",
+      "name": "fast_llm.py:chunk_1",
+      "file_path": "fast_llm.py",
+      "language": "python",
+      "repo_name": "fastLM",
+      "user_id": "sde_ii",
+      "start_line": 0,
+      "end_line": 0,
+      "char_count": 438,
+      "ingested_at": "2026-01-17T11:47:14.999594"
+    }
+  },
+  {
+    "id": "fastLM_fast_llm.py_fast_llm.py:chunk_2_d8dd5eb6",
+    "text": "FastLLM:\n    \"\"\"\n    Optimized LLM with fast startup times - similar to Ollama's approach\n    \"\"\"\n    _cached_models = {}  # Class-level cache for loaded models\n    \n    def __init__(self, model_name=\"meta-llama/Llama-3.2-1B-Instruct\", context_length=4096, use_float16=True, force_reload=False):\n        self.model_name = model_name\n        self.context_length = context_length\n        self.use_float16 = use_float16\n        \n        # Create a cache key based on model configuration\n        cache_key = f\"{model_name}_{context_length}_{use_float16}\"\n        \n        # Check if model is already loaded in memory\n        if cache_key in FastLLM._cached_models and not force_reload:\n            print(\"\u26a1 Using cached model - instant startup!\")\n            cached_data = FastLLM._cached_models[cache_key]\n            self.model = cached_data['model']\n            self.tokenizer = cached_data['tokenizer']\n            self.config = cached_data['config']\n            self.device = cached_data['device']\n            self.dtype = cached_data['dtype']\n            return\n        \n        print(\"\ud83d\udd04 Loading model for the first time (this will be cached)...\")\n        start_time = time.time()\n        \n        # Set up device\n        if torch.backends.mps.is_available():\n            self.device = torch.device(\"mps\")\n            print(\"Using Apple MPS for acceleration\")\n        else:\n            self.device = torch.device(\"cpu\")\n            print(\"Using CPU\")\n        \n        self.dtype = torch.float16 if use_float16 and self.device.type != 'cpu' else torch.float32\n        \n        if use_float16 and self.device.type != 'cpu':\n            print(\"Using float16 for memory efficiency and speed\")\n        else:\n            print(\"Using float32 for maximum precision\")\n        \n        # Load model configuration and weights\n        self._load_model_and_tokenizer()\n        \n        # Cache the loaded model\n        FastLLM._cached_models[cache_key] = {\n            'model': self.model,\n            'tokenizer': self.tokenizer,\n            'config': self.config,\n            'device': self.device,\n            'dtype': self.dtype\n        }\n        \n        load_time = time.time() - start_time\n        print(f\"\u2705 Model loaded and cached in {load_time:.2f}s (next startup will be instant!)\")\n    \n    def _load_model_and_tokenizer(self):\n        \"\"\"Load model and tokenizer (only called on first load)\"\"\"\n        # Get config from Hugging Face\n        hf_config = AutoConfig.from_pretrained(self.model_name).to_dict()\n        \n        # Rescale RoPE theta based on context length\n        rope_base = rescale_theta(\n            theta_old=hf_config[\"rope_theta\"],\n            context_length_old=hf_config[\"max_position_embeddings\"],\n            context_length_new=self.context_length\n        )\n        \n        # Create model config\n        self.config = {\n            \"vocab_size\": hf_config[\"vocab_size\"],\n            \"context_length\": self.context_length,\n            \"emb_dim\": hf_config[\"hidden_size\"],\n            \"n_heads\": hf_config[\"num_attention_heads\"],\n            \"n_layers\": hf_config[\"num_hidden_layers\"],\n            \"hidden_dim\": hf_config[\"intermediate_size\"],\n            \"n_kv_groups\": hf_config[\"num_key_value_heads\"],\n            \"rope_base\": rope_base,\n            \"dtype\": self.dtype,\n            \"rope_freq\": {\n                 \"factor\": hf_config[\"rope_scaling\"][\"factor\"],\n                 \"low_freq_factor\": hf_config[\"rope_scaling\"][\"low_freq_factor\"],\n                 \"high_freq_factor\": hf_config[\"rope_scaling\"][\"high_freq_factor\"],\n                 \"original_context_length\": hf_config[\"rope_scaling\"][\"original_max_position_embeddings\"],\n            }\n        }\n        \n        # Create model\n        self.model = Llama3Model(self.config).to(self.device)\n        \n        # Load weights efficiently\n        self._load_weights()\n        \n        # Setup tokenizer\n        self._setup_tokenizer()\n        \n        self.model.eval()\n    \n    def _load_weights(self):\n        \"\"\"Efficiently load model weights\"\"\"\n        from safetensors.torch import load_file\n        from huggingface_hub import hf_hub_download\n        \n        # Determine model size from embedding dimension\n        model_size = \"1B\" if self.config[\"emb_dim\"] == 2048 else \"3B\"\n        \n        if model_size == \"1B\":\n            # 1B model has a single safetensors file\n            weights_file = hf_hub_download(\n                repo_id=self.model_name,\n                filename=\"model.safetensors\",\n                local_dir=f\"./{self.model_name.replace('/', '_')}\"\n            )\n            combined_weights = load_file(weights_file)\n        else:\n            # 3B model has multiple safetensors files\n            combined_weights = {}\n            for i in range(1, 3):  # Files are numbered 1 and 2\n                weights_file = hf_hub_download(\n                    repo_id=self.model_name,\n                    filename=f\"model-0000{i}-of-00002.safetensors\",\n                    local_dir=f\"./{self.model_name.replace('/', '_')}\"\n                )\n                current_weights = load_file(weights_file)\n                combined_weights.update(current_weights)\n        \n        # Apply weights to model\n        self._load_weights_into_llama(self.model, self.config, combined_weights)\n        self.model.to(self.device)\n        del combined_weights  # Free memory\n    \n    def _setup_tokenizer(self):\n        \"\"\"Setup tokenizer\"\"\"\n        from huggingface_hub import hf_hub_download\n        \n        tokenizer_file_path = hf_hub_download(\n            repo_id=self.model_name, \n            filename=\"original/tokenizer.model\",\n            local_dir=f\"./{self.model_name.replace('/', '_')}\"\n        )\n        self.tokenizer = Tokenizer(tokenizer_file_path)\n    \n    def _assign(self, left, right, tensor_name=\"unknown\"):\n        \"\"\"Helper method for weight assignment\"\"\"\n        if left.shape != right.shape:\n            raise ValueError(f\"Shape mismatch in tensor '{tensor_name}'. Left: {left.shape}, Right: {right.shape}\")\n        \n        if isinstance(right, torch.Tensor):\n            return torch.nn.Parameter(right.clone().detach())\n        else:\n            return torch.nn.Parameter(torch.tensor(right))\n    \n    def _load_weights_into_llama(self, model, param_config, params):\n        \"\"\"Load weights into the model\"\"\"\n        model.tok_emb.weight = self._assign(model.tok_emb.weight, params[\"model.embed_tokens.weight\"], \"model.embed_tokens.weight\")\n\n        for l in range(param_config[\"n_layers\"]):\n            # Load attention weights\n            model.trf_blocks[l].att.W_query.weight = self._assign(\n                model.trf_blocks[l].att.W_query.weight,\n                params[f\"model.layers.{l}.self_attn.q_proj.weight\"],\n                f\"model.layers.{l}.self_attn.q_proj.weight\"\n            )\n            model.trf_blocks[l].att.W_key.weight = self._assign(\n                model.trf_blocks[l].att.W_key.weight,\n                params[f\"model.layers.{l}.self_attn.k_proj.weight\"],\n                f\"model.layers.{l}.self_attn.k_proj.weight\"\n            )\n            model.trf_blocks[l].att.W_value.weight = self._assign(\n                model.trf_blocks[l].att.W_value.weight,\n                params[f\"model.layers.{l}.self_attn.v_proj.weight\"],\n                f\"model.layers.{l}.self_attn.v_proj.weight\"\n            )\n            model.trf_blocks[l].att.out_proj.weight = self._assign(\n                model.trf_blocks[l].att.out_proj.weight,\n                params[f\"model.layers.{l}.self_attn.o_proj.weight\"],\n                f\"model.layers.{l}.self_attn.o_proj.weight\"\n            )\n            model.trf_blocks[l].norm1.weight = self._assign(\n                model.trf_blocks[l].norm1.weight,\n                params[f\"model.layers.{l}.input_layernorm.weight\"],\n                f\"model.layers.{l}.input_layernorm.weight\"\n            )\n\n            # Load FeedForward weights\n            model.trf_blocks[l].ff.fc1.weight = self._assign(\n                model.trf_blocks[l].ff.fc1.weight,\n                params[f\"model.layers.{l}.mlp.gate_proj.weight\"],\n                f\"model.layers.{l}.mlp.gate_proj.weight\"\n            )\n            model.trf_blocks[l].ff.fc2.weight = self._assign(\n                model.trf_blocks[l].ff.fc2.weight,\n                params[f\"model.layers.{l}.mlp.up_proj.weight\"],\n                f\"model.layers.{l}.mlp.up_proj.weight\"\n            )\n            model.trf_blocks[l].ff.fc3.weight = self._assign(\n                model.trf_blocks[l].ff.fc3.weight,\n                params[f\"model.layers.{l}.mlp.down_proj.weight\"],\n                f\"model.layers.{l}.mlp.down_proj.weight\"\n            )\n            model.trf_blocks[l].norm2.weight = self._assign(\n                model.trf_blocks[l].norm2.weight,\n                params[f\"model.layers.{l}.post_attention_layernorm.weight\"],\n                f\"model.layers.{l}.post_attention_layernorm.weight\"\n            )\n\n        # Load output layer weights\n        model.final_norm.weight = self._assign(model.final_norm.weight, params[\"model.norm.weight\"], \"model.norm.weight\")\n\n        if \"lm_head.weight\" in params.keys():\n            model.out_head.weight = self._assign(model.out_head.weight, params[\"lm_head.weight\"], \"lm_head.weight\")\n        else:\n            model.out_head.weight = self._assign(model.out_head.weight, params[\"model.embed_tokens.weight\"], \"model.embed_tokens.weight\")\n    \n    def generate(self, prompt, max_new_tokens=50, temperature=0.0, top_k=None, repetition_penalty=1.1, use_kv_cache=True):\n        \"\"\"Generate text with the cached model - instant startup!\"\"\"\n        # Use simple text completion without chat tokens\n        token_ids = self.tokenizer.encode(prompt, bos=False, eos=False)\n        idx = torch.tensor(token_ids, dtype=torch.long, device=self.device).unsqueeze(0)\n        \n        # Clear any existing cache\n        if use_kv_cache:\n            self.model.clear_cache()\n        \n        # First forward pass with full prompt - this is the prefill phase\n        with torch.no_grad():\n            logits = self.model(idx, use_kv_cache=use_kv_cache, cache_position=None)\n        \n        # Get logits for the last token and convert to appropriate dtype for sampling\n        if self.use_float16:\n            logits = logits[:, -1, :].float()  # Convert to float32 for numerical stability in sampling\n        else:\n            logits = logits[:, -1, :]\n        \n        # Pre-compute repetition penalty tokens window\n        penalty_window = 64\n        \n        # Generate tokens one by one using KV cache\n        for step in range(max_new_tokens):\n            # Apply repetition penalty more efficiently\n            if repetition_penalty != 1.0 and idx.shape[1] > 1:\n                # Only get the last penalty_window tokens\n                start_idx = max(0, idx.shape[1] - penalty_window)\n                penalty_tokens = idx[0, start_idx:].tolist()\n                unique_tokens = set(penalty_tokens)\n                \n                # Apply penalty in a vectorized way\n                for token_id in unique_tokens:\n                    if logits[0, token_id] > 0:\n                        logits[0, token_id] /= repetition_penalty\n                    else:\n                        logits[0, token_id] *= repetition_penalty\n            \n            # Apply top-k filtering\n            if top_k is not None:\n                v, _ = torch.topk(logits, min(top_k, logits.size(-1)))\n                logits[logits < v[:, [-1]]] = -float('Inf')\n\n            # Sample next token\n            if temperature > 0.0:\n                probs = torch.softmax(logits / temperature, dim=-1)\n                idx_next = torch.multinomial(probs, num_samples=1)\n            else:\n                idx_next = torch.argmax(logits, dim=-1, keepdim=True)\n            \n            # Check for special tokens that should stop generation\n            token_id = idx_next.item()\n            if token_id in [\n                self.tokenizer.special_tokens.get(\"<|end_of_text|>\", -1),\n                self.tokenizer.special_tokens.get(\"<|eot_id|>\", -1),\n                self.tokenizer.special_tokens.get(\"<|start_header_id|>\", -1),\n                self.tokenizer.special_tokens.get(\"<|end_header_id|>\", -1)\n            ]:\n                break\n            \n            # Decode and yield the token\n            token_text = self.tokenizer.decode([idx_next.item()])\n            yield token_text\n            \n            # Append to sequence\n            idx = torch.cat((idx, idx_next), dim=1)\n            \n            # Check if we've exceeded context length\n            if idx.shape[1] >= self.config['context_length']:\n                break\n            \n            # Forward pass for next token using KV cache - this is the decode phase\n            if step < max_new_tokens - 1:  # Don't compute on last iteration\n                with torch.no_grad():\n                    # Pass the single new token and correct cache position\n                    logits = self.model(idx_next, use_kv_cache=use_kv_cache, \n                                      cache_position=idx.shape[1]-1)\n                \n                # Convert to appropriate dtype for sampling\n                if self.use_float16:\n                    logits = logits[:, -1, :].float()\n                else:\n                    logits = logits[:, -1, :]\n        \n        # Clear cache after generation to free memory\n        if use_kv_cache:\n            self.model.clear_cache()\n    \n    @classmethod\n    def clear_cache(cls):\n        \"\"\"Clear all cached models to free memory\"\"\"\n        cls._cached_models.clear()\n        print(\"\ud83d\uddd1\ufe0f  Model cache cleared\")\n    \n    @classmethod\n    def list_cached_models(cls):\n        \"\"\"List all cached models\"\"\"\n        if not cls._cached_models:\n            print(\"No models currently cached\")\n        else:\n            print(\"Cached models:\")\n            for key in cls._cached_models.keys():\n                print(f\"  - {key}\")\n\n# Convenience function for quick usage\ndef quick_generate(prompt, max_tokens=100, temperature=0.8):\n    \"\"\"Quick generation function - model stays loaded between calls\"\"\"\n    model = FastLLM()\n    \n    print(prompt, end=\"\", flush=True)\n    for token in model.generate(prompt, max_new_tokens=max_tokens, temperature=temperature):\n        print(token, end=\"\", flush=True)\n    print()  # New line at end ",
+    "metadata": {
+      "type": "code",
+      "chunk_type": "code_block",
+      "name": "fast_llm.py:chunk_2",
+      "file_path": "fast_llm.py",
+      "language": "python",
+      "repo_name": "fastLM",
+      "user_id": "sde_ii",
+      "start_line": 0,
+      "end_line": 0,
+      "char_count": 14329,
+      "ingested_at": "2026-01-17T11:47:14.999609"
+    }
+  }
+]

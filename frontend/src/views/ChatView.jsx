@@ -8,14 +8,26 @@ import { motion, AnimatePresence } from 'framer-motion';
 
 const ThinkingPanel = ({ thoughts }) => {
     const [isOpen, setIsOpen] = useState(false);
-
-    useEffect(() => {
-        if (thoughts.some(t => t.state === 'processing')) {
-            setIsOpen(true);
-        }
-    }, [thoughts]);
+    const isProcessing = thoughts.some(t => t.state === 'processing');
 
     if (!thoughts || thoughts.length === 0) return null;
+
+    if (isProcessing && !isOpen) {
+        return (
+            <div className="mb-3">
+                <div className="flex items-center gap-2 text-slate-400 text-sm animate-pulse p-2 border border-blue-900/30 rounded-lg bg-[#131c2e]">
+                    <Loader2 size={14} className="animate-spin text-blue-400" />
+                    <span className="font-mono text-xs text-blue-300">Thinking...</span>
+                    <button
+                        onClick={() => setIsOpen(true)}
+                        className="text-xs text-slate-500 hover:text-slate-300 ml-auto"
+                    >
+                        View trace
+                    </button>
+                </div>
+            </div>
+        );
+    }
 
     return (
         <div className="mb-3 rounded-lg overflow-hidden border border-blue-900/30 bg-[#131c2e]">
@@ -24,10 +36,10 @@ const ThinkingPanel = ({ thoughts }) => {
                 className="w-full flex items-center gap-2 px-4 py-2 bg-[#1a2438] hover:bg-[#1e293b] transition-colors text-left"
             >
                 <div className={`p-1 rounded bg-blue-500/10 text-blue-400`}>
-                    <Activity size={14} />
+                    <Sparkles size={14} />
                 </div>
                 <span className="text-xs font-bold text-slate-300 uppercase tracking-wider flex-1">
-                    Reasoning Trace
+                    {isOpen ? "Reasoning Trace" : "Show Process"}
                 </span>
                 {isOpen ? <ChevronDown size={14} className="text-slate-500" /> : <ChevronRight size={14} className="text-slate-500" />}
             </button>
@@ -55,7 +67,7 @@ const ChatView = ({ isSidebarOpen, setSidebarOpen }) => {
     const [isLoading, setIsLoading] = useState(false);
     const [isStreaming, setIsStreaming] = useState(false);
     const [messages, setMessages] = useState([]);
-    const [conversationId, setConversationId] = useState(null);
+    const [conversationId, setConversationId] = useState(() => localStorage.getItem('activeConversationId') || null);
     const [showHistory, setShowHistory] = useState(false);
     const scrollRef = useRef(null);
     const iamRole = 'senior_engineer';
@@ -72,9 +84,14 @@ const ChatView = ({ isSidebarOpen, setSidebarOpen }) => {
 
     useEffect(() => {
         if (conversationId) {
-            loadConversationMessages(conversationId);
+            localStorage.setItem('activeConversationId', conversationId);
+            if (!isStreaming) {
+                loadConversationMessages(conversationId);
+            }
+        } else {
+            localStorage.removeItem('activeConversationId');
         }
-    }, [conversationId]);
+    }, [conversationId, isStreaming]);
 
     const loadConversationMessages = async (convoId) => {
         try {
@@ -113,14 +130,14 @@ const ChatView = ({ isSidebarOpen, setSidebarOpen }) => {
         setIsStreaming(true);
 
         const userMsg = {
-            id: Date.now(),
+            id: `user-${Date.now()}`,
             role: 'user',
             content: userText,
             timestamp: new Date().toLocaleTimeString()
         };
         setMessages(prev => [...prev, userMsg]);
 
-        const botMsgId = Date.now() + 1;
+        const botMsgId = `bot-${Date.now()}`;
         const initialBotMsg = {
             id: botMsgId,
             role: 'assistant',
@@ -133,7 +150,14 @@ const ChatView = ({ isSidebarOpen, setSidebarOpen }) => {
         try {
             // Use streaming endpoint
             for await (const event of api.chatAPI.streamQuery(userText, iamRole, conversationId)) {
-                if (event.type === 'step') {
+                if (event.type === 'meta') {
+                    if (event.conversation_id && event.conversation_id !== conversationId) {
+                        setConversationId(event.conversation_id);
+                    }
+                } else if (event.type === 'title') {
+                    // Log title change, could trigger sidebar refresh if needed
+                    console.log("Conversation renamed:", event.title);
+                } else if (event.type === 'step') {
                     // Update thinking steps
                     setMessages(prev => prev.map(m => {
                         if (m.id !== botMsgId) return m;
@@ -157,7 +181,40 @@ const ChatView = ({ isSidebarOpen, setSidebarOpen }) => {
                             : m
                     ));
                     scrollToBottom();
+                } else if (event.type === 'answer') {
+                    // Set final answer content
+                    setMessages(prev => prev.map(m =>
+                        m.id === botMsgId
+                            ? { ...m, content: event.content }
+                            : m
+                    ));
+                    scrollToBottom();
+                    setIsStreaming(false);
                 } else if (event.type === 'done') {
+                    // Backend sends final answer as type:'done' with content field
+                    if (event.content) {
+                        setMessages(prev => prev.map(m =>
+                            m.id === botMsgId
+                                ? { ...m, content: event.content }
+                                : m
+                        ));
+                        scrollToBottom();
+                    }
+                    setIsStreaming(false);
+                } else if (event.type === 'action') {
+                    // Handle action results (Jira tickets, Calendar events, etc.)
+                    setMessages(prev => prev.map(m =>
+                        m.id === botMsgId
+                            ? { ...m, action: event.data }
+                            : m
+                    ));
+                } else if (event.type === 'error') {
+                    console.error("Backend Error:", event.content);
+                    setMessages(prev => prev.map(m => m.id === botMsgId ? {
+                        ...m,
+                        thoughts: [...m.thoughts, { text: "Error prevented response", state: "error" }],
+                        content: `Error: ${event.content}`
+                    } : m));
                     setIsStreaming(false);
                 }
             }
@@ -273,6 +330,13 @@ const ChatView = ({ isSidebarOpen, setSidebarOpen }) => {
                                 {msg.role === 'assistant' && (
                                     <div className="space-y-3">
                                         <ThinkingPanel thoughts={msg.thoughts} />
+
+                                        {isStreaming && msg.id === messages[messages.length - 1]?.id && (!msg.thoughts?.length && !msg.content) && (
+                                            <div className="text-slate-500 italic text-sm animate-pulse flex items-center gap-2">
+                                                <Loader2 className="w-3 h-3 animate-spin" />
+                                                Initializing response...
+                                            </div>
+                                        )}
 
                                         {msg.content && (
                                             <div className="text-slate-300 text-sm leading-relaxed whitespace-pre-wrap">

@@ -14,6 +14,7 @@ import {
     X
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import SystemStatus from './SystemStatus';
 
 const Sidebar = ({ isLiveOpsOpen, setIsLiveOpsOpen }) => {
     const [isMobileOpen, setIsMobileOpen] = useState(false);
@@ -110,6 +111,9 @@ const Sidebar = ({ isLiveOpsOpen, setIsLiveOpsOpen }) => {
                             />
                         </NavLink>
                     </div>
+
+                    {/* System Status */}
+                    <SystemStatus />
 
                     {/* User Profile */}
                     <div className="p-4 bg-slate-900/30">

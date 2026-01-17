@@ -1,0 +1,20 @@
+{
+  "directed": true,
+  "multigraph": false,
+  "graph": {},
+  "nodes": [
+    {
+      "type": "file",
+      "label": "README.md",
+      "file": "README.md",
+      "id": "FILE::README.md"
+    },
+    {
+      "type": "file",
+      "label": "fast_llm.py",
+      "file": "fast_llm.py",
+      "id": "FILE::fast_llm.py"
+    }
+  ],
+  "links": []
+}

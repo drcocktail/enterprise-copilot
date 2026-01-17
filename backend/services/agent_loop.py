@@ -42,13 +42,13 @@ class AgentLoop:
         llm_service,
         hybrid_retriever,
         code_ingestion=None,
-        document_ingestion=None,
+        rag_service=None,
         max_steps: int = 5
     ):
         self.llm = llm_service
         self.retriever = hybrid_retriever
         self.code_ingestion = code_ingestion
-        self.document_ingestion = document_ingestion
+        self.rag_service = rag_service
         self.max_steps = max_steps
         
         # Tool registry
@@ -63,9 +63,9 @@ class AgentLoop:
         }
         
         self.tool_descriptions = """
-Available Tools:
-- search_code: Search the indexed codebase for relevant code snippets. Input: {"query": "search terms"}
-- search_docs: Search uploaded documents. Input: {"query": "search terms"}
+available Tools:
+- search_code: Search the indexed repositories (code, READMEs, config files). Input: {"query": "search terms"}
+- search_docs: Search USER UPLOADED PDF documents (e.g. manuals, annual reports). Input: {"query": "search terms"}
 - jira_create: Create a JIRA ticket. Input: {"summary": "...", "description": "...", "priority": "High/Medium/Low"}
 - slack_post: Post a message to Slack. Input: {"channel": "#channel-name", "message": "..."}
 - k8s_exec: Execute a Kubernetes command. Input: {"command": "kubectl ..."}
@@ -117,18 +117,49 @@ Available Tools:
     ):
         """Execute the agent loop yielding events"""
         step_num = 0
+        # Handle None capabilities gracefully
+        permissions_str = ', '.join(capabilities.permissions) if capabilities else 'READ_DOCS'
+        
+        # Format history
+        history_str = ""
+        if conversation_history:
+            for msg in conversation_history:
+                # Handle both Dict and Object (Pydantic) types safely
+                r = msg.get("role", "") if isinstance(msg, dict) else getattr(msg, "role", "")
+                c = msg.get("content", "") if isinstance(msg, dict) else getattr(msg, "content", "")
+                if r and c:
+                    history_str += f"{r.upper()}: {c}\n"
+
         context = f"""User Query: {query}
 Role: {role}
-Permissions: {', '.join(capabilities.permissions)}
+Permissions: {permissions_str}
+
+Conversation History:
+{history_str}
 
 {self.tool_descriptions}
 
-You must respond in the following format:
-Thought: [your reasoning about what to do next]
-Action: [tool name from the list above]
-Action Input: [JSON input for the tool]
+You are an agent designed to answer questions by thinking step-by-step and using tools.
+You MUST output your response in this exact format:
 
-When you have enough information to answer, use the 'final_answer' tool.
+Thought: [Your reasoning about what to do next]
+Action: [The name of the tool to use, or "final_answer"]
+Action Input: [The JSON argument for the tool]
+
+Example 1 (Need to search code):
+Thought: The user is asking about the auth flow. I should search for "authentication" in the code.
+Action: search_code
+Action Input: {{"query": "authentication flow"}}
+
+Example 2 (Answering directly):
+Thought: The user said hello. I don't need to use any tools.
+Action: final_answer
+Action Input: {{"answer": "Hello! How can I help you today?"}}
+
+CRITICAL:
+1. ALWAYS start with "Thought:".
+2. ALWAYS include "Action:" and "Action Input:".
+3. If you have the answer, use "final_answer".
 """
         
         while step_num < self.max_steps:
@@ -161,10 +192,10 @@ When you have enough information to answer, use the 'final_answer' tool.
                 except Exception as e:
                     observation = f"Error executing tool {action}: {str(e)}"
                 
-                # Truncate observation
-                max_obs_len = 1000
+                # Truncate observation - use larger limit for document context
+                max_obs_len = 6000  # Increased from 1000 for better document context
                 if len(str(observation)) > max_obs_len:
-                    observation_truncated = str(observation)[:max_obs_len] + f"... (truncated)"
+                    observation_truncated = str(observation)[:max_obs_len] + f"... (truncated, {len(str(observation))} total chars)"
                 else:
                     observation_truncated = str(observation)
                 
@@ -185,14 +216,13 @@ When you have enough information to answer, use the 'final_answer' tool.
             else:
                 context += f"\n\nStep {step_num}:\nThought: {thought}\nAction: {action}\nObservation: Unknown tool '{action}'. Available tools: {list(self.tools.keys())}\n"
         
-        # Max steps reached
-        yield {"type": "answer", "content": "I've reached my reasoning limit. " + trace[-1].get("thought", "") if trace else ""}
+        # Max steps reached\n        yield {"type": "answer", "content": "I've reached my reasoning limit. Please try rephrasing your question."}
     
     async def _think(self, context: str, history: List[Dict[str, Any]] = None) -> str:
         """Get LLM to think about next step"""
         prompt = f"""{context}
 
-Now, think step by step about what to do next."""
+Now, think step by step about what to do next. Remember to use 'Thought:', 'Action:', and 'Action Input:'."""
         
         try:
             response = await self.llm._call_ollama(
@@ -209,23 +239,42 @@ Now, think step by step about what to do next."""
         action = "final_answer"
         action_input = {}
         
-        # Extract thought
-        thought_match = re.search(r'Thought:\s*(.+?)(?=Action:|$)', response, re.DOTALL)
+        # Normalize newlines
+        response = response.replace("\r\n", "\n")
+        
+        # Extract thought (lazy match until Action: or end)
+        thought_match = re.search(r'Thought:(.+?)(?=Action:|$)', response, re.DOTALL | re.IGNORECASE)
         if thought_match:
             thought = thought_match.group(1).strip()
+        else:
+             # If no explicit "Thought:", but starts with text before Action, treat as thought
+             pre_action = re.split(r'Action:', response, flags=re.IGNORECASE)[0]
+             if pre_action.strip():
+                 thought = pre_action.strip()
         
         # Extract action
-        action_match = re.search(r'Action:\s*(\w+)', response)
+        action_match = re.search(r'Action:\s*[*`]*([a-zA-Z0-9_]+)[*`]*', response, re.IGNORECASE)
         if action_match:
             action = action_match.group(1).strip()
         
         # Extract action input
-        input_match = re.search(r'Action Input:\s*({.+?})', response, re.DOTALL)
+        input_match = re.search(r'Action Input:\s*(?:```(?:json)?\s*)?({.+?})(?:\s*```)?', response, re.DOTALL | re.IGNORECASE)
         if input_match:
             try:
                 action_input = json.loads(input_match.group(1))
             except json.JSONDecodeError:
-                action_input = {"raw": input_match.group(1)}
+                try:
+                    import ast
+                    action_input = ast.literal_eval(input_match.group(1))
+                    if not isinstance(action_input, dict): action_input = {}
+                except:
+                     action_input = {"raw": input_match.group(1)}
+        
+        # Fallback: If no Action explicit, check if direct answer
+        if action == "final_answer" and not input_match:
+             if "Action:" not in response:
+                 action_input = {"answer": response}
+                 if not thought: thought = "Answering directly."
         
         return thought, action, action_input
     
@@ -235,20 +284,27 @@ Now, think step by step about what to do next."""
         """Search codebase"""
         query = input.get("query", "")
         if self.retriever:
-            results = await self.retriever.hybrid_search(query, top_k=3)
+            # Increase top_k and length for better context
+            results = await self.retriever.hybrid_search(query, top_k=5)
             if results:
-                return "\n".join([
-                    f"[{r.get('file_path', 'unknown')}] {r.get('text', '')[:200]}..."
+                return "\n\n".join([
+                    f"--- File: {r.get('file_path', 'unknown')} ---\n{r.get('text', '')[:1000]}\n..."
                     for r in results
                 ])
-        return "No code results found."
+        return "No code results found. Try a different query."
     
     async def _search_docs(self, input: Dict, role: str) -> str:
-        """Search documents using Knowledge Graph"""
+        """Search documents using RAG"""
         query = input.get("query", "")
-        if self.document_ingestion:
-            return await self.document_ingestion.get_context_for_query(query)
-        return "Document ingestion service not available."
+        if self.rag_service:
+            # Increase limit to 15 for more context (LLM has large context window)
+            results = self.rag_service.search(query, limit=15)
+            if results:
+                return "\n\n".join([
+                    f"[Doc: {r.get('metadata', {}).get('filename')}, Chunk {r.get('metadata', {}).get('chunk_index', '?')}]\n{r.get('text', '')}" 
+                    for r in results
+                ])
+        return "No documents found."
     
     async def _jira_create(self, input: Dict, role: str) -> str:
         """Create JIRA ticket (mock)"""

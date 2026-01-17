@@ -13,6 +13,7 @@ FlagEmbedding==1.2.10
 
 # PDF Processing
 PyPDF2==3.0.1
+PyMuPDF==1.23.8
 
 # HTTP Client
 httpx==0.26.0

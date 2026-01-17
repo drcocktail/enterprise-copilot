@@ -21,7 +21,8 @@ from config.iam_config import IAMConfig, resolve_capabilities, PERSONA_DEFINITIO
 from services.llm_service import LLMService
 from services.db_service import DatabaseService
 from services.code_ingestion import CodeIngestionService
-from services.document_ingestion import DocumentIngestionService
+from services.document_service import DocumentService
+from services.rag_service import RagService
 from services.hybrid_retriever import HybridRetriever
 from services.agent_loop import AgentLoop
 
@@ -34,7 +35,8 @@ iam_config = IAMConfig()
 llm_service: Optional[LLMService] = None
 db_service: Optional[DatabaseService] = None
 code_ingestion: Optional[CodeIngestionService] = None
-document_ingestion: Optional[DocumentIngestionService] = None
+document_service: Optional[DocumentService] = None
+rag_service: Optional[RagService] = None
 hybrid_retriever: Optional[HybridRetriever] = None
 chroma_client = None
 code_collection = None
@@ -61,16 +63,25 @@ async def lifespan(app: FastAPI):
     # Initialize services
     app.state.db_service = DatabaseService()
     app.state.llm_service = LLMService()
+    
+    # Init Code Ingestion
     app.state.code_ingestion = CodeIngestionService()
-    app.state.document_ingestion = DocumentIngestionService()
+    # Load persisted graphs
+    try:
+        app.state.code_ingestion.load_all_graphs()
+    except Exception as e:
+        print(f"⚠️ Failed to load code graphs: {e}")
+    app.state.rag_service = RagService() # New Microservice
+    app.state.document_service = DocumentService(app.state.rag_service, app.state.db_service) # New Microservice
     app.state.hybrid_retriever = HybridRetriever(collection=app.state.code_collection)
     
     # Update globals
-    global llm_service, db_service, code_ingestion, hybrid_retriever, code_collection, document_ingestion
+    global llm_service, db_service, code_ingestion, hybrid_retriever, code_collection, document_service, rag_service
     llm_service = app.state.llm_service
     db_service = app.state.db_service
     code_ingestion = app.state.code_ingestion
-    document_ingestion = app.state.document_ingestion
+    document_service = app.state.document_service
+    rag_service = app.state.rag_service
     hybrid_retriever = app.state.hybrid_retriever
     code_collection = app.state.code_collection
     app.state.iam_config = IAMConfig()
@@ -100,7 +111,12 @@ app = FastAPI(
 # CORS Configuration
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=[
+        "http://localhost:3000",
+        "http://localhost:5173",
+        "http://127.0.0.1:3000",
+        "http://127.0.0.1:5173"
+    ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -312,7 +328,7 @@ async def chat_agent(
         llm_service=llm_service,
         hybrid_retriever=hybrid_retriever,
         code_ingestion=code_ingestion,
-        document_ingestion=document_ingestion,
+        rag_service=rag_service,
         max_steps=5
     )
     
@@ -362,17 +378,49 @@ async def chat_stream(
     # Resolve capabilities
     capabilities = resolve_capabilities(x_iam_role)
     
-    # Get conversation history
-    conversation_history = []
-    if body.conversation_id:
-        try:
-            # Use request.app.state.db_service
-            messages = await request.app.state.db_service.get_recent_messages(body.conversation_id, limit=6)
-            conversation_history = [{"role": m["role"], "content": m["content"]} for m in messages]
-        except:
-            pass
+    # 1. Ensure conversation exists (Persistence Fix)
+    conversation_id = body.conversation_id
+    if not conversation_id:
+        conversation_id = str(uuid.uuid4())
     
-    # Create a Queue for the stream
+    # Ensure DB record exists
+    await request.app.state.db_service.ensure_conversation(
+        conversation_id, 
+        user_id=x_iam_role, 
+        role=x_iam_role
+    )
+    
+    # 2. Persist User Message & Get History
+    conversation_history = []
+    try:
+        if body.conversation_id: # Only persist if ID was provided (or we decided to persist new ones)
+             # Wait, if we generated a new ID, we should persist associated with that too.
+             # But the frontend might not know the new ID unless we send it back.
+             # We send it back via 'meta' event.
+             pass
+        
+        await request.app.state.db_service.add_message(
+            conversation_id,
+            "user",
+            body.query
+        )
+        
+        messages = await request.app.state.db_service.get_recent_messages(
+            conversation_id=conversation_id,
+            limit=10 
+        )
+        
+        # Filter out the current query from history (it's the last one we just added)
+        if messages and messages[-1]["content"] == body.query:
+            messages.pop()
+            
+        conversation_history = [
+            {"role": m["role"], "content": m["content"]}
+            for m in messages
+        ]
+    except Exception as e:
+        print(f"Error fetching history: {e}")
+            
     event_queue = asyncio.Queue()
     
     async def background_worker():
@@ -382,12 +430,18 @@ async def chat_stream(
         actions = []
         
         try:
+            # Notify client of the conversation ID
+            await event_queue.put({
+                "type": "meta",
+                "conversation_id": conversation_id
+            })
+
             # Initialize agent
             agent = AgentLoop(
                 llm_service=request.app.state.llm_service,
                 hybrid_retriever=request.app.state.hybrid_retriever,
                 code_ingestion=request.app.state.code_ingestion,
-                document_ingestion=request.app.state.document_ingestion
+                rag_service=request.app.state.rag_service
             )
             
             async for event in agent.run_stream(
@@ -401,31 +455,34 @@ async def chat_stream(
                 
                 # 2. Accumulate state for persistence
                 if event["type"] == "step":
-                    thoughts.append(event) # {"type": "step", "text": "...", "state": "done"}
+                    thoughts.append(event)
                 elif event["type"] == "answer":
                     full_answer = event["content"]
                 elif event["type"] == "action_result":
                     actions.append(event["data"])
             
             # 3. Persistence: Save the assistant's response to DB
-            if body.conversation_id:
-                try:
-                    # Construct the complex message content if needed, but DB currently takes 'content'.
-                    # We might want to save the trace in a separate field if DB supports it.
-                    # As a fallback, we append the trace to the content or just save the answer.
-                    # Ideally, db_service.add_message supports `metadata` or `trace`.
-                    # Let's stick to simple content for now to ensure compatibility.
-                    
-                    # For a "true agent", the answer is the answer. The trace is metadata.
-                    # We assume db_service.add_message(conversation_id, role, content)
-                    await request.app.state.db_service.add_message(
-                        body.conversation_id,
-                        "assistant",
-                        full_answer
-                    )
-                    # TODO: If DB has a `trace` column, save `thoughts` and `actions` there.
-                except Exception as db_e:
-                    print(f"Failed to save message to DB: {db_e}")
+            try:
+                await request.app.state.db_service.add_message(
+                    conversation_id,
+                    "assistant",
+                    full_answer,
+                    metadata={"thoughts": thoughts, "actions": actions}
+                )
+                
+                # 4. Summarization Trigger
+                # If message count is multiple of 5, trigger summarization
+                msgs = await request.app.state.db_service.get_messages(conversation_id, limit=100)
+                if len(msgs) > 0 and len(msgs) % 5 == 0:
+                     summary = await request.app.state.llm_service.summarize_conversation(msgs)
+                     await request.app.state.db_service.update_conversation(conversation_id, title=summary)
+                     await event_queue.put({
+                         "type": "title",
+                         "title": summary
+                     })
+                     
+            except Exception as db_e:
+                print(f"Failed to save message or summarize: {db_e}")
                     
         except Exception as e:
             print(f"Background worker error: {e}")
@@ -446,9 +503,17 @@ async def chat_stream(
                     break
                 
                 if event.get("type") == "error":
-                    # Optionally verify if we should signal error to stream
+                    yield f"data: {json.dumps({'type': 'error', 'content': event['error']})}\n\n"
                     break
-                    
+                
+                if event.get("type") == "meta":
+                     yield f"data: {json.dumps(event)}\n\n"
+                     continue
+                     
+                if event.get("type") == "title":
+                     yield f"data: {json.dumps(event)}\n\n"
+                     continue
+
                 # Yield SSE format
                 if event["type"] == "step":
                     yield f"data: {json.dumps({'type': 'step', 'text': event['text'], 'state': event['state']})}\n\n"
@@ -460,9 +525,7 @@ async def chat_stream(
                     pass
 
             except asyncio.CancelledError:
-                # Client disconnected.
-                # We stop yielding, but the background_worker continues running!
-                print(f"Stream cancelled by client for conversation {body.conversation_id}")
+                print(f"Stream cancelled by client for conversation {conversation_id}")
                 raise
 
     return StreamingResponse(
@@ -489,56 +552,105 @@ async def ingest_github_repo(
     if "READ_CODEBASE" not in capabilities.permissions:
         raise HTTPException(status_code=403, detail="Code access not permitted")
     
-    # Ingest repository
-    result = await code_ingestion.ingest_github_repo(
-        github_url=request.github_url,
-        user_id=x_iam_role
-    )
+    # Extract repo name from URL
+    repo_name = request.github_url.rstrip('/').split('/')[-1].replace('.git', '')
     
-    if result.get("status") == "error":
-        raise HTTPException(status_code=400, detail=result.get("error"))
+    # Create DB entry first (status: cloning)
+    repo_record = await db_service.add_repository({
+        "name": repo_name,
+        "url": request.github_url,
+        "language": "DETECTING",
+        "status": "cloning",
+        "user_id": x_iam_role
+    })
+    repo_id = repo_record["id"]
     
-    # Add chunks to ChromaDB
-    chunks = result.get("chunks", [])
-    if chunks:
-        code_collection.add(
-            documents=[c["text"] for c in chunks],
-            metadatas=[c["metadata"] for c in chunks],
-            ids=[c["id"] for c in chunks]
+    try:
+        # Update status to parsing
+        await db_service.update_repository_status(repo_id, "parsing")
+        
+        # Ingest repository
+        result = await code_ingestion.ingest_github_repo(
+            github_url=request.github_url,
+            user_id=x_iam_role
         )
         
-        # Build BM25 index
-        hybrid_retriever.build_bm25_index(chunks)
+        if result.get("status") == "error":
+            await db_service.update_repository_status(repo_id, "error", error=result.get("error"))
+            raise HTTPException(status_code=400, detail=result.get("error"))
         
-        # Update graph reference
-        hybrid_retriever.graph = code_ingestion.graph
-    
-    return {
-        "status": "success",
-        "repo_name": result.get("repo_name"),
-        "file_count": result.get("file_count"),
-        "chunk_count": result.get("chunk_count"),
-        "graph_nodes": result.get("graph_nodes"),
-        "graph_edges": result.get("graph_edges")
-    }
+        # Add chunks to ChromaDB
+        chunks = result.get("chunks", [])
+        if chunks:
+            code_collection.add(
+                documents=[c["text"] for c in chunks],
+                metadatas=[c["metadata"] for c in chunks],
+                ids=[c["id"] for c in chunks]
+            )
+            
+            # Build BM25 index
+            hybrid_retriever.build_bm25_index(chunks)
+            
+            # Update graph reference
+            hybrid_retriever.graph = code_ingestion.graph
+        
+        # Update DB with success status and stats
+        await db_service.update_repository_status(
+            repo_id, 
+            "ready",
+            stats={
+                "graph_nodes": result.get("graph_nodes", 0),
+                "file_count": result.get("file_count", 0)
+            }
+        )
+        
+        return {
+            "status": "success",
+            "repo_id": repo_id,
+            "repo_name": result.get("repo_name"),
+            "file_count": result.get("file_count"),
+            "chunk_count": result.get("chunk_count"),
+            "graph_nodes": result.get("graph_nodes"),
+            "graph_edges": result.get("graph_edges")
+        }
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        await db_service.update_repository_status(repo_id, "error", error=str(e))
+        raise HTTPException(status_code=500, detail=str(e))
 
 
 @app.get("/api/github/repos")
 async def list_repos(
     x_iam_role: str = Header(..., description="IAM Role of the requester")
 ):
-    """List ingested repositories"""
-    repos = []
+    """List ingested repositories from database"""
+    # Get repos from database first
+    db_repos = await db_service.get_repositories(user_id=x_iam_role)
     
+    if db_repos:
+        # Return repos from database with full info
+        return db_repos
+    
+    # Fallback: scan directory if no DB entries (legacy repos)
+    repos = []
     if code_ingestion and code_ingestion.repos_dir.exists():
         for repo_dir in code_ingestion.repos_dir.iterdir():
-            if repo_dir.is_dir():
+            if repo_dir.is_dir() and not repo_dir.name.startswith("data_"):
                 repos.append({
+                    "id": repo_dir.name,
                     "name": repo_dir.name,
-                    "path": str(repo_dir)
+                    "url": "",
+                    "language": "UNKNOWN",
+                    "status": "ready",
+                    "nodes_count": 0,
+                    "file_count": 0,
+                    "last_indexed_at": None,
+                    "error_message": None
                 })
     
-    return {"repos": repos}
+    return repos
 
 
 @app.get("/api/repos/{repo_id}/graph")
@@ -671,39 +783,33 @@ async def upload_document(
     
     file_size = os.path.getsize(file_path)
     
-    # Trigger background ingestion
-    # In a real app, this should be a background task, but we'll await it for now to return stats
-    # or use asyncio.create_task if we want fire-and-forget
+    file_size = os.path.getsize(file_path)
     
-    ingest_stats = {}
-    if document_ingestion:
-        try:
-            # We treat this as fire-and-forget for speed, or await for immediate feedback?
-            # User wants "Ingesting..." progress. 
-            # Let's await it so we can return the node count immediately for the UI to show.
-            ingest_stats = await document_ingestion.ingest_document(
-                file_path=str(file_path),
-                user_id=x_iam_role,
-                original_filename=file.filename
-            )
-        except Exception as e:
-            print(f"Ingestion failed: {e}")
-            ingest_stats = {"error": str(e)}
-
+    # 1. Create DB record first (Processing)
     doc_record = await db_service.add_user_document(
         user_id=x_iam_role,
         filename=safe_filename,
         original_filename=file.filename,
         file_path=str(file_path),
-        file_size=file_size,
-        chunk_count=ingest_stats.get("chunk_count", 0)
+        file_size=file_size
     )
+    
+    # 2. Trigger Background Task
+    if document_service:
+        asyncio.create_task(
+            document_service.process_document(
+                doc_id=doc_record["id"],
+                file_path=str(file_path),
+                user_id=x_iam_role,
+                original_filename=file.filename
+            )
+        )
     
     return {
         "id": doc_record["id"],
         "filename": file.filename,
-        "status": "uploaded",
-        "ingestion": ingest_stats
+        "status": "processing",
+        "message": "Ingestion started in background" 
     }
 
 
@@ -714,6 +820,80 @@ async def list_documents(
     """List user's documents"""
     documents = await db_service.get_user_documents(user_id=x_iam_role)
     return {"documents": documents}
+
+
+@app.delete("/api/documents/{document_id}")
+async def delete_document(
+    document_id: str,
+    x_iam_role: str = Header(..., description="IAM Role of the requester")
+):
+    """Delete a document and its chunks from the database and vector store"""
+    try:
+        # Get document to verify ownership
+        doc = await db_service.get_document(document_id)
+        if not doc:
+            raise HTTPException(status_code=404, detail="Document not found")
+        
+        # Delete from ChromaDB (vector store)
+        if rag_service and rag_service.collection:
+            try:
+                # Get all chunks for this document
+                result = rag_service.collection.get(
+                    where={"doc_id": document_id},  # Match the metadata field name
+                    include=[]
+                )
+                if result and result.get("ids"):
+                    rag_service.collection.delete(ids=result["ids"])
+                    print(f"Deleted {len(result['ids'])} chunks from vector store")
+            except Exception as e:
+                print(f"Warning: Could not delete from vector store: {e}")
+        
+        # Delete from database
+        success = await db_service.delete_user_document(document_id)
+        
+        # Delete file from disk
+        if doc.get("file_path") and os.path.exists(doc["file_path"]):
+            os.remove(doc["file_path"])
+            print(f"Deleted file: {doc['file_path']}")
+        
+        return {"success": success, "message": f"Document {document_id} deleted"}
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.get("/api/documents/{document_id}/chunks")
+async def get_document_chunks(
+    document_id: str,
+    limit: int = 50,
+    x_iam_role: str = Header(..., description="IAM Role of the requester")
+):
+    """Get chunks for a specific document"""
+    chunks = []
+    
+    if rag_service and rag_service.collection:
+        try:
+            result = rag_service.collection.get(
+                where={"doc_id": document_id},  # Match the metadata field name
+                include=["documents", "metadatas"],
+                limit=limit
+            )
+            
+            if result and result.get("documents"):
+                for i, doc in enumerate(result["documents"]):
+                    meta = result["metadatas"][i] if result.get("metadatas") else {}
+                    chunks.append({
+                        "id": result["ids"][i] if result.get("ids") else i,
+                        "content": doc,
+                        "chunk_index": meta.get("chunk_index", i),
+                        "page": meta.get("page", "?"),
+                        "filename": meta.get("filename", "unknown")
+                    })
+        except Exception as e:
+            print(f"Error fetching chunks: {e}")
+    
+    return {"chunks": chunks, "total": len(chunks)}
 
 
 if __name__ == "__main__":
